@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#173d3a">
+  <title>Speak Up! — 15-Day English Course</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=5">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#home">
+      <span class="brand-bubble">SU!</span>
+      <span>Speak Up!<small>English for ages 8–12</small></span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a href="#course">Course</a>
+      <a href="#resources">Resources</a>
+      <a href="#assessment">Assessment</a>
+    </nav>
+    <button class="ghost-button" id="resetProgress" type="button">Reset progress</button>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-copy">
+        <p class="eyebrow">Speaking first · confidence always</p>
+        <h1>Fifteen days to a <em>braver English voice.</em></h1>
+        <p class="hero-text">A complete speaking and listening adventure for young learners, with daily conversations, role-plays, stories, games, and a final speaking festival.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#course">Start the course <span>→</span></a>
+          <button class="button secondary" id="continueButton" type="button">Continue learning</button>
+        </div>
+        <div class="course-facts">
+          <span><strong>15</strong> lessons</span>
+          <span><strong>60–75</strong> min/day</span>
+          <span><strong>A1–A2</strong> level</span>
+        </div>
+      </div>
+      <div class="hero-visual" aria-label="Children practicing English through pictures, role-play, maps, and conversation">
+        <img src="assets/speak-up-hero.png" alt="Children learning English with picture cards, headphones, a town map, a café role-play, and a microphone">
+        <div class="hero-sticker sticker-one">15 joyful days</div>
+        <div class="hero-sticker sticker-two">Speak · Listen · Play</div>
+      </div>
+    </section>
+
+    <section class="progress-strip" aria-label="Course progress">
+      <div>
+        <p class="eyebrow">Your journey</p>
+        <h2><span id="completedCount">0</span> of 15 days complete</h2>
+      </div>
+      <div class="progress-track"><span id="courseProgress"></span></div>
+      <p id="progressMessage">Every brave voice starts with one sentence.</p>
+    </section>
+
+    <section class="section course-section" id="course">
+      <div class="section-title">
+        <div>
+          <p class="eyebrow">The course map</p>
+          <h2>Choose today’s speaking mission</h2>
+        </div>
+        <div class="filters" role="group" aria-label="Filter lessons">
+          <button class="filter active" data-filter="all" type="button">All</button>
+          <button class="filter" data-filter="1" type="button">Days 1–5</button>
+          <button class="filter" data-filter="2" type="button">Days 6–10</button>
+          <button class="filter" data-filter="3" type="button">Days 11–15</button>
+        </div>
+      </div>
+      <div class="lesson-grid" id="lessonGrid"></div>
+    </section>
+
+    <section class="daily-rhythm">
+      <div class="section-title light">
+        <div>
+          <p class="eyebrow">A routine children can trust</p>
+          <h2>One joyful rhythm, every day</h2>
+        </div>
+      </div>
+      <div class="rhythm-grid">
+        <article><span>01</span><strong>Warm up</strong><p>Move, smile, and start talking.</p></article>
+        <article><span>02</span><strong>Listen twice</strong><p>Catch the big idea, then details.</p></article>
+        <article><span>03</span><strong>Practice</strong><p>Try useful phrases with a partner.</p></article>
+        <article><span>04</span><strong>Challenge</strong><p>Use English to complete a real task.</p></article>
+        <article><span>05</span><strong>Reflect</strong><p>Notice progress and choose a next goal.</p></article>
+      </div>
+    </section>
+
+    <section class="section" id="resources">
+      <div class="section-title">
+        <div>
+          <p class="eyebrow">Ready when you are</p>
+          <h2>Teacher & student resources</h2>
+        </div>
+      </div>
+      <div class="resource-grid">
+        <article class="resource-card coral">
+          <span class="resource-icon">🎭</span>
+          <h3>Speaking cards</h3>
+          <p>Café, shop, health, directions, interviews, and debate prompts.</p>
+          <button type="button" data-resource="speaking">Open cards</button>
+        </article>
+        <article class="resource-card blue">
+          <span class="resource-icon">🎧</span>
+          <h3>Listening sheets</h3>
+          <p>A repeatable first-listen, second-listen, and retell routine.</p>
+          <button type="button" data-resource="listening">Open sheet</button>
+        </article>
+        <article class="resource-card yellow">
+          <span class="resource-icon">📖</span>
+          <h3>Story & presentation</h3>
+          <p>Story mountain and cue-card planners for confident delivery.</p>
+          <button type="button" data-resource="story">Open planners</button>
+        </article>
+        <article class="resource-card mint">
+          <span class="resource-icon">🏅</span>
+          <h3>Speaking passport</h3>
+          <p>Fifteen can-do goals students can rate and celebrate.</p>
+          <button type="button" data-resource="passport">Open passport</button>
+        </article>
+      </div>
+      <div class="mega-library">
+        <div class="library-heading">
+          <div>
+            <p class="eyebrow">The big material box</p>
+            <h3>Everything you need for a lively class</h3>
+          </div>
+          <span>40+ activities</span>
+        </div>
+        <div class="library-grid">
+          <article><b>🖼️</b><strong>Picture prompts</strong><p>Daily visual warm-ups and describe-what-you-see questions.</p></article>
+          <article><b>🃏</b><strong>Role-play cards</strong><p>Café, shopping, directions, health, interviews, and teamwork.</p></article>
+          <article><b>✂️</b><strong>Print & cut</strong><p>Menus, maps, price tags, badges, story cards, and station signs.</p></article>
+          <article><b>🎧</b><strong>Listening tools</strong><p>Scripts, first/second-listen sheets, detail hunts, and retells.</p></article>
+          <article><b>🎲</b><strong>Speaking games</strong><p>Story dice, opinion corners, scavenger hunts, and speed chats.</p></article>
+          <article><b>🏆</b><strong>Celebration kit</strong><p>Speaking passport, feedback slips, rubrics, and certificates.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section assessment" id="assessment">
+      <div class="assessment-copy">
+        <p class="eyebrow">Simple, kind assessment</p>
+        <h2>Measure communication—not perfection.</h2>
+        <p>Use five child-friendly criteria: message, target language, interaction, confidence, and pronunciation. Give two stars and one wish after every performance.</p>
+        <div class="feedback-card">
+          <span>★</span><p><strong>Star:</strong> Your message was clear.</p>
+          <span>★</span><p><strong>Star:</strong> You asked a follow-up question.</p>
+          <span>→</span><p><strong>Wish:</strong> Try one longer answer next time.</p>
+        </div>
+      </div>
+      <div class="rubric-card">
+        <div class="rubric-row header"><span>Skill</span><span>1</span><span>2</span><span>3</span><span>4</span></div>
+        <div class="rubric-row"><strong>Message</strong><button>1</button><button>2</button><button>3</button><button>4</button></div>
+        <div class="rubric-row"><strong>Language</strong><button>1</button><button>2</button><button>3</button><button>4</button></div>
+        <div class="rubric-row"><strong>Interaction</strong><button>1</button><button>2</button><button>3</button><button>4</button></div>
+        <div class="rubric-row"><strong>Confidence</strong><button>1</button><button>2</button><button>3</button><button>4</button></div>
+        <div class="rubric-total">Practice score <strong><span id="rubricScore">0</span>/16</strong></div>
+      </div>
+    </section>
+
+    <section class="festival">
+      <p class="eyebrow">Day 15</p>
+      <h2>The Speaking Festival</h2>
+      <p>Finish the adventure with a friendly interview, a surprise role-play, and a one-minute presentation.</p>
+      <div class="festival-stations">
+        <span>01 Friendly interview</span>
+        <span>02 Role-play challenge</span>
+        <span>03 Mini presentation</span>
+      </div>
+      <a class="button festival-button" href="#course">Explore all 15 days</a>
+    </section>
+  </main>
+
+  <footer>
+    <a class="brand" href="#home"><span class="brand-bubble">SU!</span><span>Speak Up!</span></a>
+    <p>Made for brave voices, curious minds, and joyful classrooms.</p>
+    <p>Course materials for ages 8–12 · A1–A2</p>
+  </footer>
+
+  <dialog id="lessonDialog" class="content-dialog">
+    <button class="dialog-close" type="button" aria-label="Close">×</button>
+    <div id="lessonContent"></div>
+  </dialog>
+
+  <dialog id="resourceDialog" class="content-dialog resource-dialog">
+    <button class="dialog-close" type="button" aria-label="Close">×</button>
+    <div id="resourceContent"></div>
+  </dialog>
+
+  <script src="script.js?v=5"></script>
+</body>
+</html>
