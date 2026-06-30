@@ -170,6 +170,16 @@ h1 em { display: block; color: var(--coral); font-style: normal; }
 
 .compact-button { min-height: 44px; }
 .student-tracker-section { background: #f5f8f6; }
+.teacher-gate { max-width: 650px; margin: 0 auto; padding: clamp(35px, 6vw, 65px); text-align: center; border: 1px solid var(--line); border-radius: 30px; background: white; box-shadow: var(--shadow); }
+.teacher-gate-icon { display: grid; place-items: center; width: 74px; height: 74px; margin: 0 auto 22px; border-radius: 24px; background: var(--cream); font-size: 2rem; transform: rotate(-3deg); }
+.teacher-gate h2 { margin: 0; font-size: clamp(2.2rem, 5vw, 3.6rem); }
+.teacher-gate > p:not(.eyebrow) { color: var(--muted); line-height: 1.65; }
+.teacher-gate form { display: flex; align-items: end; gap: 10px; margin-top: 28px; text-align: left; }
+.teacher-gate label { display: grid; flex: 1; gap: 7px; font-weight: 700; }
+.teacher-gate input { width: 100%; padding: 14px; border: 1px solid var(--line); border-radius: 11px; font: inherit; letter-spacing: .16em; }
+.teacher-gate small { display: block; margin-top: 18px; color: var(--muted); }
+.teacher-actions { display: flex; align-items: center; gap: 10px; }
+#teacherPrivate[hidden], #teacherGate[hidden] { display: none; }
 .tracker-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 25px; }
 .tracker-summary article { display: grid; padding: 20px; border: 1px solid var(--line); border-radius: 18px; background: white; }
 .tracker-summary span { color: var(--muted); font-size: .78rem; font-weight: 800; text-transform: uppercase; }
@@ -376,6 +386,7 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
   .library-grid { grid-template-columns: 1fr; }
   .tracker-summary { grid-template-columns: 1fr 1fr; }
   .student-toolbar, .parent-heading { align-items: stretch; flex-direction: column; }
+  .teacher-gate form, .teacher-actions { align-items: stretch; flex-direction: column; }
   .form-row { grid-template-columns: 1fr; }
   .media-section, .vocab-chips { grid-template-columns: 1fr; }
   .poster-grid, .problem-card-grid, .worksheet-columns { grid-template-columns: 1fr; }

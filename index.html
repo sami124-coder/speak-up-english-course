@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=8">
+  <link rel="stylesheet" href="styles.css?v=9">
 </head>
 <body>
   <header class="topbar">
@@ -105,12 +105,25 @@
     </section>
 
     <section class="section student-tracker-section" id="students">
+      <div class="teacher-gate" id="teacherGate">
+        <div class="teacher-gate-icon">🔒</div>
+        <p class="eyebrow">Private teacher area</p>
+        <h2 id="teacherGateTitle">Teacher access only</h2>
+        <p id="teacherGateText">Enter your private PIN to open student records, family codes, and progress controls.</p>
+        <form id="teacherLoginForm">
+          <label>Teacher PIN<input id="teacherPinInput" type="password" inputmode="numeric" minlength="4" maxlength="12" required placeholder="Enter 4–12 digits"></label>
+          <button class="button primary" type="submit">Open dashboard</button>
+          <p class="login-error" id="teacherLoginError" role="alert"></p>
+        </form>
+        <small id="teacherPinHelp">First visit? Choose a PIN now. Keep it somewhere safe.</small>
+      </div>
+      <div id="teacherPrivate" hidden>
       <div class="section-title">
         <div>
           <p class="eyebrow">Teacher dashboard</p>
           <h2>See every learner clearly</h2>
         </div>
-        <button class="button secondary compact-button" id="addStudentButton" type="button">+ Add student</button>
+        <div class="teacher-actions"><button class="ghost-button" id="teacherSignOut" type="button">Lock dashboard</button><button class="button secondary compact-button" id="addStudentButton" type="button">+ Add student</button></div>
       </div>
       <div class="tracker-summary">
         <article><span>Active learners</span><strong id="studentTotal">0</strong><small>in this course</small></article>
@@ -134,6 +147,7 @@
         </table>
       </div>
       <div class="empty-students" id="emptyStudents"><span>👋</span><h3>No students yet</h3><p>Add your first learner when you are ready. The website will never add demo students.</p></div>
+      </div>
     </section>
 
     <section class="section parent-section" id="parents">
@@ -306,6 +320,6 @@
     </form>
   </dialog>
 
-  <script src="script.js?v=8"></script>
+  <script src="script.js?v=9"></script>
 </body>
 </html>

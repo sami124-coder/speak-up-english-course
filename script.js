@@ -99,6 +99,7 @@ if (!localStorage.getItem("speakUpNoDemoMigration")) {
   localStorage.setItem("speakUpStudents", JSON.stringify(trackedStudents));
 }
 let signedInStudentId = sessionStorage.getItem("speakUpParentStudentId");
+let teacherUnlocked = sessionStorage.getItem("speakUpTeacherUnlocked") === "yes";
 
 const lessonGrid = document.querySelector("#lessonGrid");
 const lessonDialog = document.querySelector("#lessonDialog");
@@ -107,6 +108,19 @@ let completed = new Set(JSON.parse(localStorage.getItem("speakUpProgress") || "[
 
 function saveStudents() {
   localStorage.setItem("speakUpStudents", JSON.stringify(trackedStudents));
+}
+
+function renderTeacherAccess() {
+  const hasPin = Boolean(localStorage.getItem("speakUpTeacherPin"));
+  document.querySelector("#teacherGate").hidden = teacherUnlocked;
+  document.querySelector("#teacherPrivate").hidden = !teacherUnlocked;
+  document.querySelector("#teacherGateTitle").textContent = hasPin ? "Welcome back, teacher" : "Create your teacher PIN";
+  document.querySelector("#teacherGateText").textContent = hasPin
+    ? "Enter your private PIN to open student records, family codes, and progress controls."
+    : "Choose a private PIN to protect your teacher dashboard on this device.";
+  document.querySelector("#teacherPinHelp").textContent = hasPin
+    ? "Only the teacher should know this PIN."
+    : "Use 4–12 digits and keep the PIN somewhere safe.";
 }
 
 function latestLesson(student) {
@@ -335,6 +349,31 @@ document.querySelector("#parentSignOut").addEventListener("click", () => {
   sessionStorage.removeItem("speakUpParentStudentId");
   renderParentDashboard();
 });
+document.querySelector("#teacherLoginForm").addEventListener("submit", event => {
+  event.preventDefault();
+  const pin = document.querySelector("#teacherPinInput").value.trim();
+  const savedPin = localStorage.getItem("speakUpTeacherPin");
+  if (!/^\d{4,12}$/.test(pin)) {
+    document.querySelector("#teacherLoginError").textContent = "Please use a PIN containing 4–12 digits.";
+    return;
+  }
+  if (savedPin && pin !== savedPin) {
+    document.querySelector("#teacherLoginError").textContent = "Incorrect PIN. Please try again.";
+    return;
+  }
+  if (!savedPin) localStorage.setItem("speakUpTeacherPin", pin);
+  teacherUnlocked = true;
+  sessionStorage.setItem("speakUpTeacherUnlocked", "yes");
+  document.querySelector("#teacherLoginError").textContent = "";
+  event.currentTarget.reset();
+  renderTeacherAccess();
+});
+document.querySelector("#teacherSignOut").addEventListener("click", () => {
+  teacherUnlocked = false;
+  sessionStorage.removeItem("speakUpTeacherUnlocked");
+  renderTeacherAccess();
+  document.querySelector("#students").scrollIntoView({behavior:"smooth"});
+});
 
 document.querySelectorAll(".dialog-close").forEach(button => button.addEventListener("click", () => button.closest("dialog").close()));
 document.querySelectorAll("dialog").forEach(dialog => dialog.addEventListener("click", e => { if (e.target === dialog) dialog.close(); }));
@@ -368,3 +407,4 @@ document.querySelectorAll(".rubric-row:not(.header)").forEach(row => {
 renderLessons();
 updateProgress();
 renderStudentTracker();
+renderTeacherAccess();
