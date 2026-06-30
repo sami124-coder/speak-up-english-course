@@ -460,6 +460,21 @@ updateProgress();
 renderStudentTracker();
 renderTeacherAccess();
 
+const heroVisual = document.querySelector(".hero-visual");
+if (matchMedia("(pointer:fine)").matches && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  heroVisual.addEventListener("pointermove", event => {
+    const bounds = heroVisual.getBoundingClientRect();
+    const x = ((event.clientX - bounds.left) / bounds.width - .5) * -12;
+    const y = ((event.clientY - bounds.top) / bounds.height - .5) * -12;
+    heroVisual.style.setProperty("--hero-x", `${x}px`);
+    heroVisual.style.setProperty("--hero-y", `${y}px`);
+  });
+  heroVisual.addEventListener("pointerleave", () => {
+    heroVisual.style.setProperty("--hero-x", "0px");
+    heroVisual.style.setProperty("--hero-y", "0px");
+  });
+}
+
 const revealTargets = document.querySelectorAll(".section-title, .lesson-card, .resource-card, .welcome-cards article, .quick-start a, .lesson-resource-hub, .sample-lesson > *, .about-course > *");
 revealTargets.forEach((element, index) => {
   element.classList.add("motion-reveal");

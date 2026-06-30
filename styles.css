@@ -66,7 +66,7 @@ h1 em { display: block; color: var(--coral); font-style: normal; }
   border-radius: 34px 48px 32px 50px; background: white; box-shadow: 12px 14px 0 var(--ink);
   transform: rotate(1deg);
 }
-.hero-visual img { width: 100%; height: 100%; min-height: 520px; object-fit: cover; object-position: center; display: block; }
+.hero-visual img { width: 100%; height: 100%; min-height: 520px; object-fit: cover; object-position: center; display: block; transform: scale(1.035) translate(var(--hero-x, 0), var(--hero-y, 0)); transition: transform .25s ease-out; }
 .hero-sticker {
   position: absolute; padding: 11px 15px; border: 2px solid var(--ink); border-radius: 12px;
   background: var(--yellow); box-shadow: 4px 4px 0 var(--ink); font: 700 .9rem "Fredoka"; transform: rotate(-3deg);
@@ -345,6 +345,21 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
 @keyframes stickerWiggle { 0%,100% { transform: rotate(-3deg) scale(1); } 50% { transform: rotate(1deg) scale(1.04); } }
 @keyframes iconBounce { 0%,100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-7px) rotate(-3deg); } }
 @keyframes softPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(47,111,237,.18); } 50% { box-shadow: 0 0 0 10px rgba(47,111,237,0); } }
+@keyframes heroTextIn { from { opacity: 0; transform: translateY(34px) rotate(1deg); } to { opacity: 1; transform: translateY(0) rotate(0); } }
+@keyframes driftOne { 0%,100% { transform: translate(0,0) rotate(-5deg); } 50% { transform: translate(9px,-14px) rotate(3deg); } }
+@keyframes driftTwo { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-8px,-12px) scale(1.13); } }
+.hero-copy > * { opacity: 0; animation: heroTextIn .72s cubic-bezier(.2,.8,.25,1) forwards; }
+.hero-copy > :nth-child(1) { animation-delay: .08s; }
+.hero-copy > :nth-child(2) { animation-delay: .2s; }
+.hero-copy > :nth-child(3) { animation-delay: .34s; }
+.hero-copy > :nth-child(4) { animation-delay: .48s; }
+.hero-copy > :nth-child(5) { animation-delay: .62s; }
+.hero-copy h1 span, .hero-copy h1 em { display: block; }
+.hero-copy h1 em { animation: softPulse 3s ease-in-out 1.2s infinite; border-radius: 18px; }
+.hero-floater { position: absolute; z-index: 4; display: grid; place-items: center; border: 2px solid var(--ink); background: white; box-shadow: 4px 4px 0 var(--ink); font-weight: 800; pointer-events: none; }
+.floater-one { top: 28%; left: 4%; padding: 10px 14px; border-radius: 16px; animation: driftOne 4.2s ease-in-out infinite; }
+.floater-two { top: 14%; right: 9%; width: 48px; height: 48px; border-radius: 50%; background: var(--yellow); animation: driftTwo 3.4s ease-in-out infinite; }
+.floater-three { right: 7%; bottom: 26%; width: 52px; height: 52px; border-radius: 16px; background: #dbe9ff; animation: driftOne 4.8s ease-in-out -2s infinite; }
 .hero-visual { animation: heroFloat 6s ease-in-out infinite; }
 .hero-sticker { animation: stickerWiggle 3.5s ease-in-out infinite; }
 .sticker-two { animation-delay: -1.7s; }
@@ -440,6 +455,7 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
   .hero { padding-top: 65px; }
   .hero-visual { min-height: 360px; transform: scale(.78); margin: -40px; }
   .hero-visual { animation: none; }
+  .hero-floater { transform: scale(.85); }
   .hero-visual img { min-height: 360px; }
   .course-facts { gap: 18px; }
   .section-title { align-items: start; flex-direction: column; }
