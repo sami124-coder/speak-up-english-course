@@ -9,11 +9,15 @@
   <meta name="apple-mobile-web-app-title" content="Speak Up!">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml">
-  <title>Speak Up! — 15-Day English Course</title>
+  <title>Speak Up! English Course for Kids | 15-Day Speaking & Listening Program</title>
+  <meta name="description" content="A joyful 15-day English speaking and listening course for ages 8–12 with lessons, worksheets, games, teacher plans, and parent progress.">
+  <meta property="og:title" content="Speak Up! English Course for Kids">
+  <meta property="og:description" content="15 days to help children speak English with confidence.">
+  <meta property="og:image" content="assets/speak-up-hero.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=12">
+  <link rel="stylesheet" href="styles.css?v=13">
 </head>
 <body>
   <header class="topbar">
@@ -33,12 +37,13 @@
   <main>
     <section class="hero" id="home">
       <div class="hero-copy">
-        <p class="eyebrow">Welcome to Speak Up! · English made joyful</p>
-        <h1>Small conversations. <em>Big, brave voices.</em></h1>
-        <p class="hero-text">Speak Up! is a 15-day English adventure for ages 8–12. Children learn by doing: listening to real conversations, speaking with a partner, playing purposeful games, and celebrating progress every day.</p>
+        <p class="eyebrow">Speak Up! English Course</p>
+        <h1>15 days to speak English <em>with confidence.</em></h1>
+        <p class="hero-text">A complete speaking and listening program where children learn through conversations, games, role-play, and daily real-world missions.</p>
         <div class="hero-actions">
-          <a class="button primary" href="#course">Start the course <span>→</span></a>
-          <button class="button secondary" id="continueButton" type="button">Continue learning</button>
+          <button class="button primary" id="startDayOne" type="button">Start Day 1 <span>→</span></button>
+          <a class="button secondary" href="#resources">Teacher materials</a>
+          <a class="button secondary" href="#parents">Parent login</a>
         </div>
         <div class="course-facts">
           <span><strong>15</strong> lessons</span>
@@ -77,9 +82,19 @@
     </section>
 
     <section class="quick-start" aria-label="Quick start">
-      <a href="#course"><span>1</span><div><strong>Choose a lesson</strong><small>Open one of the 15 daily missions</small></div><b>→</b></a>
-      <a href="#resources"><span>2</span><div><strong>Get materials</strong><small>Listening, speaking, and printables</small></div><b>→</b></a>
-      <a href="#parents"><span>3</span><div><strong>Check progress</strong><small>Families use their private code</small></div><b>→</b></a>
+      <a href="#course"><span>👦</span><div><strong>For Students</strong><small>Start today’s speaking mission</small></div><b>→</b></a>
+      <a href="#students"><span>👩‍🏫</span><div><strong>For Teachers</strong><small>Lessons, materials, and progress</small></div><b>→</b></a>
+      <a href="#parents"><span>🏡</span><div><strong>For Parents</strong><small>Progress and home practice</small></div><b>→</b></a>
+    </section>
+
+    <section class="section about-course">
+      <div><p class="eyebrow">What children will learn</p><h2>Useful English for real moments.</h2></div>
+      <ul class="outcome-list"><li>Ask for help politely</li><li>Answer simple questions</li><li>Join pair conversations</li><li>Listen for key words</li><li>Complete role-play missions</li><li>Speak with more confidence</li></ul>
+    </section>
+
+    <section class="sample-lesson">
+      <div><p class="eyebrow">Try a complete lesson</p><h2>Day 1: Classroom English</h2><p>Six useful phrases, guided listening, a speaking game, student worksheet, printable materials, and a teacher plan.</p></div>
+      <button class="button primary" id="previewDayOne" type="button">Open free lesson preview →</button>
     </section>
 
     <section class="section course-section" id="course">
@@ -126,6 +141,7 @@
           <p class="login-error" id="teacherLoginError" role="alert"></p>
         </form>
         <small id="teacherPinHelp">First visit? Choose a PIN now. Keep it somewhere safe.</small>
+        <p class="privacy-note">Demo privacy note: GitHub Pages does not provide secure accounts or a shared database. Use initials or practice data only—never store sensitive student information here.</p>
       </div>
       <div id="teacherPrivate" hidden>
       <div class="section-title">
@@ -339,6 +355,6 @@
     </form>
   </dialog>
 
-  <script src="script.js?v=12"></script>
+  <script src="script.js?v=13"></script>
 </body>
 </html>

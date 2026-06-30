@@ -264,19 +264,30 @@ function showLesson(day) {
     <div class="lesson-cover"><span>${extra.visual}</span><div><p>Picture prompt</p><strong>What can you see? What might happen today?</strong></div></div>
     <p class="dialog-kicker">Day ${lesson.day} · 60–75 minutes</p><h2>${lesson.title}</h2>
     <p class="dialog-goal"><strong>Can-do goal:</strong> ${lesson.goal}</p>
-    ${lessonTeachingPack(lesson, extra)}
-    <section class="dialog-section"><h3>Useful language</h3><p>${lesson.language}</p></section>
-    <section class="dialog-section"><h3>Picture vocabulary</h3><div class="vocab-chips">${extra.words.map((word, index) => `<span><b>${["🔵","🟡","🟢","🟠","🟣","🔴"][index]}</b>${word}</span>`).join("")}</div></section>
-    <section class="dialog-section"><h3>Listening script</h3><p class="script">${lesson.listen}</p></section>
-    <section class="dialog-section"><h3>Speaking challenge</h3><p>${lesson.task}</p></section>
-    <section class="dialog-section"><h3>Worksheet</h3><p>${lesson.worksheet}</p></section>
-    <section class="dialog-section media-section">
-      <div class="video-card"><span class="play-icon">▶</span><div><p class="media-label">Video practice</p><h3>${lesson.title} video</h3><p>Open a child-friendly YouTube search, preview a suitable short video, then use the listening sheet.</p><a href="${videoUrl}" target="_blank" rel="noreferrer">Find a lesson video ↗</a></div></div>
-      <div class="materials-card"><p class="media-label">Extra materials</p><h3>Print & play</h3><ul>${extra.materials.map(item => `<li>${item}</li>`).join("")}</ul></div>
-    </section>
-    <section class="dialog-section bonus-card"><p class="media-label">Bonus challenge</p><h3>One more way to speak</h3><p>${extra.bonus}</p></section>
-    ${day === 1 ? dayOneExtended : ""}
-    <button class="button primary dialog-complete" data-dialog-complete="${lesson.day}">${completed.has(day) ? "Completed ✓" : "Mark day complete"}</button>`;
+    <div class="lesson-tabs" role="tablist">
+      <button class="lesson-tab active" data-lesson-tab="student" type="button">Student</button>
+      <button class="lesson-tab" data-lesson-tab="teacher" type="button">Teacher</button>
+      <button class="lesson-tab" data-lesson-tab="materials" type="button">Materials</button>
+      <button class="lesson-tab" data-lesson-tab="progress" type="button">Progress</button>
+    </div>
+    <div class="lesson-panel" data-lesson-panel="student">
+      <section class="dialog-section"><h3>Useful language</h3><p>${lesson.language}</p></section>
+      <section class="dialog-section"><h3>Picture vocabulary</h3><div class="vocab-chips">${extra.words.map((word, index) => `<span><b>${["🔵","🟡","🟢","🟠","🟣","🔴"][index]}</b>${word}</span>`).join("")}</div></section>
+      <section class="dialog-section"><h3>Listening</h3><div class="lesson-tools"><button class="button secondary" data-play-listening="${lesson.day}" type="button">▶ Play listening</button></div><p class="script">${lesson.listen}</p></section>
+      <section class="dialog-section"><h3>Speaking challenge</h3><p>${lesson.task}</p></section>
+      <section class="dialog-section"><h3>Worksheet</h3><p>${lesson.worksheet}</p></section>
+    </div>
+    <div class="lesson-panel" data-lesson-panel="teacher" hidden>${teacherUnlocked ? lessonTeachingPack(lesson, extra) : `<section class="dialog-section"><h3>Teacher access required</h3><p>Unlock the private Teacher area first, then reopen this lesson to view timing, differentiation, and assessment guidance.</p><a class="button primary" href="#students" onclick="document.querySelector('#lessonDialog').close()">Open teacher access</a></section>`}</div>
+    <div class="lesson-panel" data-lesson-panel="materials" hidden>
+      <section class="dialog-section media-section"><div class="video-card"><span class="play-icon">▶</span><div><p class="media-label">Video practice</p><h3>${lesson.title} video</h3><a href="${videoUrl}" target="_blank" rel="noreferrer">Find a lesson video ↗</a></div></div><div class="materials-card"><p class="media-label">Print & play</p><h3>Lesson materials</h3><ul>${extra.materials.map(item => `<li>${item}</li>`).join("")}</ul></div></section>
+      <div class="lesson-tools"><a class="button secondary" href="downloads/flashcards.html" target="_blank">Open flashcards</a><button class="button secondary" onclick="window.print()" type="button">Print worksheet</button>${day === 1 ? `<a class="button primary" href="downloads/day1-pack.html" target="_blank">Open Day 1 pack</a>` : ""}</div>
+      ${day === 1 ? dayOneExtended : ""}
+    </div>
+    <div class="lesson-panel" data-lesson-panel="progress" hidden>
+      <section class="dialog-section"><h3>My success check</h3><ul class="success-list"><li>I used two target phrases.</li><li>I listened and answered my partner.</li><li>I spoke clearly.</li><li>I tried again when it was difficult.</li></ul></section>
+      <section class="dialog-section bonus-card"><h3>Extra challenge</h3><p>${extra.bonus}</p></section>
+      <button class="button primary dialog-complete" data-dialog-complete="${lesson.day}">${completed.has(day) ? "Completed ✓" : "Mark day complete"}</button>
+    </div>`;
   lessonDialog.showModal();
 }
 
@@ -398,6 +409,24 @@ document.querySelectorAll(".dialog-close").forEach(button => button.addEventList
 document.querySelectorAll("dialog").forEach(dialog => dialog.addEventListener("click", e => { if (e.target === dialog) dialog.close(); }));
 
 lessonDialog.addEventListener("click", event => {
+  const tab = event.target.closest("[data-lesson-tab]");
+  if (tab) {
+    lessonDialog.querySelectorAll("[data-lesson-tab]").forEach(button => button.classList.toggle("active", button === tab));
+    lessonDialog.querySelectorAll("[data-lesson-panel]").forEach(panel => { panel.hidden = panel.dataset.lessonPanel !== tab.dataset.lessonTab; });
+    return;
+  }
+  const audioButton = event.target.closest("[data-play-listening]");
+  if (audioButton) {
+    speechSynthesis.cancel();
+    const lesson = lessons.find(item => item.day === Number(audioButton.dataset.playListening));
+    const speech = new SpeechSynthesisUtterance(lesson.listen.replace(/\n/g, " "));
+    speech.rate = .82;
+    speech.lang = "en-US";
+    speechSynthesis.speak(speech);
+    audioButton.textContent = "🔊 Playing…";
+    speech.onend = () => { audioButton.textContent = "▶ Play listening"; };
+    return;
+  }
   const button = event.target.closest("[data-dialog-complete]");
   if (!button) return;
   const day = Number(button.dataset.dialogComplete);
@@ -409,6 +438,8 @@ document.querySelector("#continueButton").addEventListener("click", () => {
   const next = lessons.find(l => !completed.has(l.day)) || lessons[14];
   showLesson(next.day);
 });
+document.querySelector("#startDayOne").addEventListener("click", () => showLesson(1));
+document.querySelector("#previewDayOne").addEventListener("click", () => showLesson(1));
 
 document.querySelector("#resetProgress").addEventListener("click", () => {
   if (confirm("Reset all course progress?")) { completed.clear(); updateProgress(); renderLessons(); }
