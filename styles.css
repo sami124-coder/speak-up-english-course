@@ -259,14 +259,29 @@ h1 em { display: block; color: var(--coral); font-style: normal; }
 .student-dialog textarea { min-height: 95px; resize: vertical; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-.resource-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.resource-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .resource-card { min-height: 330px; padding: 26px; border: 2px solid var(--ink); border-radius: 25px; box-shadow: 5px 5px 0 var(--ink); }
 .resource-card.coral { background: #ffe0d8; } .resource-card.blue { background: #deebff; }
 .resource-card.yellow { background: #fff0b9; } .resource-card.mint { background: #dff4eb; }
 .resource-icon { font-size: 2.2rem; }
 .resource-card h3 { margin: 65px 0 10px; font-size: 1.55rem; }
 .resource-card p { color: #435d59; line-height: 1.6; }
-.resource-card button { padding: 0; color: var(--ink); border: 0; border-bottom: 2px solid; background: transparent; font-weight: 800; }
+.resource-card button, .resource-download { display: inline-block; padding: 0; color: var(--ink); border: 0; border-bottom: 2px solid; background: transparent; font-weight: 800; text-decoration: none; }
+.lesson-resource-hub { margin-top: 65px; padding: clamp(24px, 5vw, 48px); border: 1px solid var(--line); border-radius: 28px; background: #f5f8f6; }
+.lesson-resource-hub .library-heading { margin: 0 0 24px; padding: 0; border: 0; background: transparent; }
+.lesson-resource-library { display: grid; gap: 10px; }
+.lesson-pack { overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: white; }
+.lesson-pack summary { display: flex; align-items: center; gap: 14px; padding: 18px 20px; cursor: pointer; list-style: none; font-weight: 800; }
+.lesson-pack summary::-webkit-details-marker { display: none; }
+.lesson-pack summary span { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 11px; color: white; background: var(--coral); font: 700 .82rem "Fredoka"; }
+.lesson-pack summary::after { content: "+"; margin-left: auto; font-size: 1.5rem; }
+.lesson-pack[open] summary::after { content: "−"; }
+.lesson-pack-content { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 0 20px 20px; }
+.skill-panel { padding: 20px; border-radius: 15px; background: #eaf1ff; }
+.skill-panel.speaking { background: #fff0e9; }
+.skill-panel h4 { margin: 0 0 12px; font: 700 1.25rem "Fredoka"; }
+.skill-panel p { color: var(--muted); line-height: 1.6; white-space: pre-line; }
+.skill-panel strong { display: block; margin-top: 13px; }
 .mega-library { margin-top: 28px; padding: clamp(24px, 4vw, 46px); border-radius: 28px; color: white; background: var(--ink); }
 .library-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; padding-bottom: 28px; border-bottom: 1px solid rgba(255,255,255,.18); }
 .library-heading .eyebrow { color: var(--yellow); }
@@ -381,6 +396,7 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
   .section-title { align-items: start; flex-direction: column; }
   .lesson-grid, .resource-grid, .rhythm-grid { grid-template-columns: 1fr; }
   .welcome-cards, .lesson-quality-grid, .support-grid { grid-template-columns: 1fr; }
+  .lesson-pack-content { grid-template-columns: 1fr; }
   .teaching-step { grid-template-columns: 1fr; gap: 4px; }
   .library-heading { align-items: flex-start; flex-direction: column; }
   .library-grid { grid-template-columns: 1fr; }

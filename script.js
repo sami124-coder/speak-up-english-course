@@ -41,6 +41,8 @@ const dailyExtras = {
   15: {visual:"🎉", words:["interview","role-play","present","listen","respond","proud"], materials:["Festival station signs","Final speaking rubric","Celebration certificates"], bonus:"Create a compliment wall: write one speaking strength for each teammate.", video:"English speaking activities for kids final presentation"}
 };
 
+resources.conversation = `<p class="dialog-kicker">Pair-work library</p><h2>Conversation cards</h2><div class="problem-card-grid">${["What makes you feel brave?","Describe your best friend.","What is your favorite day and why?","Tell three things you do before school.","Create a café order under $10.","What skill can you teach?","Give directions to a secret place.","Choose a gift and explain why.","Give two healthy tips.","Tell a 30-second story.","Suggest a fun class project.","Books or films—which is better?"].map((prompt,index)=>`<article><span>${index+1}</span><p>${prompt}</p><strong>Listen · Respond · Ask more</strong></article>`).join("")}</div>`;
+
 const dayOneExtended = `
   <section class="dialog-section day-gallery">
     <div class="section-mini-heading"><p class="media-label">Ready-made visual materials</p><h3>Classroom English posters</h3></div>
@@ -192,6 +194,23 @@ function renderLessons(filter = "all") {
       <button class="open-lesson" data-day="${lesson.day}">Open lesson →</button>`;
     lessonGrid.append(card);
   });
+}
+
+function renderLessonResourceLibrary() {
+  const library = document.querySelector("#lessonResourceLibrary");
+  library.innerHTML = lessons.map(lesson => {
+    const extra = dailyExtras[lesson.day];
+    return `<details class="lesson-pack">
+      <summary><span>${lesson.day}</span>${lesson.title}</summary>
+      <div class="lesson-pack-content">
+        <article class="skill-panel listening"><h4>🎧 Listening</h4><strong>Listen twice</strong><p>${lesson.listen}</p><strong>Focus questions</strong><p>Who is speaking? Where are they? What two details did you hear? Which useful phrase can you repeat?</p></article>
+        <article class="skill-panel speaking"><h4>🎙️ Speaking</h4><strong>Target language</strong><p>${lesson.language}</p><strong>Communication mission</strong><p>${lesson.task}</p><strong>Extra challenge</strong><p>${extra.bonus}</p></article>
+      </div>
+    </details>`;
+  }).join("");
+  library.querySelectorAll("details").forEach(pack => pack.addEventListener("toggle", () => {
+    if (pack.open) library.querySelectorAll("details").forEach(other => { if (other !== pack) other.open = false; });
+  }));
 }
 
 function updateProgress() {
@@ -405,6 +424,7 @@ document.querySelectorAll(".rubric-row:not(.header)").forEach(row => {
 });
 
 renderLessons();
+renderLessonResourceLibrary();
 updateProgress();
 renderStudentTracker();
 renderTeacherAccess();
