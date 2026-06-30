@@ -115,10 +115,11 @@
       </div>
       <div class="student-table-wrap">
         <table class="student-table">
-          <thead><tr><th>Learner</th><th>Course</th><th>Attendance</th><th>Speaking</th><th>Listening</th><th>Stars</th><th>Current goal</th><th>Quick action</th></tr></thead>
+          <thead><tr><th>Learner</th><th>Course</th><th>Attendance</th><th>Speaking</th><th>Listening</th><th>Stars</th><th>Family code</th><th>Current goal</th><th>Quick action</th></tr></thead>
           <tbody id="studentTrackerRows"></tbody>
         </table>
       </div>
+      <div class="empty-students" id="emptyStudents"><span>👋</span><h3>No students yet</h3><p>Add your first learner when you are ready. The website will never add demo students.</p></div>
     </section>
 
     <section class="section parent-section" id="parents">
@@ -128,10 +129,17 @@
           <h2>Parents can follow the learning journey.</h2>
           <p>Clear progress, kind feedback, and a simple activity to practice together at home.</p>
         </div>
-        <label class="child-picker">Viewing progress for
-          <select id="parentStudentSelect" aria-label="Choose a child"></select>
-        </label>
+        <button class="ghost-button light-ghost" id="parentSignOut" type="button" hidden>Sign out</button>
       </div>
+      <form class="parent-login" id="parentLogin">
+        <div class="login-icon">🔐</div>
+        <div><p class="media-label">Private family access</p><h3>Sign in to view your child</h3><p>Enter the student name and family code provided by the teacher.</p></div>
+        <label>Student name<input id="parentLoginName" required autocomplete="username" placeholder="Child’s name"></label>
+        <label>Family code<input id="parentLoginCode" required autocomplete="current-password" placeholder="e.g. MAYA-4821"></label>
+        <button class="button primary" type="submit">View progress</button>
+        <p class="login-error" id="parentLoginError" role="alert"></p>
+      </form>
+      <div class="parent-private" id="parentPrivate" hidden>
       <div class="parent-dashboard">
         <article class="parent-profile-card">
           <div class="student-avatar" id="parentAvatar">A</div>
@@ -162,6 +170,7 @@
         <div><p class="media-label">Latest learning</p><h3 id="latestLessonTitle">Day 1 · Classroom English</h3></div>
         <p id="latestLessonCanDo">I can ask for help in English.</p>
         <button class="ghost-button light-ghost" id="copyParentUpdate" type="button">Copy family update</button>
+      </div>
       </div>
     </section>
 
@@ -278,6 +287,7 @@
       </div>
       <label>Current speaking goal<input name="goal" required value="Answer in full sentences"></label>
       <label>Teacher note<textarea name="note">A positive learner who participates well in pair work.</textarea></label>
+      <label>Parent email (optional)<input name="parentEmail" type="email" placeholder="parent@example.com"></label>
       <button class="button primary dialog-complete" type="submit">Add learner</button>
     </form>
   </dialog>

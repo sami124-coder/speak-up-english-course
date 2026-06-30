@@ -91,14 +91,14 @@ const dayOneExtended = `
     <p>Students mark a word when they hear it in a teacher instruction. Three in a row: “Bingo! I’m ready!”</p>
   </section>`;
 
-const starterStudents = [
-  {id:1, name:"Maya", age:9, level:"A1", completed:6, attendance:93, speaking:72, listening:78, stars:18, goal:"Use because to give a reason", note:"Maya is speaking more confidently and now asks for help independently.", home:"Ask three ‘What do you like?’ questions at dinner."},
-  {id:2, name:"Adam", age:10, level:"A1+", completed:9, attendance:87, speaking:81, listening:76, stars:24, goal:"Add details when telling a story", note:"Adam brings great energy to role-plays and listens carefully to his partner.", home:"Tell a one-minute story using first, then, and finally."},
-  {id:3, name:"Lina", age:11, level:"A2", completed:12, attendance:96, speaking:88, listening:91, stars:31, goal:"Disagree politely and give an example", note:"Lina communicates clearly and supports other learners during team challenges.", home:"Choose a fun topic and practice one polite mini debate."},
-  {id:4, name:"Yousef", age:8, level:"A1", completed:4, attendance:82, speaking:64, listening:69, stars:13, goal:"Answer in a complete sentence", note:"Yousef is building courage. Pair rehearsal helps him share his ideas.", home:"Practice five full-sentence answers with a family member."}
-];
-
-let trackedStudents = JSON.parse(localStorage.getItem("speakUpStudents") || "null") || starterStudents;
+const demoNames = new Set(["Maya", "Adam", "Lina", "Yousef"]);
+let trackedStudents = JSON.parse(localStorage.getItem("speakUpStudents") || "[]");
+if (!localStorage.getItem("speakUpNoDemoMigration")) {
+  trackedStudents = trackedStudents.filter(student => !demoNames.has(student.name));
+  localStorage.setItem("speakUpNoDemoMigration", "1");
+  localStorage.setItem("speakUpStudents", JSON.stringify(trackedStudents));
+}
+let signedInStudentId = sessionStorage.getItem("speakUpParentStudentId");
 
 const lessonGrid = document.querySelector("#lessonGrid");
 const lessonDialog = document.querySelector("#lessonDialog");
@@ -125,7 +125,7 @@ function renderStudentTracker() {
       <td><div class="student-name-cell"><span class="mini-avatar">${student.name[0].toUpperCase()}</span><div><strong>${student.name}</strong><br><small>Age ${student.age} · <span class="level-pill">${student.level}</span></small></div></div></td>
       <td><strong>${student.completed}/15</strong><div class="table-progress"><span style="width:${student.completed / 15 * 100}%"></span></div></td>
       <td>${student.attendance}%</td><td>${student.speaking}%</td><td>${student.listening}%</td>
-      <td>⭐ ${student.stars}</td><td>${student.goal}</td>
+      <td>⭐ ${student.stars}</td><td><button class="student-action family-code" data-copy-code="${student.id}">${student.familyCode || "Create code"}</button></td><td>${student.goal}</td>
       <td><button class="student-action" data-student-progress="${student.id}">+ Lesson</button> <button class="student-action" data-student-star="${student.id}">+ Star</button></td>
     </tr>`).join("");
   const total = trackedStudents.length || 1;
@@ -133,20 +133,16 @@ function renderStudentTracker() {
   document.querySelector("#averageProgress").textContent = `${Math.round(trackedStudents.reduce((sum,s) => sum + s.completed / 15 * 100, 0) / total)}%`;
   document.querySelector("#averageConfidence").textContent = `${Math.round(trackedStudents.reduce((sum,s) => sum + s.speaking, 0) / total)}%`;
   document.querySelector("#totalStars").textContent = trackedStudents.reduce((sum,s) => sum + s.stars, 0);
-  renderParentOptions();
-}
-
-function renderParentOptions() {
-  const select = document.querySelector("#parentStudentSelect");
-  const current = select.value;
-  select.innerHTML = trackedStudents.map(student => `<option value="${student.id}">${student.name}</option>`).join("");
-  if (trackedStudents.some(s => String(s.id) === current)) select.value = current;
+  document.querySelector(".student-table-wrap").hidden = trackedStudents.length === 0;
+  document.querySelector("#emptyStudents").hidden = trackedStudents.length !== 0;
   renderParentDashboard();
 }
 
 function renderParentDashboard() {
-  const select = document.querySelector("#parentStudentSelect");
-  const student = trackedStudents.find(s => String(s.id) === select.value) || trackedStudents[0];
+  const student = trackedStudents.find(s => String(s.id) === String(signedInStudentId));
+  document.querySelector("#parentLogin").hidden = Boolean(student);
+  document.querySelector("#parentPrivate").hidden = !student;
+  document.querySelector("#parentSignOut").hidden = !student;
   if (!student) return;
   const progress = Math.round(student.completed / 15 * 100);
   const lesson = latestLesson(student);
@@ -239,9 +235,20 @@ document.querySelectorAll("[data-resource]").forEach(button => button.addEventLi
 
 document.querySelector("#studentSearch").addEventListener("input", renderStudentTracker);
 document.querySelector("#studentLevelFilter").addEventListener("change", renderStudentTracker);
-document.querySelector("#parentStudentSelect").addEventListener("change", renderParentDashboard);
 document.querySelector("#addStudentButton").addEventListener("click", () => document.querySelector("#studentDialog").showModal());
 document.querySelector("#studentTrackerRows").addEventListener("click", event => {
+  const codeButton = event.target.closest("[data-copy-code]");
+  if (codeButton) {
+    const student = trackedStudents.find(item => item.id === Number(codeButton.dataset.copyCode));
+    if (!student.familyCode) {
+      student.familyCode = `${student.name.replace(/[^a-z]/gi,"").slice(0,4).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+      saveStudents();
+    }
+    navigator.clipboard.writeText(`Student: ${student.name}\nFamily code: ${student.familyCode}`);
+    codeButton.textContent = "Copied!";
+    setTimeout(() => { codeButton.textContent = student.familyCode; }, 1200);
+    return;
+  }
   const progressButton = event.target.closest("[data-student-progress]");
   const starButton = event.target.closest("[data-student-star]");
   if (!progressButton && !starButton) return;
@@ -259,15 +266,38 @@ document.querySelector("#studentForm").addEventListener("submit", event => {
     id: Date.now(), name, age:Number(data.get("age")), level:data.get("level"),
     completed:0, attendance:100, speaking:60, listening:60, stars:0,
     goal:data.get("goal").trim(), note:data.get("note").trim(),
-    home:"Practice today’s five useful phrases together for five minutes."
+    home:"Practice today’s five useful phrases together for five minutes.",
+    parentEmail:data.get("parentEmail").trim(),
+    familyCode:`${name.replace(/[^a-z]/gi,"").slice(0,4).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`
   });
   saveStudents(); renderStudentTracker(); document.querySelector("#studentDialog").close(); event.currentTarget.reset();
 });
 document.querySelector("#copyParentUpdate").addEventListener("click", async event => {
-  const student = trackedStudents.find(s => String(s.id) === document.querySelector("#parentStudentSelect").value) || trackedStudents[0];
+  const student = trackedStudents.find(s => String(s.id) === String(signedInStudentId));
+  if (!student) return;
   const text = `${student.name}'s Speak Up update: ${student.completed}/15 lessons complete, speaking ${student.speaking}%, listening ${student.listening}%. Teacher note: ${student.note} Next goal: ${student.goal} Home practice: ${student.home}`;
   try { await navigator.clipboard.writeText(text); event.currentTarget.textContent = "Copied ✓"; }
   catch { event.currentTarget.textContent = "Copy unavailable"; }
+});
+document.querySelector("#parentLogin").addEventListener("submit", event => {
+  event.preventDefault();
+  const name = document.querySelector("#parentLoginName").value.trim().toLowerCase();
+  const code = document.querySelector("#parentLoginCode").value.trim().toUpperCase();
+  const student = trackedStudents.find(item => item.name.trim().toLowerCase() === name && item.familyCode?.toUpperCase() === code);
+  if (!student) {
+    document.querySelector("#parentLoginError").textContent = "The name or family code is incorrect. Please ask the teacher for access details.";
+    return;
+  }
+  document.querySelector("#parentLoginError").textContent = "";
+  signedInStudentId = String(student.id);
+  sessionStorage.setItem("speakUpParentStudentId", signedInStudentId);
+  event.currentTarget.reset();
+  renderParentDashboard();
+});
+document.querySelector("#parentSignOut").addEventListener("click", () => {
+  signedInStudentId = null;
+  sessionStorage.removeItem("speakUpParentStudentId");
+  renderParentDashboard();
 });
 
 document.querySelectorAll(".dialog-close").forEach(button => button.addEventListener("click", () => button.closest("dialog").close()));
