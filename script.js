@@ -188,6 +188,41 @@ function updateProgress() {
   localStorage.setItem("speakUpProgress", JSON.stringify([...completed]));
 }
 
+function lessonTeachingPack(lesson, extra) {
+  const firstPhrase = lesson.language.split(" · ")[0];
+  return `
+    <section class="dialog-section">
+      <p class="media-label">Teacher-ready plan</p><h3>Learning design</h3>
+      <div class="lesson-quality-grid">
+        <article><span>🎯</span><strong>Outcome</strong><p>By the end, learners can ${lesson.goal.charAt(0).toLowerCase()}${lesson.goal.slice(1)}</p></article>
+        <article><span>🧰</span><strong>Prepare</strong><p>${extra.materials.join(", ")} and a timer.</p></article>
+        <article><span>🗣️</span><strong>Language target</strong><p>Model clearly: “${firstPhrase}”</p></article>
+      </div>
+    </section>
+    <section class="dialog-section">
+      <p class="media-label">60–75 minute sequence</p><h3>Teach it step by step</h3>
+      <div class="teaching-steps">
+        <article class="teaching-step"><span>5–8 min</span><div><strong>Connect & warm up</strong>Show the picture prompt. Learners notice three details, predict the topic, then share one idea with a partner.</div></article>
+        <article class="teaching-step"><span>10 min</span><div><strong>Model the language</strong>Teach the six picture words with gesture and voice. Model the key phrases, then use echo, whisper, and partner repetition.</div></article>
+        <article class="teaching-step"><span>12 min</span><div><strong>Listen twice</strong>First listen for the situation and speakers. Second listen for two details and one useful phrase. Pair-check before class feedback.</div></article>
+        <article class="teaching-step"><span>12 min</span><div><strong>Supported speaking</strong>Learners rehearse with visible sentence starters. Change partners once and encourage one follow-up question.</div></article>
+        <article class="teaching-step"><span>15 min</span><div><strong>Real communication mission</strong>${lesson.task}</div></article>
+        <article class="teaching-step"><span>8 min</span><div><strong>Reflect & exit</strong>Complete the worksheet, self-rate confidence from 1–3, and say one target phrase before leaving.</div></article>
+      </div>
+    </section>
+    <section class="dialog-section">
+      <p class="media-label">Support every learner</p><h3>Differentiate with confidence</h3>
+      <div class="support-grid">
+        <article><strong>🌱 Extra support</strong><p>Keep picture words and sentence frames visible. Allow pointing plus speaking, partner rehearsal, and a slower second listen.</p></article>
+        <article><strong>🚀 Ready for more</strong><p>Ask for a reason, extra detail, or follow-up question. Challenge learners to speak without reading the full sentence frame.</p></article>
+      </div>
+    </section>
+    <section class="dialog-section">
+      <p class="media-label">Quick assessment</p><h3>Success checklist</h3>
+      <ul class="success-list"><li>I used at least two target phrases.</li><li>I listened and responded to my partner.</li><li>I spoke clearly enough to be understood.</li><li>I tried again when communication was difficult.</li></ul>
+    </section>`;
+}
+
 function showLesson(day) {
   const lesson = lessons.find(l => l.day === day);
   const extra = dailyExtras[day];
@@ -196,6 +231,7 @@ function showLesson(day) {
     <div class="lesson-cover"><span>${extra.visual}</span><div><p>Picture prompt</p><strong>What can you see? What might happen today?</strong></div></div>
     <p class="dialog-kicker">Day ${lesson.day} · 60–75 minutes</p><h2>${lesson.title}</h2>
     <p class="dialog-goal"><strong>Can-do goal:</strong> ${lesson.goal}</p>
+    ${lessonTeachingPack(lesson, extra)}
     <section class="dialog-section"><h3>Useful language</h3><p>${lesson.language}</p></section>
     <section class="dialog-section"><h3>Picture vocabulary</h3><div class="vocab-chips">${extra.words.map((word, index) => `<span><b>${["🔵","🟡","🟢","🟠","🟣","🔴"][index]}</b>${word}</span>`).join("")}</div></section>
     <section class="dialog-section"><h3>Listening script</h3><p class="script">${lesson.listen}</p></section>
