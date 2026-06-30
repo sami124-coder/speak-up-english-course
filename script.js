@@ -460,6 +460,25 @@ updateProgress();
 renderStudentTracker();
 renderTeacherAccess();
 
+const revealTargets = document.querySelectorAll(".section-title, .lesson-card, .resource-card, .welcome-cards article, .quick-start a, .lesson-resource-hub, .sample-lesson > *, .about-course > *");
+revealTargets.forEach((element, index) => {
+  element.classList.add("motion-reveal");
+  element.style.transitionDelay = `${Math.min(index % 5, 4) * 70}ms`;
+});
+if ("IntersectionObserver" in window) {
+  const motionObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+        motionObserver.unobserve(entry.target);
+      }
+    });
+  }, {threshold:.12});
+  revealTargets.forEach(element => motionObserver.observe(element));
+} else {
+  revealTargets.forEach(element => element.classList.add("is-visible"));
+}
+
 let installPrompt;
 const installButton = document.querySelector("#installApp");
 window.addEventListener("beforeinstallprompt", event => {
