@@ -428,3 +428,24 @@ renderLessonResourceLibrary();
 updateProgress();
 renderStudentTracker();
 renderTeacherAccess();
+
+let installPrompt;
+const installButton = document.querySelector("#installApp");
+window.addEventListener("beforeinstallprompt", event => {
+  event.preventDefault();
+  installPrompt = event;
+  installButton.hidden = false;
+});
+installButton.addEventListener("click", async () => {
+  if (installPrompt) {
+    installPrompt.prompt();
+    await installPrompt.userChoice;
+    installPrompt = null;
+    installButton.hidden = true;
+  } else {
+    alert("On iPhone or iPad: tap Share, then “Add to Home Screen”. On a computer: use the install icon in the browser address bar.");
+  }
+});
+window.addEventListener("appinstalled", () => { installButton.hidden = true; });
+if (/iphone|ipad|ipod/i.test(navigator.userAgent) && !window.navigator.standalone) installButton.hidden = false;
+if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js"));

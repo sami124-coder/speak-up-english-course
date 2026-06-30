@@ -4,11 +4,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#173d3a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Speak Up!">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml">
   <title>Speak Up! — 15-Day English Course</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=11">
+  <link rel="stylesheet" href="styles.css?v=12">
 </head>
 <body>
   <header class="topbar">
@@ -22,7 +27,7 @@
       <a href="#students">Teacher</a>
       <a href="#parents">Parent</a>
     </nav>
-    <button class="ghost-button" id="resetProgress" type="button">Reset progress</button>
+    <div class="app-controls"><button class="install-button" id="installApp" type="button" hidden>Install app</button><button class="ghost-button" id="resetProgress" type="button">Reset progress</button></div>
   </header>
 
   <main>
@@ -334,6 +339,6 @@
     </form>
   </dialog>
 
-  <script src="script.js?v=10"></script>
+  <script src="script.js?v=12"></script>
 </body>
 </html>

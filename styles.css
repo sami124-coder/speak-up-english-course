@@ -16,6 +16,7 @@ html { scroll-behavior: smooth; }
 body { margin: 0; color: var(--ink); background: var(--paper); font-family: "DM Sans", sans-serif; overflow-x: hidden; }
 button, a { font: inherit; }
 button { cursor: pointer; }
+[hidden] { display: none !important; }
 a { color: inherit; }
 
 .topbar {
@@ -35,6 +36,8 @@ a { color: inherit; }
 .ghost-button, .filter {
   padding: 9px 14px; color: var(--ink); border: 1px solid var(--line); border-radius: 999px; background: transparent; font-weight: 700;
 }
+.app-controls { display: flex; align-items: center; gap: 8px; }
+.install-button { padding: 10px 15px; color: white; border: 0; border-radius: 999px; background: var(--coral); font-weight: 800; box-shadow: 2px 3px 0 var(--ink); }
 
 .hero {
   display: grid; grid-template-columns: 1.05fr .95fr; gap: clamp(34px, 7vw, 100px); align-items: center;
@@ -397,6 +400,8 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
 }
 @media (max-width: 700px) {
   .topbar nav, .ghost-button { display: none; }
+  .topbar { min-height: 68px; padding-inline: 16px; }
+  .install-button { display: inline-flex; padding: 9px 12px; font-size: .78rem; }
   .hero { padding-top: 65px; }
   .hero-visual { min-height: 360px; transform: scale(.78); margin: -40px; }
   .hero-visual img { min-height: 360px; }
