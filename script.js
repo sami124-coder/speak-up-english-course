@@ -91,10 +91,82 @@ const dayOneExtended = `
     <p>Students mark a word when they hear it in a teacher instruction. Three in a row: “Bingo! I’m ready!”</p>
   </section>`;
 
+const starterStudents = [
+  {id:1, name:"Maya", age:9, level:"A1", completed:6, attendance:93, speaking:72, listening:78, stars:18, goal:"Use because to give a reason", note:"Maya is speaking more confidently and now asks for help independently.", home:"Ask three ‘What do you like?’ questions at dinner."},
+  {id:2, name:"Adam", age:10, level:"A1+", completed:9, attendance:87, speaking:81, listening:76, stars:24, goal:"Add details when telling a story", note:"Adam brings great energy to role-plays and listens carefully to his partner.", home:"Tell a one-minute story using first, then, and finally."},
+  {id:3, name:"Lina", age:11, level:"A2", completed:12, attendance:96, speaking:88, listening:91, stars:31, goal:"Disagree politely and give an example", note:"Lina communicates clearly and supports other learners during team challenges.", home:"Choose a fun topic and practice one polite mini debate."},
+  {id:4, name:"Yousef", age:8, level:"A1", completed:4, attendance:82, speaking:64, listening:69, stars:13, goal:"Answer in a complete sentence", note:"Yousef is building courage. Pair rehearsal helps him share his ideas.", home:"Practice five full-sentence answers with a family member."}
+];
+
+let trackedStudents = JSON.parse(localStorage.getItem("speakUpStudents") || "null") || starterStudents;
+
 const lessonGrid = document.querySelector("#lessonGrid");
 const lessonDialog = document.querySelector("#lessonDialog");
 const resourceDialog = document.querySelector("#resourceDialog");
 let completed = new Set(JSON.parse(localStorage.getItem("speakUpProgress") || "[]"));
+
+function saveStudents() {
+  localStorage.setItem("speakUpStudents", JSON.stringify(trackedStudents));
+}
+
+function latestLesson(student) {
+  return lessons[Math.max(0, Math.min(student.completed, 15) - 1)] || lessons[0];
+}
+
+function renderStudentTracker() {
+  const query = document.querySelector("#studentSearch").value.trim().toLowerCase();
+  const level = document.querySelector("#studentLevelFilter").value;
+  const visible = trackedStudents.filter(student =>
+    (level === "all" || student.level === level) &&
+    `${student.name} ${student.goal}`.toLowerCase().includes(query)
+  );
+  document.querySelector("#studentTrackerRows").innerHTML = visible.map(student => `
+    <tr>
+      <td><div class="student-name-cell"><span class="mini-avatar">${student.name[0].toUpperCase()}</span><div><strong>${student.name}</strong><br><small>Age ${student.age} · <span class="level-pill">${student.level}</span></small></div></div></td>
+      <td><strong>${student.completed}/15</strong><div class="table-progress"><span style="width:${student.completed / 15 * 100}%"></span></div></td>
+      <td>${student.attendance}%</td><td>${student.speaking}%</td><td>${student.listening}%</td>
+      <td>⭐ ${student.stars}</td><td>${student.goal}</td>
+      <td><button class="student-action" data-student-progress="${student.id}">+ Lesson</button> <button class="student-action" data-student-star="${student.id}">+ Star</button></td>
+    </tr>`).join("");
+  const total = trackedStudents.length || 1;
+  document.querySelector("#studentTotal").textContent = trackedStudents.length;
+  document.querySelector("#averageProgress").textContent = `${Math.round(trackedStudents.reduce((sum,s) => sum + s.completed / 15 * 100, 0) / total)}%`;
+  document.querySelector("#averageConfidence").textContent = `${Math.round(trackedStudents.reduce((sum,s) => sum + s.speaking, 0) / total)}%`;
+  document.querySelector("#totalStars").textContent = trackedStudents.reduce((sum,s) => sum + s.stars, 0);
+  renderParentOptions();
+}
+
+function renderParentOptions() {
+  const select = document.querySelector("#parentStudentSelect");
+  const current = select.value;
+  select.innerHTML = trackedStudents.map(student => `<option value="${student.id}">${student.name}</option>`).join("");
+  if (trackedStudents.some(s => String(s.id) === current)) select.value = current;
+  renderParentDashboard();
+}
+
+function renderParentDashboard() {
+  const select = document.querySelector("#parentStudentSelect");
+  const student = trackedStudents.find(s => String(s.id) === select.value) || trackedStudents[0];
+  if (!student) return;
+  const progress = Math.round(student.completed / 15 * 100);
+  const lesson = latestLesson(student);
+  document.querySelector("#parentAvatar").textContent = student.name[0].toUpperCase();
+  document.querySelector("#parentName").textContent = student.name;
+  document.querySelector("#parentLevel").textContent = `Age ${student.age} · Level ${student.level}`;
+  document.querySelector("#parentProgressPercent").textContent = `${progress}%`;
+  document.querySelector("#parentProgressRing").style.background = `conic-gradient(var(--coral) ${progress}%, #edf0ee ${progress}%)`;
+  document.querySelector("#parentProgressText").textContent = `${student.completed} of 15 days complete`;
+  [["Speaking",student.speaking],["Listening",student.listening],["Attendance",student.attendance]].forEach(([skill,value]) => {
+    document.querySelector(`#parent${skill}Value`).textContent = `${value}%`;
+    document.querySelector(`#parent${skill}Bar`).style.width = `${value}%`;
+  });
+  document.querySelector("#parentStars").textContent = `${student.stars} stars`;
+  document.querySelector("#parentTeacherNote").textContent = student.note;
+  document.querySelector("#parentGoal").textContent = student.goal;
+  document.querySelector("#parentHomePractice").textContent = student.home;
+  document.querySelector("#latestLessonTitle").textContent = `Day ${lesson.day} · ${lesson.title}`;
+  document.querySelector("#latestLessonCanDo").textContent = `I can ${lesson.goal.charAt(0).toLowerCase()}${lesson.goal.slice(1)}`;
+}
 
 function renderLessons(filter = "all") {
   lessonGrid.innerHTML = "";
@@ -165,6 +237,39 @@ document.querySelectorAll("[data-resource]").forEach(button => button.addEventLi
   resourceDialog.showModal();
 }));
 
+document.querySelector("#studentSearch").addEventListener("input", renderStudentTracker);
+document.querySelector("#studentLevelFilter").addEventListener("change", renderStudentTracker);
+document.querySelector("#parentStudentSelect").addEventListener("change", renderParentDashboard);
+document.querySelector("#addStudentButton").addEventListener("click", () => document.querySelector("#studentDialog").showModal());
+document.querySelector("#studentTrackerRows").addEventListener("click", event => {
+  const progressButton = event.target.closest("[data-student-progress]");
+  const starButton = event.target.closest("[data-student-star]");
+  if (!progressButton && !starButton) return;
+  const id = Number((progressButton || starButton).dataset[progressButton ? "studentProgress" : "studentStar"]);
+  const student = trackedStudents.find(item => item.id === id);
+  if (progressButton) student.completed = Math.min(15, student.completed + 1);
+  if (starButton) student.stars += 1;
+  saveStudents(); renderStudentTracker();
+});
+document.querySelector("#studentForm").addEventListener("submit", event => {
+  event.preventDefault();
+  const data = new FormData(event.currentTarget);
+  const name = data.get("name").trim();
+  trackedStudents.push({
+    id: Date.now(), name, age:Number(data.get("age")), level:data.get("level"),
+    completed:0, attendance:100, speaking:60, listening:60, stars:0,
+    goal:data.get("goal").trim(), note:data.get("note").trim(),
+    home:"Practice today’s five useful phrases together for five minutes."
+  });
+  saveStudents(); renderStudentTracker(); document.querySelector("#studentDialog").close(); event.currentTarget.reset();
+});
+document.querySelector("#copyParentUpdate").addEventListener("click", async event => {
+  const student = trackedStudents.find(s => String(s.id) === document.querySelector("#parentStudentSelect").value) || trackedStudents[0];
+  const text = `${student.name}'s Speak Up update: ${student.completed}/15 lessons complete, speaking ${student.speaking}%, listening ${student.listening}%. Teacher note: ${student.note} Next goal: ${student.goal} Home practice: ${student.home}`;
+  try { await navigator.clipboard.writeText(text); event.currentTarget.textContent = "Copied ✓"; }
+  catch { event.currentTarget.textContent = "Copy unavailable"; }
+});
+
 document.querySelectorAll(".dialog-close").forEach(button => button.addEventListener("click", () => button.closest("dialog").close()));
 document.querySelectorAll("dialog").forEach(dialog => dialog.addEventListener("click", e => { if (e.target === dialog) dialog.close(); }));
 
@@ -196,3 +301,4 @@ document.querySelectorAll(".rubric-row:not(.header)").forEach(row => {
 
 renderLessons();
 updateProgress();
+renderStudentTracker();

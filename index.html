@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=5">
+  <link rel="stylesheet" href="styles.css?v=6">
 </head>
 <body>
   <header class="topbar">
@@ -18,6 +18,8 @@
     </a>
     <nav aria-label="Primary navigation">
       <a href="#course">Course</a>
+      <a href="#students">Students</a>
+      <a href="#parents">Parents</a>
       <a href="#resources">Resources</a>
       <a href="#assessment">Assessment</a>
     </nav>
@@ -85,6 +87,81 @@
         <article><span>03</span><strong>Practice</strong><p>Try useful phrases with a partner.</p></article>
         <article><span>04</span><strong>Challenge</strong><p>Use English to complete a real task.</p></article>
         <article><span>05</span><strong>Reflect</strong><p>Notice progress and choose a next goal.</p></article>
+      </div>
+    </section>
+
+    <section class="section student-tracker-section" id="students">
+      <div class="section-title">
+        <div>
+          <p class="eyebrow">Teacher dashboard</p>
+          <h2>See every learner clearly</h2>
+        </div>
+        <button class="button secondary compact-button" id="addStudentButton" type="button">+ Add student</button>
+      </div>
+      <div class="tracker-summary">
+        <article><span>Active learners</span><strong id="studentTotal">0</strong><small>in this course</small></article>
+        <article><span>Average progress</span><strong id="averageProgress">0%</strong><small>lessons completed</small></article>
+        <article><span>Speaking confidence</span><strong id="averageConfidence">0%</strong><small>class average</small></article>
+        <article><span>Stars earned</span><strong id="totalStars">0</strong><small>celebrate effort</small></article>
+      </div>
+      <div class="student-toolbar">
+        <input id="studentSearch" type="search" placeholder="Search learners…">
+        <select id="studentLevelFilter" aria-label="Filter students by level">
+          <option value="all">All levels</option>
+          <option value="A1">A1</option>
+          <option value="A1+">A1+</option>
+          <option value="A2">A2</option>
+        </select>
+      </div>
+      <div class="student-table-wrap">
+        <table class="student-table">
+          <thead><tr><th>Learner</th><th>Course</th><th>Attendance</th><th>Speaking</th><th>Listening</th><th>Stars</th><th>Current goal</th><th>Quick action</th></tr></thead>
+          <tbody id="studentTrackerRows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section parent-section" id="parents">
+      <div class="parent-heading">
+        <div>
+          <p class="eyebrow">Family connection</p>
+          <h2>Parents can follow the learning journey.</h2>
+          <p>Clear progress, kind feedback, and a simple activity to practice together at home.</p>
+        </div>
+        <label class="child-picker">Viewing progress for
+          <select id="parentStudentSelect" aria-label="Choose a child"></select>
+        </label>
+      </div>
+      <div class="parent-dashboard">
+        <article class="parent-profile-card">
+          <div class="student-avatar" id="parentAvatar">A</div>
+          <p class="media-label">My child’s journey</p>
+          <h3 id="parentName">Student</h3>
+          <p id="parentLevel">Level A1</p>
+          <div class="big-progress-ring" id="parentProgressRing"><span id="parentProgressPercent">0%</span></div>
+          <strong id="parentProgressText">0 of 15 days complete</strong>
+        </article>
+        <article class="parent-skills-card">
+          <p class="media-label">Skill growth</p><h3>This week’s progress</h3>
+          <div class="skill-row"><span>Speaking confidence</span><strong id="parentSpeakingValue">0%</strong></div>
+          <div class="skill-meter"><span id="parentSpeakingBar"></span></div>
+          <div class="skill-row"><span>Listening accuracy</span><strong id="parentListeningValue">0%</strong></div>
+          <div class="skill-meter"><span id="parentListeningBar"></span></div>
+          <div class="skill-row"><span>Attendance</span><strong id="parentAttendanceValue">0%</strong></div>
+          <div class="skill-meter"><span id="parentAttendanceBar"></span></div>
+          <div class="parent-stars"><span>⭐</span><div><strong id="parentStars">0 stars</strong><small>earned through brave communication</small></div></div>
+        </article>
+        <article class="parent-message-card">
+          <p class="media-label">Teacher update</p><h3>A note from class</h3>
+          <blockquote id="parentTeacherNote"></blockquote>
+          <div class="next-goal"><span>Next goal</span><strong id="parentGoal"></strong></div>
+          <div class="home-practice"><span>🏠</span><div><small>Try this at home</small><strong id="parentHomePractice"></strong></div></div>
+        </article>
+      </div>
+      <div class="weekly-strip">
+        <div><p class="media-label">Latest learning</p><h3 id="latestLessonTitle">Day 1 · Classroom English</h3></div>
+        <p id="latestLessonCanDo">I can ask for help in English.</p>
+        <button class="ghost-button light-ghost" id="copyParentUpdate" type="button">Copy family update</button>
       </div>
     </section>
 
@@ -190,6 +267,21 @@
     <div id="resourceContent"></div>
   </dialog>
 
-  <script src="script.js?v=5"></script>
+  <dialog id="studentDialog" class="content-dialog student-dialog">
+    <button class="dialog-close" type="button" aria-label="Close">×</button>
+    <form id="studentForm">
+      <p class="dialog-kicker">Teacher dashboard</p><h2>Add a learner</h2>
+      <label>Student name<input name="name" required placeholder="e.g. Maya"></label>
+      <div class="form-row">
+        <label>Age<input name="age" required type="number" min="8" max="12" value="9"></label>
+        <label>Level<select name="level"><option>A1</option><option>A1+</option><option>A2</option></select></label>
+      </div>
+      <label>Current speaking goal<input name="goal" required value="Answer in full sentences"></label>
+      <label>Teacher note<textarea name="note">A positive learner who participates well in pair work.</textarea></label>
+      <button class="button primary dialog-complete" type="submit">Add learner</button>
+    </form>
+  </dialog>
+
+  <script src="script.js?v=6"></script>
 </body>
 </html>
