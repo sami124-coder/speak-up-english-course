@@ -29,7 +29,7 @@ a { color: inherit; }
   display: grid; place-items: center; width: 45px; height: 45px; color: white; background: var(--coral);
   border: 2px solid var(--ink); border-radius: 15px 18px 12px 17px; box-shadow: 3px 3px 0 var(--ink); transform: rotate(-3deg);
 }
-.topbar nav { display: flex; gap: 28px; }
+.topbar nav { display: flex; gap: 24px; }
 .topbar nav a { color: var(--muted); font-weight: 700; text-decoration: none; }
 .topbar nav a:hover { color: var(--coral); }
 .ghost-button, .filter {
@@ -106,6 +106,13 @@ h1 em { display: block; color: var(--coral); font-style: normal; }
 .progress-strip p:last-child { margin: 0; color: rgba(255,255,255,.72); }
 .progress-track { height: 13px; overflow: hidden; border: 1px solid rgba(255,255,255,.45); border-radius: 99px; background: rgba(255,255,255,.12); }
 .progress-track span { display: block; width: 0; height: 100%; background: var(--yellow); transition: width .4s ease; }
+.quick-start { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 30px clamp(24px, 7vw, 110px); background: white; }
+.quick-start a { display: flex; align-items: center; gap: 13px; padding: 17px; border: 1px solid var(--line); border-radius: 16px; text-decoration: none; transition: .2s ease; }
+.quick-start a:hover { border-color: var(--coral); transform: translateY(-2px); }
+.quick-start span { display: grid; place-items: center; flex: 0 0 auto; width: 34px; height: 34px; color: white; border-radius: 10px; background: var(--coral); font-weight: 800; }
+.quick-start div { display: grid; gap: 3px; }
+.quick-start small { color: var(--muted); }
+.quick-start b { margin-left: auto; color: var(--coral); }
 
 .section { padding: clamp(65px, 9vw, 125px) clamp(24px, 7vw, 110px); }
 .section-title { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 42px; }
@@ -114,7 +121,7 @@ h1 em { display: block; color: var(--coral); font-style: normal; }
 .filter.active { color: white; border-color: var(--ink); background: var(--ink); }
 .lesson-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .lesson-card {
-  position: relative; min-height: 455px; padding: 20px; overflow: hidden; border: 1px solid var(--line);
+  position: relative; min-height: 390px; padding: 18px; overflow: hidden; border: 1px solid var(--line);
   border-radius: 25px; background: white; box-shadow: 0 10px 28px rgba(23,61,58,.07); transition: .25s ease;
 }
 .lesson-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
@@ -124,7 +131,7 @@ h1 em { display: block; color: var(--coral); font-style: normal; }
 .complete-toggle { width: 30px; height: 30px; border: 1px solid var(--line); border-radius: 50%; background: white; }
 .completed .complete-toggle { color: white; background: var(--mint); }
 .lesson-thumbnail {
-  position: relative; display: grid; place-items: center; height: 145px; margin-top: 18px; overflow: hidden;
+  position: relative; display: grid; place-items: center; height: 110px; margin-top: 14px; overflow: hidden;
   border: 1px solid var(--line); border-radius: 17px; background: #ffe4dc;
 }
 .lesson-thumbnail::before, .lesson-thumbnail::after {
@@ -132,7 +139,7 @@ h1 em { display: block; color: var(--coral); font-style: normal; }
 }
 .lesson-thumbnail::before { top: -25px; left: -20px; }
 .lesson-thumbnail::after { right: -20px; bottom: -30px; }
-.lesson-thumbnail span { position: relative; z-index: 1; font-size: 4.4rem; filter: drop-shadow(0 8px 5px rgba(23,61,58,.13)); transition: transform .2s ease; }
+.lesson-thumbnail span { position: relative; z-index: 1; font-size: 3.4rem; filter: drop-shadow(0 8px 5px rgba(23,61,58,.13)); transition: transform .2s ease; }
 .lesson-card:hover .lesson-thumbnail span { transform: scale(1.12) rotate(-4deg); }
 .lesson-thumbnail small {
   position: absolute; z-index: 2; right: 10px; bottom: 10px; padding: 5px 8px; border-radius: 7px;
@@ -260,11 +267,11 @@ h1 em { display: block; color: var(--coral); font-style: normal; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
 .resource-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-.resource-card { min-height: 330px; padding: 26px; border: 2px solid var(--ink); border-radius: 25px; box-shadow: 5px 5px 0 var(--ink); }
+.resource-card { min-height: 245px; padding: 23px; border: 1px solid var(--line); border-radius: 22px; box-shadow: 0 8px 25px rgba(23,61,58,.07); }
 .resource-card.coral { background: #ffe0d8; } .resource-card.blue { background: #deebff; }
 .resource-card.yellow { background: #fff0b9; } .resource-card.mint { background: #dff4eb; }
 .resource-icon { font-size: 2.2rem; }
-.resource-card h3 { margin: 65px 0 10px; font-size: 1.55rem; }
+.resource-card h3 { margin: 28px 0 8px; font-size: 1.45rem; }
 .resource-card p { color: #435d59; line-height: 1.6; }
 .resource-card button, .resource-download { display: inline-block; padding: 0; color: var(--ink); border: 0; border-bottom: 2px solid; background: transparent; font-weight: 800; text-decoration: none; }
 .lesson-resource-hub { margin-top: 65px; padding: clamp(24px, 5vw, 48px); border: 1px solid var(--line); border-radius: 28px; background: #f5f8f6; }
@@ -282,7 +289,7 @@ h1 em { display: block; color: var(--coral); font-style: normal; }
 .skill-panel h4 { margin: 0 0 12px; font: 700 1.25rem "Fredoka"; }
 .skill-panel p { color: var(--muted); line-height: 1.6; white-space: pre-line; }
 .skill-panel strong { display: block; margin-top: 13px; }
-.mega-library { margin-top: 28px; padding: clamp(24px, 4vw, 46px); border-radius: 28px; color: white; background: var(--ink); }
+.mega-library { display: none; }
 .library-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; padding-bottom: 28px; border-bottom: 1px solid rgba(255,255,255,.18); }
 .library-heading .eyebrow { color: var(--yellow); }
 .library-heading h3 { margin: 0; font-size: clamp(1.8rem, 3vw, 3rem); }
@@ -382,6 +389,7 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
   .rhythm-grid { grid-template-columns: repeat(2, 1fr); }
   .progress-strip { grid-template-columns: 1fr; }
   .tracker-summary { grid-template-columns: repeat(2, 1fr); }
+  .quick-start { grid-template-columns: 1fr; }
   .parent-dashboard { grid-template-columns: 1fr; }
   .parent-login { grid-template-columns: 1fr; align-items: stretch; }
   .login-error { grid-column: auto; }
