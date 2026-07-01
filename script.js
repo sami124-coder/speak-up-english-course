@@ -609,7 +609,7 @@ if (matchMedia("(pointer:fine)").matches && !matchMedia("(prefers-reduced-motion
   });
 }
 
-const revealTargets = document.querySelectorAll(".section-title, .lesson-card, .resource-card, .welcome-cards article, .quick-start a, .public-roadmap article, .about-course > *, .video-journey-copy, .video-gallery figure");
+const revealTargets = document.querySelectorAll(".section-title, .lesson-card, .resource-card, .quick-start a, .public-roadmap article, .about-course > *");
 revealTargets.forEach((element, index) => {
   element.classList.add("motion-reveal");
   element.style.transitionDelay = `${Math.min(index % 5, 4) * 70}ms`;
@@ -627,12 +627,6 @@ if ("IntersectionObserver" in window) {
 } else {
   revealTargets.forEach(element => element.classList.add("is-visible"));
 }
-
-document.querySelectorAll(".video-gallery video").forEach(video => {
-  video.addEventListener("play", () => {
-    document.querySelectorAll(".video-gallery video").forEach(other => { if (other !== video) other.pause(); });
-  });
-});
 
 let installPrompt;
 const installButton = document.querySelector("#installApp");
