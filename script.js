@@ -487,9 +487,11 @@ document.querySelector("#parentLogin").addEventListener("submit", async event =>
   const code = document.querySelector("#parentLoginCode").value.trim().toUpperCase();
   const {data,error} = await supabaseClient.rpc("get_child_progress", {p_student_name:name, p_family_code:code});
   let student = data;
-  if (!student && error) student = trackedStudents.find(item => item.name.trim().toLowerCase() === name && item.familyCode?.toUpperCase() === code);
+  if (!student) student = trackedStudents.find(item => item.name.trim().toLowerCase() === name && item.familyCode?.toUpperCase() === code);
   if (!student) {
-    document.querySelector("#parentLoginError").textContent = "The name or family code is incorrect. Please ask the teacher for access details.";
+    document.querySelector("#parentLoginError").textContent = error
+      ? "Progress service is unavailable. Please try again or use this device after the teacher adds the learner."
+      : "The name or family code is incorrect. Please ask the teacher for access details.";
     return;
   }
   const existing = trackedStudents.findIndex(item => String(item.id) === String(student.id));
