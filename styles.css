@@ -205,7 +205,7 @@ h1 em { display: block; color: var(--coral); font-style: normal; }
 .teacher-gate-icon { display: grid; place-items: center; width: 74px; height: 74px; margin: 0 auto 22px; border-radius: 24px; background: var(--cream); font-size: 2rem; transform: rotate(-3deg); }
 .teacher-gate h2 { margin: 0; font-size: clamp(2.2rem, 5vw, 3.6rem); }
 .teacher-gate > p:not(.eyebrow) { color: var(--muted); line-height: 1.65; }
-.teacher-gate form { display: grid; grid-template-columns: 1fr 1fr auto auto; align-items: end; gap: 10px; margin-top: 28px; text-align: left; }
+.teacher-gate form { display: grid; grid-template-columns: minmax(220px, 360px) auto; justify-content: center; align-items: end; gap: 10px; margin-top: 28px; text-align: left; }
 .teacher-gate .login-error { grid-column: 1 / -1; }
 .teacher-gate label { display: grid; flex: 1; gap: 7px; font-weight: 700; }
 .teacher-gate input { width: 100%; padding: 14px; border: 1px solid var(--line); border-radius: 11px; font: inherit; letter-spacing: .16em; }
@@ -511,6 +511,7 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
   .tracker-summary { grid-template-columns: 1fr 1fr; }
   .student-toolbar, .parent-heading { align-items: stretch; flex-direction: column; }
   .teacher-gate form, .teacher-actions { align-items: stretch; flex-direction: column; }
+  .teacher-gate form { grid-template-columns: 1fr; }
   .form-row { grid-template-columns: 1fr; }
   .profile-head, .profile-notes { grid-template-columns: 1fr; align-items: stretch; }
   .profile-head { flex-direction: column; }

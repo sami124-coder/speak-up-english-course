@@ -102,8 +102,9 @@ if (!localStorage.getItem("speakUpNoDemoMigration")) {
 }
 let signedInStudentId = sessionStorage.getItem("speakUpParentStudentId");
 const supabaseClient = window.supabase.createClient("https://vibayhusnmcpvtlxuayh.supabase.co", "sb_publishable_icj980mZsKVkWH4ZB7LyTA_DaK5x3Mx");
+const TEACHER_PIN = "2468";
 let cloudUser = null;
-let teacherUnlocked = false;
+let teacherUnlocked = sessionStorage.getItem("speakUpTeacherUnlocked") === "1";
 document.querySelector("#teacherPrivate").append(document.querySelector("#resources"));
 
 const lessonGrid = document.querySelector("#lessonGrid");
@@ -131,9 +132,9 @@ async function loadCloudStudents() {
 function renderTeacherAccess() {
   document.querySelector("#teacherGate").hidden = teacherUnlocked;
   document.querySelector("#teacherPrivate").hidden = !teacherUnlocked;
-  document.querySelector("#teacherGateTitle").textContent = "Teacher cloud access";
-  document.querySelector("#teacherGateText").textContent = "Sign in to synchronize student records securely across devices.";
-  document.querySelector("#teacherPinHelp").textContent = "New teacher? Create an account with your email and password.";
+  document.querySelector("#teacherGateTitle").textContent = "Teacher PIN access";
+  document.querySelector("#teacherGateText").textContent = "Enter the teacher PIN to open the private dashboard.";
+  document.querySelector("#teacherPinHelp").textContent = "One teacher · one simple PIN";
 }
 
 function latestLesson(student) {
@@ -506,37 +507,21 @@ document.querySelector("#parentSignOut").addEventListener("click", () => {
 });
 document.querySelector("#teacherLoginForm").addEventListener("submit", async event => {
   event.preventDefault();
-  const email = document.querySelector("#teacherEmailInput").value.trim();
-  const password = document.querySelector("#teacherPasswordInput").value;
-  const {data,error} = await supabaseClient.auth.signInWithPassword({email,password});
-  if (error) { document.querySelector("#teacherLoginError").textContent = error.message; return; }
-  cloudUser = data.user;
+  const pin = document.querySelector("#teacherPinInput").value;
+  if (pin !== TEACHER_PIN) {
+    document.querySelector("#teacherLoginError").textContent = "Incorrect PIN. Please try again.";
+    return;
+  }
   teacherUnlocked = true;
+  sessionStorage.setItem("speakUpTeacherUnlocked", "1");
   document.querySelector("#teacherLoginError").textContent = "";
   event.currentTarget.reset();
   renderTeacherAccess();
   await loadCloudStudents();
 });
-document.querySelector("#teacherSignUp").addEventListener("click", async () => {
-  const form = document.querySelector("#teacherLoginForm");
-  if (!form.reportValidity()) {
-    document.querySelector("#teacherLoginError").textContent = "Enter a valid email and a password with at least 8 characters.";
-    return;
-  }
-  const email = document.querySelector("#teacherEmailInput").value.trim();
-  const password = document.querySelector("#teacherPasswordInput").value;
-  if (!email || password.length < 8) {
-    document.querySelector("#teacherLoginError").textContent = "Enter a valid email and a password with at least 8 characters.";
-    return;
-  }
-  const {data,error} = await supabaseClient.auth.signUp({email,password,options:{emailRedirectTo:`${location.origin}${location.pathname}`}});
-  document.querySelector("#teacherLoginError").textContent = error ? error.message : (data.session ? "Account created." : "Check your email to confirm the account, then sign in.");
-  if (data.session) { cloudUser = data.user; teacherUnlocked = true; renderTeacherAccess(); await loadCloudStudents(); }
-});
 document.querySelector("#teacherSignOut").addEventListener("click", () => {
-  supabaseClient.auth.signOut();
-  cloudUser = null;
   teacherUnlocked = false;
+  sessionStorage.removeItem("speakUpTeacherUnlocked");
   renderTeacherAccess();
   document.querySelector("#students").scrollIntoView({behavior:"smooth"});
 });
@@ -588,9 +573,7 @@ renderTeacherAccess();
 supabaseClient.auth.getSession().then(async ({data}) => {
   if (data.session?.user) {
     cloudUser = data.session.user;
-    teacherUnlocked = true;
-    renderTeacherAccess();
-    await loadCloudStudents();
+    if (teacherUnlocked) await loadCloudStudents();
   }
 });
 

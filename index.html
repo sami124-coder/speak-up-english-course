@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=32">
+  <link rel="stylesheet" href="styles.css?v=33">
 </head>
 <body>
   <header class="topbar">
@@ -114,15 +114,13 @@
         <div class="teacher-gate-icon">🔒</div>
         <p class="eyebrow">Private teacher area</p>
         <h2 id="teacherGateTitle">Teacher access only</h2>
-        <p id="teacherGateText">Sign in to securely synchronize student records across devices.</p>
+        <p id="teacherGateText">Enter the teacher PIN to open the private dashboard.</p>
         <form id="teacherLoginForm">
-          <label>Email<input id="teacherEmailInput" type="email" autocomplete="email" required placeholder="teacher@example.com"></label>
-          <label>Password<input id="teacherPasswordInput" type="password" autocomplete="current-password" minlength="8" required placeholder="At least 8 characters"></label>
-          <button class="button primary" type="submit">Sign in</button>
-          <button class="button secondary" id="teacherSignUp" type="button">Create account</button>
+          <label>Teacher PIN<input id="teacherPinInput" type="password" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{4}" maxlength="4" required placeholder="4-digit PIN"></label>
+          <button class="button primary" type="submit">Unlock</button>
           <p class="login-error" id="teacherLoginError" role="alert"></p>
         </form>
-        <small id="teacherPinHelp">Teacher records are synchronized securely through Supabase.</small>
+        <small id="teacherPinHelp">One teacher · one simple PIN</small>
       </div>
       <div id="teacherPrivate" hidden>
       <div class="section-title">
@@ -332,6 +330,6 @@
   </dialog>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js?v=32"></script>
+  <script src="script.js?v=33"></script>
 </body>
 </html>
