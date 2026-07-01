@@ -581,9 +581,16 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
 
 /* Ollie, the floating course guide */
 .course-guide {
+  --guide-x: 0px; --guide-y: 0px;
   position: fixed; z-index: 80; right: clamp(10px, 2vw, 28px); bottom: clamp(8px, 2vw, 24px);
   display: flex; align-items: flex-end; gap: 4px; pointer-events: none;
+  transform: translate3d(var(--guide-x), var(--guide-y), 0);
+  transition: transform 2.8s cubic-bezier(.45, .05, .25, 1);
+  will-change: transform;
 }
+.course-guide.guide-left { flex-direction: row-reverse; }
+.course-guide.guide-left .guide-message { border-radius: 20px 20px 20px 5px; }
+.course-guide.guide-left .guide-message::after { right: auto; left: -13px; transform: rotate(135deg); }
 .guide-character {
   position: relative; width: clamp(92px, 9vw, 138px); height: clamp(138px, 13.5vw, 207px);
   padding: 0; border: 0; background: transparent; cursor: pointer; pointer-events: auto;
@@ -623,4 +630,7 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
   .guide-character { width: 78px; height: 117px; }
   .guide-message { width: min(220px, calc(100vw - 92px)); margin-bottom: 45px; padding: 12px 32px 12px 14px; }
   .guide-message span { font-size: .78rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .course-guide { transform: none !important; }
 }
