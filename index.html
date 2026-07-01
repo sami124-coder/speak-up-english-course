@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=23">
+  <link rel="stylesheet" href="styles.css?v=24">
 </head>
 <body>
   <header class="topbar">
@@ -256,6 +256,10 @@
         <p id="latestLessonCanDo">I can ask for help in English.</p>
         <button class="ghost-button light-ghost" id="copyParentUpdate" type="button">Copy family update</button>
       </div>
+      <section class="parent-full-record">
+        <div class="parent-record-heading"><div><p class="media-label">Complete learning record</p><h3>All lesson progress</h3><p>Read-only details shared by the teacher.</p></div><span id="parentStatusChip" class="status-chip">On track</span></div>
+        <div class="parent-record-grid" id="parentLessonRecords"></div>
+      </section>
       </div>
     </section>
 
@@ -366,6 +370,6 @@
     <div id="studentProfileContent"></div>
   </dialog>
 
-  <script src="script.js?v=23"></script>
+  <script src="script.js?v=24"></script>
 </body>
 </html>

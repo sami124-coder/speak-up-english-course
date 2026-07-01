@@ -216,6 +216,25 @@ function renderParentDashboard() {
   document.querySelector("#parentHomePractice").textContent = student.home;
   document.querySelector("#latestLessonTitle").textContent = `Day ${lesson.day} · ${lesson.title}`;
   document.querySelector("#latestLessonCanDo").textContent = `I can ${lesson.goal.charAt(0).toLowerCase()}${lesson.goal.slice(1)}`;
+  const status = studentStatus(student);
+  const statusChip = document.querySelector("#parentStatusChip");
+  statusChip.textContent = status[0];
+  statusChip.className = `status-chip ${status[1]}`;
+  document.querySelector("#parentLessonRecords").innerHTML = ensureLessonRecords(student).map(record => {
+    const lessonInfo = lessons[record.day - 1];
+    const unmarked = record.attendance === "Not marked";
+    return `<article class="parent-record-day ${unmarked ? "is-unmarked" : ""}">
+      <h4>Day ${record.day} · ${lessonInfo.title}</h4>
+      <dl>
+        <dt>Attendance</dt><dd>${record.attendance}</dd>
+        <dt>Speaking</dt><dd>${record.speaking || "—"}/4</dd>
+        <dt>Listening</dt><dd>${record.listening || "—"}/4</dd>
+        <dt>Participation</dt><dd>${record.participation || "—"}/4</dd>
+        <dt>Stars</dt><dd>⭐ ${record.stars || 0}</dd>
+      </dl>
+      <p class="parent-record-note">${record.note || (unmarked ? "This lesson has not been assessed yet." : "No lesson note added.")}</p>
+    </article>`;
+  }).join("");
 }
 
 function showStudentProfile(studentId) {
