@@ -654,3 +654,21 @@ installButton.addEventListener("click", async () => {
 window.addEventListener("appinstalled", () => { installButton.hidden = true; });
 if (/iphone|ipad|ipod/i.test(navigator.userAgent) && !window.navigator.standalone) installButton.hidden = false;
 if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js"));
+
+const courseGuide = document.querySelector("#courseGuide");
+const guideMessage = document.querySelector("#guideMessage");
+const guideClose = document.querySelector(".guide-close");
+const guideTips = [
+  ["Hi, I’m Ollie!", "Need help? Choose a lesson and let’s speak English together."],
+  ["Speaking tip", "Say it once slowly, then say it again with confidence!"],
+  ["Listening tip", "Listen for the important words first. You do not need every word."],
+  ["Ready to begin?", "Teachers can open a lesson and find every activity in one place."]
+];
+let guideTipIndex = 0;
+courseGuide.addEventListener("click", () => {
+  guideTipIndex = (guideTipIndex + 1) % guideTips.length;
+  guideMessage.querySelector("strong").textContent = guideTips[guideTipIndex][0];
+  guideMessage.querySelector("span").textContent = guideTips[guideTipIndex][1];
+  guideMessage.classList.remove("is-hidden");
+});
+guideClose.addEventListener("click", () => guideMessage.classList.add("is-hidden"));

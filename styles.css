@@ -578,3 +578,49 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .motion-reveal { opacity: 1; transform: none; }
 }
+
+/* Ollie, the floating course guide */
+.course-guide {
+  position: fixed; z-index: 80; right: clamp(10px, 2vw, 28px); bottom: clamp(8px, 2vw, 24px);
+  display: flex; align-items: flex-end; gap: 4px; pointer-events: none;
+}
+.guide-character {
+  position: relative; width: clamp(92px, 9vw, 138px); height: clamp(138px, 13.5vw, 207px);
+  padding: 0; border: 0; background: transparent; cursor: pointer; pointer-events: auto;
+  filter: drop-shadow(0 12px 14px rgba(8, 28, 49, .22)); transform-origin: 50% 100%;
+  animation: guide-float 3.6s ease-in-out infinite;
+}
+.guide-character img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.guide-character:hover { animation-play-state: paused; transform: translateY(-5px) rotate(2deg); }
+.guide-character:focus-visible { outline: 4px solid var(--gold); outline-offset: 3px; border-radius: 45%; }
+.guide-pulse {
+  position: absolute; right: 8%; top: 24%; width: 17px; height: 17px; border-radius: 50%;
+  background: var(--coral); border: 3px solid white; box-shadow: 0 0 0 0 rgba(239, 120, 96, .55);
+  animation: guide-pulse 2s infinite;
+}
+.guide-message {
+  position: relative; width: min(265px, calc(100vw - 125px)); margin-bottom: 78px;
+  padding: 16px 38px 16px 18px; border: 2px solid var(--ink); border-radius: 20px 20px 5px 20px;
+  background: white; color: var(--ink); box-shadow: 5px 6px 0 var(--ink); pointer-events: auto;
+  opacity: 1; transform: translateY(0) scale(1); transition: opacity .22s ease, transform .22s ease;
+}
+.guide-message::after {
+  content: ""; position: absolute; right: -13px; bottom: 10px; width: 22px; height: 22px;
+  background: white; border-right: 2px solid var(--ink); border-bottom: 2px solid var(--ink); transform: rotate(-45deg);
+}
+.guide-message strong, .guide-message span { display: block; }
+.guide-message strong { font: 700 1.05rem "Fredoka", sans-serif; color: var(--coral); margin-bottom: 4px; }
+.guide-message span { font-size: .86rem; line-height: 1.35; }
+.guide-message.is-hidden { opacity: 0; transform: translateY(10px) scale(.94); pointer-events: none; }
+.guide-close {
+  position: absolute; z-index: 1; right: 8px; top: 7px; width: 25px; height: 25px; border: 0;
+  border-radius: 50%; background: #eef3f7; color: var(--ink); cursor: pointer; font-size: 1rem; line-height: 1;
+}
+@keyframes guide-float { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-8px) rotate(1deg); } }
+@keyframes guide-pulse { 70% { box-shadow: 0 0 0 12px rgba(239, 120, 96, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 120, 96, 0); } }
+@media (max-width: 700px) {
+  .course-guide { right: 6px; bottom: 5px; }
+  .guide-character { width: 78px; height: 117px; }
+  .guide-message { width: min(220px, calc(100vw - 92px)); margin-bottom: 45px; padding: 12px 32px 12px 14px; }
+  .guide-message span { font-size: .78rem; }
+}
