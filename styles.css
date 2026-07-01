@@ -273,6 +273,11 @@ h1 em { display: block; color: var(--coral); font-style: normal; }
 .empty-students p { margin: 0; color: var(--muted); }
 .family-code { background: #fff4c9; letter-spacing: .08em; }
 .student-name-cell { display: flex; align-items: center; gap: 10px; }
+.student-name-button { padding: 0; border: 0; color: var(--ink); background: transparent; font-weight: 800; text-align: left; text-decoration: underline; text-decoration-color: transparent; }
+.student-name-button:hover { color: var(--blue); text-decoration-color: currentColor; }
+.status-chip { display: inline-flex; margin-top: 5px; padding: 4px 8px; border-radius: 999px; font-size: .68rem; font-weight: 800; }
+.status-excellent { color: #164f8f; background: #dbeafe; }.status-track { color: #176344; background: #dcf5e8; }
+.status-practice { color: #795c00; background: #fff1b8; }.status-support { color: #8c2e2e; background: #ffe0df; }
 .mini-avatar, .student-avatar { display: grid; place-items: center; flex: 0 0 auto; color: white; border-radius: 50%; background: var(--coral); font: 700 1rem "Fredoka"; }
 .mini-avatar { width: 38px; height: 38px; }
 .level-pill { padding: 4px 8px; border-radius: 99px; background: #dff4eb; font-size: .7rem; font-weight: 800; }
@@ -329,6 +334,22 @@ h1 em { display: block; color: var(--coral); font-style: normal; }
 .student-dialog form { padding: 55px clamp(24px, 6vw, 58px); }
 .student-dialog label { display: grid; gap: 7px; margin: 15px 0; font-weight: 700; }
 .student-dialog textarea { min-height: 95px; resize: vertical; }
+.profile-dialog { width: min(1120px, calc(100% - 28px)); }
+#studentProfileContent { padding: 55px clamp(22px, 5vw, 52px); }
+.profile-head { display: flex; justify-content: space-between; gap: 25px; align-items: center; margin-bottom: 25px; }
+.profile-head h2 { margin: 4px 0; }
+.profile-summary { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+.profile-summary article { padding: 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--cream); }
+.profile-summary span, .profile-summary strong { display: block; }.profile-summary span { color: var(--muted); font-size: .73rem; }.profile-summary strong { margin-top: 7px; font-size: 1.25rem; }
+.profile-notes { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 20px 0; }
+.profile-notes label { display: grid; gap: 7px; font-weight: 800; }
+.profile-notes textarea, .profile-notes input { width: 100%; min-height: 45px; padding: 11px; border: 1px solid var(--line); border-radius: 10px; font: inherit; }
+.profile-notes textarea { min-height: 90px; resize: vertical; }
+.lesson-records { display: grid; gap: 9px; margin-top: 18px; }
+.lesson-record { display: grid; grid-template-columns: 1.3fr repeat(5, .65fr) 1.2fr; gap: 9px; align-items: end; padding: 13px; border: 1px solid var(--line); border-radius: 13px; }
+.lesson-record h4 { margin: 0; font: 700 1rem "Fredoka"; }.lesson-record small { color: var(--muted); }
+.lesson-record label { display: grid; gap: 5px; color: var(--muted); font-size: .68rem; font-weight: 800; }
+.lesson-record select, .lesson-record input { width: 100%; padding: 8px; border: 1px solid var(--line); border-radius: 8px; background: white; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
 .resource-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
@@ -526,6 +547,10 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
   .student-toolbar, .parent-heading { align-items: stretch; flex-direction: column; }
   .teacher-gate form, .teacher-actions { align-items: stretch; flex-direction: column; }
   .form-row { grid-template-columns: 1fr; }
+  .profile-head, .profile-notes { grid-template-columns: 1fr; align-items: stretch; }
+  .profile-head { flex-direction: column; }
+  .profile-summary { grid-template-columns: 1fr 1fr; }
+  .lesson-record { grid-template-columns: 1fr 1fr; }
   .media-section, .vocab-chips { grid-template-columns: 1fr; }
   .poster-grid, .problem-card-grid, .worksheet-columns { grid-template-columns: 1fr; }
   .lesson-cover { align-items: flex-start; flex-direction: column; }

@@ -130,6 +130,41 @@ function latestLesson(student) {
   return lessons[Math.max(0, Math.min(student.completed, 15) - 1)] || lessons[0];
 }
 
+function studentStatus(student) {
+  if (student.speaking >= 85 && student.listening >= 85) return ["Excellent", "status-excellent"];
+  if (student.speaking >= 65 && student.attendance >= 80) return ["On track", "status-track"];
+  if (student.speaking >= 50) return ["Needs practice", "status-practice"];
+  return ["Needs support", "status-support"];
+}
+
+function ensureLessonRecords(student) {
+  if (!student.lessonRecords) student.lessonRecords = lessons.map(lesson => ({
+    day: lesson.day, attendance: lesson.day <= student.completed ? "Present" : "Not marked",
+    speaking: lesson.day <= student.completed ? Math.max(1, Math.round(student.speaking / 25)) : 0,
+    listening: lesson.day <= student.completed ? Math.max(1, Math.round(student.listening / 25)) : 0,
+    participation: lesson.day <= student.completed ? 3 : 0, stars: lesson.day === 1 ? student.stars : 0, note: ""
+  }));
+  return student.lessonRecords;
+}
+
+function recalculateStudent(student) {
+  const records = ensureLessonRecords(student);
+  const marked = records.filter(record => record.attendance !== "Not marked");
+  const present = marked.filter(record => ["Present","Late"].includes(record.attendance));
+  const scored = marked.filter(record => record.speaking > 0);
+  student.completed = marked.length;
+  student.attendance = marked.length ? Math.round(present.length / marked.length * 100) : 100;
+  if (scored.length) {
+    student.speaking = Math.round(scored.reduce((sum, record) => sum + Number(record.speaking), 0) / scored.length * 25);
+    student.listening = Math.round(scored.reduce((sum, record) => sum + Number(record.listening), 0) / scored.length * 25);
+  }
+  student.stars = records.reduce((sum, record) => sum + Number(record.stars || 0), 0);
+}
+
+function parentUpdateText(student) {
+  return `Hello! ${student.name} completed ${student.completed} of 15 lessons. Speaking confidence is ${student.speaking}% and listening accuracy is ${student.listening}%. This week’s goal is ${student.goal}. At home: ${student.home}`;
+}
+
 function renderStudentTracker() {
   const query = document.querySelector("#studentSearch").value.trim().toLowerCase();
   const level = document.querySelector("#studentLevelFilter").value;
@@ -137,14 +172,16 @@ function renderStudentTracker() {
     (level === "all" || student.level === level) &&
     `${student.name} ${student.goal}`.toLowerCase().includes(query)
   );
-  document.querySelector("#studentTrackerRows").innerHTML = visible.map(student => `
+  document.querySelector("#studentTrackerRows").innerHTML = visible.map(student => {
+    const status = studentStatus(student);
+    return `
     <tr>
-      <td><div class="student-name-cell"><span class="mini-avatar">${student.name[0].toUpperCase()}</span><div><strong>${student.name}</strong><br><small>Age ${student.age} · <span class="level-pill">${student.level}</span></small></div></div></td>
+      <td><div class="student-name-cell"><span class="mini-avatar">${student.name[0].toUpperCase()}</span><div><button class="student-name-button" data-student-profile="${student.id}">${student.name}</button><br><small>Age ${student.age} · <span class="level-pill">${student.level}</span></small><br><span class="status-chip ${status[1]}">${status[0]}</span></div></div></td>
       <td><strong>${student.completed}/15</strong><div class="table-progress"><span style="width:${student.completed / 15 * 100}%"></span></div></td>
       <td>${student.attendance}%</td><td>${student.speaking}%</td><td>${student.listening}%</td>
       <td>⭐ ${student.stars}</td><td><button class="student-action family-code" data-copy-code="${student.id}">${student.familyCode || "Create code"}</button></td><td>${student.goal}</td>
-      <td><button class="student-action" data-student-progress="${student.id}">+ Lesson</button> <button class="student-action" data-student-star="${student.id}">+ Star</button></td>
-    </tr>`).join("");
+      <td><button class="student-action" data-student-profile="${student.id}">Profile</button> <button class="student-action" data-copy-update="${student.id}">Copy update</button></td>
+    </tr>`}).join("");
   const total = trackedStudents.length || 1;
   document.querySelector("#studentTotal").textContent = trackedStudents.length;
   document.querySelector("#averageProgress").textContent = `${Math.round(trackedStudents.reduce((sum,s) => sum + s.completed / 15 * 100, 0) / total)}%`;
@@ -179,6 +216,43 @@ function renderParentDashboard() {
   document.querySelector("#parentHomePractice").textContent = student.home;
   document.querySelector("#latestLessonTitle").textContent = `Day ${lesson.day} · ${lesson.title}`;
   document.querySelector("#latestLessonCanDo").textContent = `I can ${lesson.goal.charAt(0).toLowerCase()}${lesson.goal.slice(1)}`;
+}
+
+function showStudentProfile(studentId) {
+  const student = trackedStudents.find(item => item.id === Number(studentId));
+  const records = ensureLessonRecords(student);
+  const status = studentStatus(student);
+  document.querySelector("#studentProfileContent").innerHTML = `
+    <div class="profile-head"><div><p class="dialog-kicker">Student profile</p><h2>${student.name}</h2><span class="status-chip ${status[1]}">${status[0]}</span></div><button class="button secondary" data-profile-copy="${student.id}">Copy parent update</button></div>
+    <div class="profile-summary">
+      <article><span>Course progress</span><strong>${student.completed}/15</strong></article>
+      <article><span>Attendance</span><strong>${student.attendance}%</strong></article>
+      <article><span>Speaking</span><strong>${student.speaking}%</strong></article>
+      <article><span>Listening</span><strong>${student.listening}%</strong></article>
+      <article><span>Stars</span><strong>⭐ ${student.stars}</strong></article>
+    </div>
+    <div class="profile-notes">
+      <label>Teacher note<textarea data-profile-field="note" data-student-id="${student.id}">${student.note}</textarea></label>
+      <label>Next goal<textarea data-profile-field="goal" data-student-id="${student.id}">${student.goal}</textarea></label>
+      <label>Parent activity<textarea data-profile-field="home" data-student-id="${student.id}">${student.home}</textarea></label>
+    </div>
+    <h3>Lesson-by-lesson tracking</h3>
+    <div class="lesson-records">${records.map(record => {
+      const lesson = lessons[record.day - 1];
+      const scoreOptions = [0,1,2,3,4].map(value => `<option value="${value}" ${Number(record.speaking)===value ? "selected":""}>${value || "—"}</option>`).join("");
+      return `<article class="lesson-record" data-record-day="${record.day}">
+        <div><h4>Day ${record.day} · ${lesson.title}</h4><small>${lesson.goal}</small></div>
+        <label>Attendance<select data-record-field="attendance"><option ${record.attendance==="Not marked"?"selected":""}>Not marked</option><option ${record.attendance==="Present"?"selected":""}>Present</option><option ${record.attendance==="Late"?"selected":""}>Late</option><option ${record.attendance==="Absent"?"selected":""}>Absent</option></select></label>
+        <label>Speaking<select data-record-field="speaking">${scoreOptions}</select></label>
+        <label>Listening<select data-record-field="listening">${[0,1,2,3,4].map(value => `<option value="${value}" ${Number(record.listening)===value ? "selected":""}>${value || "—"}</option>`).join("")}</select></label>
+        <label>Participation<select data-record-field="participation">${[0,1,2,3,4].map(value => `<option value="${value}" ${Number(record.participation)===value ? "selected":""}>${value || "—"}</option>`).join("")}</select></label>
+        <label>Stars<input data-record-field="stars" type="number" min="0" max="10" value="${record.stars || 0}"></label>
+        <label>Short note<input data-record-field="note" value="${record.note || ""}" placeholder="Optional"></label>
+      </article>`;
+    }).join("")}</div>`;
+  const profileDialog = document.querySelector("#studentProfileDialog");
+  profileDialog.dataset.studentId = student.id;
+  if (!profileDialog.open) profileDialog.showModal();
 }
 
 function renderLessons(filter = "all") {
@@ -301,6 +375,16 @@ document.querySelector("#studentSearch").addEventListener("input", renderStudent
 document.querySelector("#studentLevelFilter").addEventListener("change", renderStudentTracker);
 document.querySelector("#addStudentButton").addEventListener("click", () => document.querySelector("#studentDialog").showModal());
 document.querySelector("#studentTrackerRows").addEventListener("click", event => {
+  const profileButton = event.target.closest("[data-student-profile]");
+  if (profileButton) { showStudentProfile(profileButton.dataset.studentProfile); return; }
+  const updateButton = event.target.closest("[data-copy-update]");
+  if (updateButton) {
+    const student = trackedStudents.find(item => item.id === Number(updateButton.dataset.copyUpdate));
+    navigator.clipboard.writeText(parentUpdateText(student));
+    updateButton.textContent = "Copied!";
+    setTimeout(() => { updateButton.textContent = "Copy update"; }, 1200);
+    return;
+  }
   const codeButton = event.target.closest("[data-copy-code]");
   if (codeButton) {
     const student = trackedStudents.find(item => item.id === Number(codeButton.dataset.copyCode));
@@ -339,9 +423,33 @@ document.querySelector("#studentForm").addEventListener("submit", event => {
 document.querySelector("#copyParentUpdate").addEventListener("click", async event => {
   const student = trackedStudents.find(s => String(s.id) === String(signedInStudentId));
   if (!student) return;
-  const text = `${student.name}'s Speak Up update: ${student.completed}/15 lessons complete, speaking ${student.speaking}%, listening ${student.listening}%. Teacher note: ${student.note} Next goal: ${student.goal} Home practice: ${student.home}`;
+  const text = parentUpdateText(student);
   try { await navigator.clipboard.writeText(text); event.currentTarget.textContent = "Copied ✓"; }
   catch { event.currentTarget.textContent = "Copy unavailable"; }
+});
+document.querySelector("#studentProfileDialog").addEventListener("change", event => {
+  const dialog = event.currentTarget;
+  const student = trackedStudents.find(item => item.id === Number(dialog.dataset.studentId));
+  const recordField = event.target.dataset.recordField;
+  if (recordField) {
+    const day = Number(event.target.closest("[data-record-day]").dataset.recordDay);
+    const record = ensureLessonRecords(student).find(item => item.day === day);
+    record[recordField] = ["speaking","listening","participation","stars"].includes(recordField) ? Number(event.target.value) : event.target.value;
+    recalculateStudent(student);
+    saveStudents(); renderStudentTracker(); showStudentProfile(student.id);
+  }
+  const profileField = event.target.dataset.profileField;
+  if (profileField) {
+    student[profileField] = event.target.value.trim();
+    saveStudents(); renderParentDashboard();
+  }
+});
+document.querySelector("#studentProfileDialog").addEventListener("click", event => {
+  const copyButton = event.target.closest("[data-profile-copy]");
+  if (!copyButton) return;
+  const student = trackedStudents.find(item => item.id === Number(copyButton.dataset.profileCopy));
+  navigator.clipboard.writeText(parentUpdateText(student));
+  copyButton.textContent = "Copied ✓";
 });
 document.querySelector("#parentLogin").addEventListener("submit", event => {
   event.preventDefault();
