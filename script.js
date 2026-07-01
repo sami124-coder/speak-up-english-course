@@ -518,8 +518,17 @@ document.querySelector("#teacherLoginForm").addEventListener("submit", async eve
   await loadCloudStudents();
 });
 document.querySelector("#teacherSignUp").addEventListener("click", async () => {
+  const form = document.querySelector("#teacherLoginForm");
+  if (!form.reportValidity()) {
+    document.querySelector("#teacherLoginError").textContent = "Enter a valid email and a password with at least 8 characters.";
+    return;
+  }
   const email = document.querySelector("#teacherEmailInput").value.trim();
   const password = document.querySelector("#teacherPasswordInput").value;
+  if (!email || password.length < 8) {
+    document.querySelector("#teacherLoginError").textContent = "Enter a valid email and a password with at least 8 characters.";
+    return;
+  }
   const {data,error} = await supabaseClient.auth.signUp({email,password,options:{emailRedirectTo:`${location.origin}${location.pathname}`}});
   document.querySelector("#teacherLoginError").textContent = error ? error.message : (data.session ? "Account created." : "Check your email to confirm the account, then sign in.");
   if (data.session) { cloudUser = data.user; teacherUnlocked = true; renderTeacherAccess(); await loadCloudStudents(); }
