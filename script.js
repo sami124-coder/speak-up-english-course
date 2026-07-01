@@ -499,8 +499,8 @@ document.querySelector("#parentLogin").addEventListener("submit", async event =>
   document.querySelector("#parentLoginError").textContent = "";
   signedInStudentId = String(student.id);
   sessionStorage.setItem("speakUpParentStudentId", signedInStudentId);
-  event.currentTarget.reset();
-  renderParentDashboard();
+  localStorage.setItem("speakUpStudents", JSON.stringify(trackedStudents));
+  location.reload();
 });
 document.querySelector("#parentSignOut").addEventListener("click", () => {
   signedInStudentId = null;

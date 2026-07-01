@@ -28,7 +28,7 @@ a { color: inherit; }
 .app-download-banner p { display: grid; gap: 1px; margin: 0; }
 .app-download-banner strong { font-family: "Fredoka", sans-serif; font-size: 1.05rem; }
 .app-download-banner small { color: rgba(255,255,255,.75); }
-.app-download-icon { font-size: 1.65rem; animation: iconBounce 3s ease-in-out infinite; }
+.app-download-icon { width: 44px; height: 44px; border-radius: 13px; animation: iconBounce 3s ease-in-out infinite; }
 .app-download-banner .install-button { flex: 0 0 auto; color: var(--ink); background: var(--yellow); }
 
 .topbar {
@@ -502,7 +502,7 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
   .app-download-banner { justify-content: space-between; gap: 10px; min-height: 60px; padding: 8px 12px; }
   .app-download-banner small { display: none; }
   .app-download-banner strong { font-size: .85rem; }
-  .app-download-icon { display: none; }
+  .app-download-icon { width: 36px; height: 36px; }
   .app-download-banner .install-button { padding: 9px 11px; font-size: .74rem; }
   .topbar nav, .ghost-button { display: none; }
   .topbar { min-height: 68px; padding-inline: 16px; }
