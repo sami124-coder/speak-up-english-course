@@ -615,21 +615,22 @@ if ("IntersectionObserver" in window) {
 
 let installPrompt;
 const installButton = document.querySelector("#installApp");
+const installBanner = document.querySelector("#appDownloadBanner");
 window.addEventListener("beforeinstallprompt", event => {
   event.preventDefault();
   installPrompt = event;
-  installButton.hidden = false;
+  installBanner.hidden = false;
 });
 installButton.addEventListener("click", async () => {
   if (installPrompt) {
     installPrompt.prompt();
     await installPrompt.userChoice;
     installPrompt = null;
-    installButton.hidden = true;
+    installBanner.hidden = true;
   } else {
     alert("On iPhone or iPad: tap Share, then “Add to Home Screen”. On a computer: use the install icon in the browser address bar.");
   }
 });
-window.addEventListener("appinstalled", () => { installButton.hidden = true; });
-if (/iphone|ipad|ipod/i.test(navigator.userAgent) && !window.navigator.standalone) installButton.hidden = false;
+window.addEventListener("appinstalled", () => { installBanner.hidden = true; });
+if (matchMedia("(display-mode: standalone)").matches || window.navigator.standalone) installBanner.hidden = true;
 if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js"));
