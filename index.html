@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=24">
+  <link rel="stylesheet" href="styles.css?v=25">
 </head>
 <body>
   <header class="topbar">
@@ -155,13 +155,15 @@
         <div class="teacher-gate-icon">🔒</div>
         <p class="eyebrow">Private teacher area</p>
         <h2 id="teacherGateTitle">Teacher access only</h2>
-        <p id="teacherGateText">Enter your private PIN to open student records, family codes, and progress controls.</p>
+        <p id="teacherGateText">Sign in to securely synchronize student records across devices.</p>
         <form id="teacherLoginForm">
-          <label>Teacher PIN<input id="teacherPinInput" type="password" inputmode="numeric" minlength="4" maxlength="12" required placeholder="Enter 4–12 digits"></label>
-          <button class="button primary" type="submit">Open dashboard</button>
+          <label>Email<input id="teacherEmailInput" type="email" autocomplete="email" required placeholder="teacher@example.com"></label>
+          <label>Password<input id="teacherPasswordInput" type="password" autocomplete="current-password" minlength="8" required placeholder="At least 8 characters"></label>
+          <button class="button primary" type="submit">Sign in</button>
+          <button class="button secondary" id="teacherSignUp" type="button">Create account</button>
           <p class="login-error" id="teacherLoginError" role="alert"></p>
         </form>
-        <small id="teacherPinHelp">First visit? Choose a PIN now. Keep it somewhere safe.</small>
+        <small id="teacherPinHelp">Teacher records are synchronized securely through Supabase.</small>
       </div>
       <div id="teacherPrivate" hidden>
       <div class="section-title">
@@ -370,6 +372,7 @@
     <div id="studentProfileContent"></div>
   </dialog>
 
-  <script src="script.js?v=24"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="script.js?v=25"></script>
 </body>
 </html>

@@ -101,7 +101,9 @@ if (!localStorage.getItem("speakUpNoDemoMigration")) {
   localStorage.setItem("speakUpStudents", JSON.stringify(trackedStudents));
 }
 let signedInStudentId = sessionStorage.getItem("speakUpParentStudentId");
-let teacherUnlocked = sessionStorage.getItem("speakUpTeacherUnlocked") === "yes";
+const supabaseClient = window.supabase.createClient("https://vibayhusnmcpvtlxuayh.supabase.co", "sb_publishable_icj980mZsKVkWH4ZB7LyTA_DaK5x3Mx");
+let cloudUser = null;
+let teacherUnlocked = false;
 document.querySelector("#teacherPrivate").append(document.querySelector("#resources"));
 
 const lessonGrid = document.querySelector("#lessonGrid");
@@ -109,21 +111,29 @@ const lessonDialog = document.querySelector("#lessonDialog");
 const resourceDialog = document.querySelector("#resourceDialog");
 let completed = new Set(JSON.parse(localStorage.getItem("speakUpProgress") || "[]"));
 
-function saveStudents() {
+async function saveStudents() {
   localStorage.setItem("speakUpStudents", JSON.stringify(trackedStudents));
+  if (!cloudUser) return;
+  const rows = trackedStudents.map(student => ({id:Number(student.id), teacher_id:cloudUser.id, name:student.name, family_code:student.familyCode, payload:student, updated_at:new Date().toISOString()}));
+  const {error} = await supabaseClient.from("students").upsert(rows);
+  if (error) console.error("Cloud sync failed:", error.message);
+}
+
+async function loadCloudStudents() {
+  if (!cloudUser) return;
+  const {data,error} = await supabaseClient.from("students").select("payload").order("updated_at");
+  if (error) { document.querySelector("#teacherLoginError").textContent = "Run supabase-setup.sql in the Supabase SQL Editor."; return; }
+  if (data.length) trackedStudents = data.map(row => row.payload);
+  else if (trackedStudents.length) await saveStudents();
+  renderStudentTracker();
 }
 
 function renderTeacherAccess() {
-  const hasPin = Boolean(localStorage.getItem("speakUpTeacherPin"));
   document.querySelector("#teacherGate").hidden = teacherUnlocked;
   document.querySelector("#teacherPrivate").hidden = !teacherUnlocked;
-  document.querySelector("#teacherGateTitle").textContent = hasPin ? "Welcome back, teacher" : "Create your teacher PIN";
-  document.querySelector("#teacherGateText").textContent = hasPin
-    ? "Enter your private PIN to open student records, family codes, and progress controls."
-    : "Choose a private PIN to protect your teacher dashboard on this device.";
-  document.querySelector("#teacherPinHelp").textContent = hasPin
-    ? "Only the teacher should know this PIN."
-    : "Use 4–12 digits and keep the PIN somewhere safe.";
+  document.querySelector("#teacherGateTitle").textContent = "Teacher cloud access";
+  document.querySelector("#teacherGateText").textContent = "Sign in to synchronize student records securely across devices.";
+  document.querySelector("#teacherPinHelp").textContent = "New teacher? Create an account with your email and password.";
 }
 
 function latestLesson(student) {
@@ -470,15 +480,19 @@ document.querySelector("#studentProfileDialog").addEventListener("click", event 
   navigator.clipboard.writeText(parentUpdateText(student));
   copyButton.textContent = "Copied ✓";
 });
-document.querySelector("#parentLogin").addEventListener("submit", event => {
+document.querySelector("#parentLogin").addEventListener("submit", async event => {
   event.preventDefault();
   const name = document.querySelector("#parentLoginName").value.trim().toLowerCase();
   const code = document.querySelector("#parentLoginCode").value.trim().toUpperCase();
-  const student = trackedStudents.find(item => item.name.trim().toLowerCase() === name && item.familyCode?.toUpperCase() === code);
+  const {data,error} = await supabaseClient.rpc("get_child_progress", {p_student_name:name, p_family_code:code});
+  let student = data;
+  if (!student && error) student = trackedStudents.find(item => item.name.trim().toLowerCase() === name && item.familyCode?.toUpperCase() === code);
   if (!student) {
     document.querySelector("#parentLoginError").textContent = "The name or family code is incorrect. Please ask the teacher for access details.";
     return;
   }
+  const existing = trackedStudents.findIndex(item => String(item.id) === String(student.id));
+  if (existing >= 0) trackedStudents[existing] = student; else trackedStudents.push(student);
   document.querySelector("#parentLoginError").textContent = "";
   signedInStudentId = String(student.id);
   sessionStorage.setItem("speakUpParentStudentId", signedInStudentId);
@@ -490,28 +504,30 @@ document.querySelector("#parentSignOut").addEventListener("click", () => {
   sessionStorage.removeItem("speakUpParentStudentId");
   renderParentDashboard();
 });
-document.querySelector("#teacherLoginForm").addEventListener("submit", event => {
+document.querySelector("#teacherLoginForm").addEventListener("submit", async event => {
   event.preventDefault();
-  const pin = document.querySelector("#teacherPinInput").value.trim();
-  const savedPin = localStorage.getItem("speakUpTeacherPin");
-  if (!/^\d{4,12}$/.test(pin)) {
-    document.querySelector("#teacherLoginError").textContent = "Please use a PIN containing 4–12 digits.";
-    return;
-  }
-  if (savedPin && pin !== savedPin) {
-    document.querySelector("#teacherLoginError").textContent = "Incorrect PIN. Please try again.";
-    return;
-  }
-  if (!savedPin) localStorage.setItem("speakUpTeacherPin", pin);
+  const email = document.querySelector("#teacherEmailInput").value.trim();
+  const password = document.querySelector("#teacherPasswordInput").value;
+  const {data,error} = await supabaseClient.auth.signInWithPassword({email,password});
+  if (error) { document.querySelector("#teacherLoginError").textContent = error.message; return; }
+  cloudUser = data.user;
   teacherUnlocked = true;
-  sessionStorage.setItem("speakUpTeacherUnlocked", "yes");
   document.querySelector("#teacherLoginError").textContent = "";
   event.currentTarget.reset();
   renderTeacherAccess();
+  await loadCloudStudents();
+});
+document.querySelector("#teacherSignUp").addEventListener("click", async () => {
+  const email = document.querySelector("#teacherEmailInput").value.trim();
+  const password = document.querySelector("#teacherPasswordInput").value;
+  const {data,error} = await supabaseClient.auth.signUp({email,password,options:{emailRedirectTo:`${location.origin}${location.pathname}`}});
+  document.querySelector("#teacherLoginError").textContent = error ? error.message : (data.session ? "Account created." : "Check your email to confirm the account, then sign in.");
+  if (data.session) { cloudUser = data.user; teacherUnlocked = true; renderTeacherAccess(); await loadCloudStudents(); }
 });
 document.querySelector("#teacherSignOut").addEventListener("click", () => {
+  supabaseClient.auth.signOut();
+  cloudUser = null;
   teacherUnlocked = false;
-  sessionStorage.removeItem("speakUpTeacherUnlocked");
   renderTeacherAccess();
   document.querySelector("#students").scrollIntoView({behavior:"smooth"});
 });
@@ -560,6 +576,14 @@ renderLessons();
 updateProgress();
 renderStudentTracker();
 renderTeacherAccess();
+supabaseClient.auth.getSession().then(async ({data}) => {
+  if (data.session?.user) {
+    cloudUser = data.session.user;
+    teacherUnlocked = true;
+    renderTeacherAccess();
+    await loadCloudStudents();
+  }
+});
 
 const heroVisual = document.querySelector(".hero-visual");
 if (matchMedia("(pointer:fine)").matches && !matchMedia("(prefers-reduced-motion: reduce)").matches) {

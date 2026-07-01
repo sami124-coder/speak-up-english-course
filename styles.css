@@ -243,11 +243,12 @@ h1 em { display: block; color: var(--coral); font-style: normal; }
 
 .compact-button { min-height: 44px; }
 .student-tracker-section { background: #f5f8f6; }
-.teacher-gate { max-width: 650px; margin: 0 auto; padding: clamp(35px, 6vw, 65px); text-align: center; border: 1px solid var(--line); border-radius: 30px; background: white; box-shadow: var(--shadow); }
+.teacher-gate { max-width: 880px; margin: 0 auto; padding: clamp(35px, 6vw, 65px); text-align: center; border: 1px solid var(--line); border-radius: 30px; background: white; box-shadow: var(--shadow); }
 .teacher-gate-icon { display: grid; place-items: center; width: 74px; height: 74px; margin: 0 auto 22px; border-radius: 24px; background: var(--cream); font-size: 2rem; transform: rotate(-3deg); }
 .teacher-gate h2 { margin: 0; font-size: clamp(2.2rem, 5vw, 3.6rem); }
 .teacher-gate > p:not(.eyebrow) { color: var(--muted); line-height: 1.65; }
-.teacher-gate form { display: flex; align-items: end; gap: 10px; margin-top: 28px; text-align: left; }
+.teacher-gate form { display: grid; grid-template-columns: 1fr 1fr auto auto; align-items: end; gap: 10px; margin-top: 28px; text-align: left; }
+.teacher-gate .login-error { grid-column: 1 / -1; }
 .teacher-gate label { display: grid; flex: 1; gap: 7px; font-weight: 700; }
 .teacher-gate input { width: 100%; padding: 14px; border: 1px solid var(--line); border-radius: 11px; font: inherit; letter-spacing: .16em; }
 .teacher-gate small { display: block; margin-top: 18px; color: var(--muted); }
