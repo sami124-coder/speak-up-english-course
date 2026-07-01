@@ -82,7 +82,15 @@ h1 em { display: block; color: var(--coral); font-style: normal; }
 }
 .sticker-one { top: 22px; left: 22px; }
 .sticker-two { right: 22px; bottom: 22px; color: white; background: var(--coral); transform: rotate(3deg); }
-.welcome-section { display: grid; grid-template-columns: .82fr 1.18fr; gap: clamp(38px, 7vw, 95px); align-items: center; padding: clamp(70px, 9vw, 125px) clamp(24px, 7vw, 110px); }
+.welcome-section { position: relative; display: grid; grid-template-columns: .82fr 1.18fr; gap: clamp(38px, 7vw, 95px); align-items: center; min-height: 760px; padding: clamp(70px, 9vw, 125px) clamp(24px, 7vw, 110px); overflow: hidden; }
+.welcome-bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.video-welcome::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(7,27,47,.94), rgba(12,39,64,.72) 50%, rgba(12,39,64,.48)); }
+.video-welcome .welcome-copy, .video-welcome .welcome-cards { position: relative; z-index: 2; }
+.video-welcome .welcome-copy { color: white; }
+.video-welcome .welcome-copy > p:last-child { color: rgba(255,255,255,.78); }
+.video-welcome .eyebrow { color: var(--yellow); }
+.video-welcome .welcome-cards article, .video-welcome .welcome-cards article:nth-child(2), .video-welcome .welcome-cards article:nth-child(3) { color: white; border-color: rgba(255,255,255,.3); background: rgba(10,37,61,.62); box-shadow: 0 15px 40px rgba(0,0,0,.2); backdrop-filter: blur(13px); }
+.video-welcome .welcome-cards p { color: rgba(255,255,255,.72); }
 .welcome-copy h2 { margin: 0; font-size: clamp(2.7rem, 5vw, 5.2rem); letter-spacing: -.045em; }
 .welcome-copy > p:last-child { color: var(--muted); font-size: 1.08rem; line-height: 1.8; }
 .welcome-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
@@ -502,6 +510,7 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
   .section-title { align-items: start; flex-direction: column; }
   .lesson-grid, .resource-grid, .rhythm-grid { grid-template-columns: 1fr; }
   .welcome-cards, .lesson-quality-grid, .support-grid { grid-template-columns: 1fr; }
+  .video-welcome::after { background: rgba(7,27,47,.82); }
   .lesson-pack-content { grid-template-columns: 1fr; }
   .outcome-list { grid-template-columns: 1fr; }
   .sample-lesson { align-items: flex-start; flex-direction: column; }

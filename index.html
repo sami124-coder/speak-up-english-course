@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=18">
+  <link rel="stylesheet" href="styles.css?v=19">
 </head>
 <body>
   <header class="topbar">
@@ -64,7 +64,10 @@
       </div>
     </section>
 
-    <section class="welcome-section" aria-labelledby="welcome-title">
+    <section class="welcome-section video-welcome" aria-labelledby="welcome-title">
+      <video class="welcome-bg-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1">
+        <source src="https://videos.pexels.com/video-files/8088562/8088562-uhd_3840_2160_30fps.mp4" type="video/mp4">
+      </video>
       <div class="welcome-copy">
         <p class="eyebrow">More than a course</p>
         <h2 id="welcome-title">A safe place to try, speak, and grow.</h2>
@@ -121,17 +124,13 @@
         <div class="video-prompt"><strong>Try these questions</strong><span>What can you see?</span><span>How do they feel?</span><span>What happens next?</span></div>
       </div>
       <div class="video-gallery">
-        <figure>
-          <video controls muted playsinline preload="metadata" aria-label="Speaking and listening observation clip two"><source src="https://videos.pexels.com/video-files/8088562/8088562-uhd_3840_2160_30fps.mp4" type="video/mp4"></video>
-          <figcaption><span>01</span><div><strong>Make a prediction</strong><small>What might happen next?</small></div></figcaption>
-        </figure>
         <figure class="portrait-video">
           <video controls muted playsinline preload="metadata" aria-label="Portrait speaking and listening observation clip"><source src="https://videos.pexels.com/video-files/8088311/8088311-uhd_2160_3840_30fps.mp4" type="video/mp4"></video>
-          <figcaption><span>02</span><div><strong>Describe the action</strong><small>Use a complete sentence.</small></div></figcaption>
+          <figcaption><span>01</span><div><strong>Describe the action</strong><small>Use a complete sentence.</small></div></figcaption>
         </figure>
         <figure>
           <video controls muted playsinline preload="metadata" aria-label="Speaking and listening observation clip four"><source src="https://videos.pexels.com/video-files/8088522/8088522-hd_1920_1080_30fps.mp4" type="video/mp4"></video>
-          <figcaption><span>03</span><div><strong>Ask a question</strong><small>Invite a partner to respond.</small></div></figcaption>
+          <figcaption><span>02</span><div><strong>Ask a question</strong><small>Invite a partner to respond.</small></div></figcaption>
         </figure>
       </div>
     </section>
@@ -389,6 +388,6 @@
     </form>
   </dialog>
 
-  <script src="script.js?v=18"></script>
+  <script src="script.js?v=19"></script>
 </body>
 </html>
