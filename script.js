@@ -196,23 +196,6 @@ function renderLessons(filter = "all") {
   });
 }
 
-function renderLessonResourceLibrary() {
-  const library = document.querySelector("#lessonResourceLibrary");
-  library.innerHTML = lessons.map(lesson => {
-    const extra = dailyExtras[lesson.day];
-    return `<details class="lesson-pack">
-      <summary><span>${lesson.day}</span>${lesson.title}</summary>
-      <div class="lesson-pack-content">
-        <article class="skill-panel listening"><h4>🎧 Listening</h4><strong>Listen twice</strong><p>${lesson.listen}</p><strong>Focus questions</strong><p>Who is speaking? Where are they? What two details did you hear? Which useful phrase can you repeat?</p></article>
-        <article class="skill-panel speaking"><h4>🎙️ Speaking</h4><strong>Target language</strong><p>${lesson.language}</p><strong>Communication mission</strong><p>${lesson.task}</p><strong>Extra challenge</strong><p>${extra.bonus}</p></article>
-      </div>
-    </details>`;
-  }).join("");
-  library.querySelectorAll("details").forEach(pack => pack.addEventListener("toggle", () => {
-    if (pack.open) library.querySelectorAll("details").forEach(other => { if (other !== pack) other.open = false; });
-  }));
-}
-
 function updateProgress() {
   const count = completed.size;
   document.querySelector("#completedCount").textContent = count;
@@ -445,17 +428,7 @@ document.querySelector("#resetProgress").addEventListener("click", () => {
   if (confirm("Reset all course progress?")) { completed.clear(); updateProgress(); renderLessons(); }
 });
 
-document.querySelectorAll(".rubric-row:not(.header)").forEach(row => {
-  row.querySelectorAll("button").forEach(button => button.addEventListener("click", () => {
-    row.querySelectorAll("button").forEach(b => b.classList.remove("active"));
-    button.classList.add("active");
-    const score = [...document.querySelectorAll(".rubric-row button.active")].reduce((sum, b) => sum + Number(b.textContent), 0);
-    document.querySelector("#rubricScore").textContent = score;
-  }));
-});
-
 renderLessons();
-renderLessonResourceLibrary();
 updateProgress();
 renderStudentTracker();
 renderTeacherAccess();
@@ -475,7 +448,7 @@ if (matchMedia("(pointer:fine)").matches && !matchMedia("(prefers-reduced-motion
   });
 }
 
-const revealTargets = document.querySelectorAll(".section-title, .lesson-card, .resource-card, .welcome-cards article, .quick-start a, .lesson-resource-hub, .public-roadmap article, .about-course > *, .video-journey-copy, .video-gallery figure");
+const revealTargets = document.querySelectorAll(".section-title, .lesson-card, .resource-card, .welcome-cards article, .quick-start a, .public-roadmap article, .about-course > *, .video-journey-copy, .video-gallery figure");
 revealTargets.forEach((element, index) => {
   element.classList.add("motion-reveal");
   element.style.transitionDelay = `${Math.min(index % 5, 4) * 70}ms`;
