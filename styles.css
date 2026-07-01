@@ -126,6 +126,15 @@ h1 em { display: block; color: var(--coral); font-style: normal; }
 .sample-lesson p:last-child { max-width: 700px; color: rgba(255,255,255,.78); line-height: 1.7; }
 .sample-lesson .eyebrow { color: var(--yellow); }
 .sample-lesson .button { color: var(--ink); background: var(--yellow); white-space: nowrap; }
+.public-roadmap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.public-roadmap article { padding: 28px; border: 1px solid var(--line); border-radius: 22px; background: white; box-shadow: 0 9px 25px rgba(16,42,67,.07); }
+.public-roadmap article:nth-child(2) { background: var(--cream); }
+.public-roadmap span { color: var(--blue); font-weight: 800; }
+.public-roadmap h3 { margin: 14px 0 20px; font-size: 1.55rem; }
+.public-roadmap ol { display: grid; gap: 10px; margin: 0; padding-left: 23px; color: var(--muted); }
+.roadmap-lock { margin: 22px 0 0; padding: 16px 18px; border-radius: 14px; color: var(--muted); background: #eef4fb; text-align: center; }
+.teacher-missions { margin-bottom: 70px; padding-bottom: 65px; border-bottom: 1px solid var(--line); }
+.compact-title h2 { font-size: clamp(2rem, 4vw, 3.5rem); }
 .lesson-tabs { display: flex; gap: 7px; margin: 28px 0 18px; padding: 6px; overflow-x: auto; border-radius: 14px; background: var(--cream); }
 .lesson-tab { flex: 1; min-width: max-content; padding: 11px 14px; border: 0; border-radius: 10px; background: transparent; font-weight: 800; }
 .lesson-tab.active { color: white; background: var(--blue); }
@@ -443,6 +452,7 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
   .tracker-summary { grid-template-columns: repeat(2, 1fr); }
   .quick-start { grid-template-columns: 1fr; }
   .about-course { grid-template-columns: 1fr; }
+  .public-roadmap { grid-template-columns: 1fr; }
   .parent-dashboard { grid-template-columns: 1fr; }
   .parent-login { grid-template-columns: 1fr; align-items: stretch; }
   .login-error { grid-column: auto; }

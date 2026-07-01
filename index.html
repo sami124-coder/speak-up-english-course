@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=15">
+  <link rel="stylesheet" href="styles.css?v=16">
 </head>
 <body>
   <header class="topbar">
@@ -41,7 +41,7 @@
         <h1><span>15 days to speak English</span><em>with confidence.</em></h1>
         <p class="hero-text">A complete speaking and listening program where children learn through conversations, games, role-play, and daily real-world missions.</p>
         <div class="hero-actions">
-          <button class="button primary" id="startDayOne" type="button">Start Day 1 <span>→</span></button>
+          <a class="button primary" href="#students">Teacher: start lessons <span>→</span></a>
           <a class="button secondary" href="#resources">Teacher materials</a>
           <a class="button secondary" href="#parents">Parent login</a>
         </div>
@@ -85,7 +85,7 @@
     </section>
 
     <section class="quick-start" aria-label="Quick start">
-      <a href="#course"><span>👦</span><div><strong>For Students</strong><small>Start today’s speaking mission</small></div><b>→</b></a>
+      <a href="#course"><span>👦</span><div><strong>For Students</strong><small>Explore the 15-day roadmap</small></div><b>→</b></a>
       <a href="#students"><span>👩‍🏫</span><div><strong>For Teachers</strong><small>Lessons, materials, and progress</small></div><b>→</b></a>
       <a href="#parents"><span>🏡</span><div><strong>For Parents</strong><small>Progress and home practice</small></div><b>→</b></a>
     </section>
@@ -95,25 +95,19 @@
       <ul class="outcome-list"><li>Ask for help politely</li><li>Answer simple questions</li><li>Join pair conversations</li><li>Listen for key words</li><li>Complete role-play missions</li><li>Speak with more confidence</li></ul>
     </section>
 
-    <section class="sample-lesson">
-      <div><p class="eyebrow">Try a complete lesson</p><h2>Day 1: Classroom English</h2><p>Six useful phrases, guided listening, a speaking game, student worksheet, printable materials, and a teacher plan.</p></div>
-      <button class="button primary" id="previewDayOne" type="button">Open free lesson preview →</button>
-    </section>
-
     <section class="section course-section" id="course">
       <div class="section-title">
         <div>
-          <p class="eyebrow">The course map</p>
-          <h2>Choose today’s speaking mission</h2>
-        </div>
-        <div class="filters" role="group" aria-label="Filter lessons">
-          <button class="filter active" data-filter="all" type="button">All</button>
-          <button class="filter" data-filter="1" type="button">Days 1–5</button>
-          <button class="filter" data-filter="2" type="button">Days 6–10</button>
-          <button class="filter" data-filter="3" type="button">Days 11–15</button>
+          <p class="eyebrow">Public course roadmap</p>
+          <h2>See the 15-day learning journey</h2>
         </div>
       </div>
-      <div class="lesson-grid" id="lessonGrid"></div>
+      <div class="public-roadmap">
+        <article><span>Days 1–5</span><h3>Build the foundation</h3><ol><li>Classroom English</li><li>Introductions</li><li>Family & Friends</li><li>Likes & Reasons</li><li>Daily Routines</li></ol></article>
+        <article><span>Days 6–10</span><h3>Speak in real situations</h3><ol><li>Café Role-play</li><li>Hobbies & Abilities</li><li>Places & Directions</li><li>Shopping</li><li>Feelings & Health</li></ol></article>
+        <article><span>Days 11–15</span><h3>Share ideas confidently</h3><ol><li>Storytelling</li><li>Team Challenge</li><li>Mini Debates</li><li>Presentation Rehearsal</li><li>Speaking Festival</li></ol></article>
+      </div>
+      <p class="roadmap-lock">🔒 Full lesson plans, listening scripts, worksheets, and speaking missions are available inside the private Teacher area.</p>
     </section>
 
     <section class="daily-rhythm">
@@ -154,6 +148,17 @@
         </div>
         <div class="teacher-actions"><button class="ghost-button" id="teacherSignOut" type="button">Lock dashboard</button><button class="button secondary compact-button" id="addStudentButton" type="button">+ Add student</button></div>
       </div>
+      <section class="teacher-missions">
+        <div class="section-title compact-title"><div><p class="eyebrow">Private lesson library</p><h2>Choose today’s speaking mission</h2></div>
+          <div class="filters" role="group" aria-label="Filter lessons">
+            <button class="filter active" data-filter="all" type="button">All</button>
+            <button class="filter" data-filter="1" type="button">Days 1–5</button>
+            <button class="filter" data-filter="2" type="button">Days 6–10</button>
+            <button class="filter" data-filter="3" type="button">Days 11–15</button>
+          </div>
+        </div>
+        <div class="lesson-grid" id="lessonGrid"></div>
+      </section>
       <div class="tracker-summary">
         <article><span>Active learners</span><strong id="studentTotal">0</strong><small>in this course</small></article>
         <article><span>Average progress</span><strong id="averageProgress">0%</strong><small>lessons completed</small></article>
@@ -358,6 +363,6 @@
     </form>
   </dialog>
 
-  <script src="script.js?v=15"></script>
+  <script src="script.js?v=16"></script>
 </body>
 </html>

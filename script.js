@@ -434,12 +434,12 @@ lessonDialog.addEventListener("click", event => {
   button.textContent = "Completed ✓";
 });
 
-document.querySelector("#continueButton").addEventListener("click", () => {
+document.querySelector("#continueButton")?.addEventListener("click", () => {
   const next = lessons.find(l => !completed.has(l.day)) || lessons[14];
   showLesson(next.day);
 });
-document.querySelector("#startDayOne").addEventListener("click", () => showLesson(1));
-document.querySelector("#previewDayOne").addEventListener("click", () => showLesson(1));
+document.querySelector("#startDayOne")?.addEventListener("click", () => showLesson(1));
+document.querySelector("#previewDayOne")?.addEventListener("click", () => showLesson(1));
 
 document.querySelector("#resetProgress").addEventListener("click", () => {
   if (confirm("Reset all course progress?")) { completed.clear(); updateProgress(); renderLessons(); }
@@ -475,7 +475,7 @@ if (matchMedia("(pointer:fine)").matches && !matchMedia("(prefers-reduced-motion
   });
 }
 
-const revealTargets = document.querySelectorAll(".section-title, .lesson-card, .resource-card, .welcome-cards article, .quick-start a, .lesson-resource-hub, .sample-lesson > *, .about-course > *");
+const revealTargets = document.querySelectorAll(".section-title, .lesson-card, .resource-card, .welcome-cards article, .quick-start a, .lesson-resource-hub, .public-roadmap article, .about-course > *");
 revealTargets.forEach((element, index) => {
   element.classList.add("motion-reveal");
   element.style.transitionDelay = `${Math.min(index % 5, 4) * 70}ms`;
