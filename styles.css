@@ -116,11 +116,6 @@ h1 em { display: block; color: var(--coral); font-style: normal; }
 .quick-start div { display: grid; gap: 3px; }
 .quick-start small { color: var(--muted); }
 .quick-start b { margin-left: auto; color: var(--coral); }
-.about-course { display: grid; grid-template-columns: .8fr 1.2fr; gap: 60px; align-items: center; background: white; }
-.about-course h2 { margin: 0; font-size: clamp(2.4rem, 5vw, 4.7rem); }
-.outcome-list { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0; list-style: none; }
-.outcome-list li { padding: 17px; border: 1px solid var(--line); border-radius: 14px; background: var(--cream); font-weight: 700; }
-.outcome-list li::before { content: "✓"; margin-right: 9px; color: var(--blue); }
 .sample-lesson { display: flex; align-items: center; justify-content: space-between; gap: 35px; padding: 50px clamp(24px, 7vw, 110px); color: white; background: var(--blue); }
 .sample-lesson h2 { margin: 0; font-size: clamp(2.3rem, 4vw, 4rem); }
 .sample-lesson p:last-child { max-width: 700px; color: rgba(255,255,255,.78); line-height: 1.7; }
@@ -484,7 +479,6 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
   .progress-strip { grid-template-columns: 1fr; }
   .tracker-summary { grid-template-columns: repeat(2, 1fr); }
   .quick-start { grid-template-columns: 1fr; }
-  .about-course { grid-template-columns: 1fr; }
   .public-roadmap { grid-template-columns: 1fr; }
   .parent-dashboard { grid-template-columns: 1fr; }
   .parent-record-grid { grid-template-columns: 1fr 1fr; }
@@ -507,7 +501,6 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
   .lesson-grid, .resource-grid, .rhythm-grid { grid-template-columns: 1fr; }
   .lesson-quality-grid, .support-grid { grid-template-columns: 1fr; }
   .lesson-pack-content { grid-template-columns: 1fr; }
-  .outcome-list { grid-template-columns: 1fr; }
   .sample-lesson { align-items: flex-start; flex-direction: column; }
   .sample-lesson .button { width: 100%; }
   .parent-record-heading { align-items: flex-start; flex-direction: column; }

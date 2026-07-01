@@ -1,5 +1,5 @@
-const CACHE="speak-up-v31";
-const CORE=["./","./index.html","./styles.css?v=31","./script.js?v=31","./manifest.webmanifest","./assets/app-icon.svg","./assets/speak-up-hero.png","./assets/day1-classroom-english.png","./assets/day1-speaking-game.png","./downloads/print.css","./downloads/flashcards.html","./downloads/role-play-cards.html","./downloads/home-practice.html","./downloads/certificates.html","./downloads/day1-pack.html"];
+const CACHE="speak-up-v32";
+const CORE=["./","./index.html","./styles.css?v=32","./script.js?v=32","./manifest.webmanifest","./assets/app-icon.svg","./assets/speak-up-hero.png","./assets/day1-classroom-english.png","./assets/day1-speaking-game.png","./downloads/print.css","./downloads/flashcards.html","./downloads/role-play-cards.html","./downloads/home-practice.html","./downloads/certificates.html","./downloads/day1-pack.html"];
 self.addEventListener("install",event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE))));
 self.addEventListener("activate",event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key))))));
 self.addEventListener("fetch",event=>{if(event.request.method!=="GET"||event.request.destination==="video"||event.request.headers.has("range"))return;event.respondWith(fetch(event.request).then(response=>{const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy));return response}).catch(()=>caches.match(event.request).then(hit=>hit||caches.match("./index.html"))))});

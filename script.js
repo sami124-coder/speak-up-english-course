@@ -609,7 +609,7 @@ if (matchMedia("(pointer:fine)").matches && !matchMedia("(prefers-reduced-motion
   });
 }
 
-const revealTargets = document.querySelectorAll(".section-title, .lesson-card, .resource-card, .quick-start a, .public-roadmap article, .about-course > *");
+const revealTargets = document.querySelectorAll(".section-title, .lesson-card, .resource-card, .quick-start a, .public-roadmap article");
 revealTargets.forEach((element, index) => {
   element.classList.add("motion-reveal");
   element.style.transitionDelay = `${Math.min(index % 5, 4) * 70}ms`;
