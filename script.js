@@ -656,7 +656,6 @@ if (/iphone|ipad|ipod/i.test(navigator.userAgent) && !window.navigator.standalon
 if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js"));
 
 const courseGuide = document.querySelector("#courseGuide");
-const courseGuideWrap = document.querySelector(".course-guide");
 const guideMessage = document.querySelector("#guideMessage");
 const guideClose = document.querySelector(".guide-close");
 const guideTips = [
@@ -673,33 +672,3 @@ courseGuide.addEventListener("click", () => {
   guideMessage.classList.remove("is-hidden");
 });
 guideClose.addEventListener("click", () => guideMessage.classList.add("is-hidden"));
-
-const guideStops = [
-  {x: 0, y: 0, left: false},
-  {x: () => -(window.innerWidth - courseGuideWrap.offsetWidth - 32), y: 0, left: true},
-  {x: () => -(window.innerWidth - courseGuideWrap.offsetWidth - 32), y: () => -(window.innerHeight * .48), left: true},
-  {x: 0, y: () => -(window.innerHeight * .38), left: false}
-];
-let guideStopIndex = 0;
-function moveCourseGuide() {
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  guideStopIndex = (guideStopIndex + 1) % guideStops.length;
-  const stop = guideStops[guideStopIndex];
-  const x = typeof stop.x === "function" ? stop.x() : stop.x;
-  const y = typeof stop.y === "function" ? stop.y() : stop.y;
-  courseGuideWrap.style.setProperty("--guide-x", `${x}px`);
-  courseGuideWrap.style.setProperty("--guide-y", `${y}px`);
-  courseGuideWrap.classList.toggle("guide-left", stop.left);
-}
-let guideWanderTimer = setInterval(moveCourseGuide, 7000);
-courseGuideWrap.addEventListener("pointerenter", () => clearInterval(guideWanderTimer));
-courseGuideWrap.addEventListener("pointerleave", () => {
-  clearInterval(guideWanderTimer);
-  guideWanderTimer = setInterval(moveCourseGuide, 7000);
-});
-window.addEventListener("resize", () => {
-  courseGuideWrap.style.setProperty("--guide-x", "0px");
-  courseGuideWrap.style.setProperty("--guide-y", "0px");
-  courseGuideWrap.classList.remove("guide-left");
-  guideStopIndex = 0;
-});
