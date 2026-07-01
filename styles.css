@@ -170,6 +170,7 @@ h1 em { display: block; color: var(--coral); font-style: normal; }
 .video-gallery figcaption div { display: grid; gap: 3px; }
 .video-gallery figcaption small { color: rgba(255,255,255,.62); }
 .teacher-missions { margin-bottom: 70px; padding-bottom: 65px; border-bottom: 1px solid var(--line); }
+.teacher-resource-section { margin: 70px calc(clamp(24px, 7vw, 110px) * -1) calc(clamp(65px, 9vw, 125px) * -1); background: white; }
 .compact-title h2 { font-size: clamp(2rem, 4vw, 3.5rem); }
 .lesson-tabs { display: flex; gap: 7px; margin: 28px 0 18px; padding: 6px; overflow-x: auto; border-radius: 14px; background: var(--cream); }
 .lesson-tab { flex: 1; min-width: max-content; padding: 11px 14px; border: 0; border-radius: 10px; background: transparent; font-weight: 800; }

@@ -102,6 +102,7 @@ if (!localStorage.getItem("speakUpNoDemoMigration")) {
 }
 let signedInStudentId = sessionStorage.getItem("speakUpParentStudentId");
 let teacherUnlocked = sessionStorage.getItem("speakUpTeacherUnlocked") === "yes";
+document.querySelector("#teacherPrivate").append(document.querySelector("#resources"));
 
 const lessonGrid = document.querySelector("#lessonGrid");
 const lessonDialog = document.querySelector("#lessonDialog");
