@@ -570,6 +570,8 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
   padding-bottom: calc(76px + env(safe-area-inset-bottom));
+  height: 100dvh;
+  overflow: hidden;
 }
 .is-standalone .app-download-banner,
 .is-standalone footer { display: none !important; }
@@ -614,6 +616,22 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
 .is-standalone .app-tabbar a span { font-size: 1.45rem; line-height: 1; }
 .is-standalone .app-tabbar a small { font-size: .68rem; }
 .is-standalone .app-tabbar a.active { color: var(--ink); background: #fff1bd; }
+.is-standalone main {
+  height: calc(100dvh - 66px - 76px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  overflow: hidden;
+}
+.is-standalone main > section[id] { display: none; }
+.is-standalone main > section[id].app-page-active {
+  display: block;
+  box-sizing: border-box;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+.is-standalone main > section[id].app-page-active::-webkit-scrollbar { display: none; }
+.is-standalone #home.app-page-active { min-height: 100%; }
 .is-standalone .content-dialog {
   width: 100%;
   max-width: none;

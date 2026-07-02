@@ -652,11 +652,22 @@ const appTabs = [...document.querySelectorAll("[data-app-tab]")];
 function updateAppTabs() {
   const section = (location.hash || "#home").slice(1);
   appTabs.forEach(tab => {
-    const active = tab.dataset.appTab === section;
+    const active = tab.dataset.appTab === section || (tab.dataset.appTab === "students" && section === "resources");
     tab.classList.toggle("active", active);
     if (active) tab.setAttribute("aria-current", "page");
     else tab.removeAttribute("aria-current");
   });
+  if (standaloneApp) {
+    const appPages = [...document.querySelectorAll("main > section[id]")];
+    const requestedPage = document.querySelector(`main > section#${CSS.escape(section)}`);
+    const activePage = requestedPage || document.querySelector("main > section#home");
+    appPages.forEach(page => {
+      const active = page === activePage;
+      page.classList.toggle("app-page-active", active);
+      page.hidden = !active;
+    });
+    activePage.scrollTo({top: 0, behavior: "instant"});
+  }
 }
 window.addEventListener("hashchange", updateAppTabs);
 updateAppTabs();
