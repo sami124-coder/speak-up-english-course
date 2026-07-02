@@ -646,6 +646,20 @@ if ("IntersectionObserver" in window) {
 let installPrompt;
 const installButton = document.querySelector("#installApp");
 const installBanner = document.querySelector("#appDownloadBanner");
+const standaloneApp = matchMedia("(display-mode: standalone)").matches || Boolean(window.navigator.standalone);
+document.body.classList.toggle("is-standalone", standaloneApp);
+const appTabs = [...document.querySelectorAll("[data-app-tab]")];
+function updateAppTabs() {
+  const section = (location.hash || "#home").slice(1);
+  appTabs.forEach(tab => {
+    const active = tab.dataset.appTab === section;
+    tab.classList.toggle("active", active);
+    if (active) tab.setAttribute("aria-current", "page");
+    else tab.removeAttribute("aria-current");
+  });
+}
+window.addEventListener("hashchange", updateAppTabs);
+updateAppTabs();
 window.addEventListener("beforeinstallprompt", event => {
   event.preventDefault();
   installPrompt = event;
@@ -666,5 +680,5 @@ window.addEventListener("appinstalled", () => {
   trackAnalyticsEvent("app_installed");
   installBanner.hidden = true;
 });
-if (matchMedia("(display-mode: standalone)").matches || window.navigator.standalone) installBanner.hidden = true;
+if (standaloneApp) installBanner.hidden = true;
 if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js"));

@@ -1,4 +1,4 @@
-const CACHE="speak-up-v50";
+const CACHE="speak-up-v51";
 const CORE=["./","./index.html","./styles.css?v=50","./script.js?v=50","./manifest.webmanifest","./assets/app-icon.svg","./assets/speak-up-hero.png","./assets/day1-picture-prompt.png","./assets/day2-picture-prompt.png","./assets/day1-classroom-english.png","./assets/day1-speaking-game.png","./downloads/print.css","./downloads/flashcards.html","./downloads/classroom_english_day1_flashcards.pdf","./downloads/classroom_english_day1_student_worksheet.pdf","./downloads/Introductions_Day2_Flash_Cards.pdf","./downloads/Introductions_Day2_Worksheet.pdf","./downloads/role-play-cards.html","./downloads/home-practice.html","./downloads/certificates.html","./downloads/day1-pack.html"];
 self.addEventListener("install",event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE))));
 self.addEventListener("activate",event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key))))));

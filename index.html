@@ -7,6 +7,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Speak Up!">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml">
   <title>Speak Up! English Course for Kids | 15-Day Speaking & Listening Program</title>
@@ -17,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=50">
+  <link rel="stylesheet" href="styles.css?v=51">
 </head>
 <body>
   <aside class="app-download-banner" id="appDownloadBanner" aria-label="Install Speak Up application">
@@ -315,6 +316,13 @@
     </section>
   </main>
 
+  <nav class="app-tabbar" aria-label="App navigation">
+    <a href="#home" data-app-tab="home"><span aria-hidden="true">⌂</span><small>Home</small></a>
+    <a href="#course" data-app-tab="course"><span aria-hidden="true">▤</span><small>Lessons</small></a>
+    <a href="#students" data-app-tab="students"><span aria-hidden="true">✎</span><small>Teacher</small></a>
+    <a href="#parents" data-app-tab="parents"><span aria-hidden="true">♡</span><small>Parent</small></a>
+  </nav>
+
   <footer>
     <a class="brand" href="#home"><span class="brand-bubble">SU!</span><span>Speak Up!</span></a>
     <p>Made for brave voices, curious minds, and joyful classrooms.</p>
@@ -353,6 +361,6 @@
   </dialog>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js?v=50"></script>
+  <script src="script.js?v=51"></script>
 </body>
 </html>

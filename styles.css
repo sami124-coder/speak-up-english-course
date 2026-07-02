@@ -561,3 +561,80 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .motion-reveal { opacity: 1; transform: none; }
 }
+
+.app-tabbar { display: none; }
+
+/* Native-style shell shown only when the PWA is installed. */
+.is-standalone {
+  overscroll-behavior-y: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  padding-bottom: calc(76px + env(safe-area-inset-bottom));
+}
+.is-standalone .app-download-banner,
+.is-standalone footer { display: none !important; }
+.is-standalone .topbar {
+  min-height: 58px;
+  padding: max(8px, env(safe-area-inset-top)) 16px 8px;
+  border-bottom: 1px solid rgba(23,61,58,.1);
+  box-shadow: 0 4px 18px rgba(16,42,67,.07);
+}
+.is-standalone .topbar nav,
+.is-standalone .topbar .app-controls { display: none; }
+.is-standalone .brand-bubble { width: 40px; height: 40px; border-radius: 13px; font-size: 1rem; }
+.is-standalone .brand > span:last-child { font-size: 1rem; }
+.is-standalone .brand small { font-size: .65rem; }
+.is-standalone .app-tabbar {
+  position: fixed;
+  z-index: 80;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  min-height: 68px;
+  padding: 6px 8px max(6px, env(safe-area-inset-bottom));
+  border-top: 1px solid rgba(23,61,58,.12);
+  background: rgba(255,255,255,.96);
+  box-shadow: 0 -8px 28px rgba(16,42,67,.1);
+  backdrop-filter: blur(16px);
+}
+.is-standalone .app-tabbar a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 56px;
+  color: #6a7c79;
+  border-radius: 15px;
+  text-decoration: none;
+  font-weight: 800;
+}
+.is-standalone .app-tabbar a span { font-size: 1.45rem; line-height: 1; }
+.is-standalone .app-tabbar a small { font-size: .68rem; }
+.is-standalone .app-tabbar a.active { color: var(--ink); background: #fff1bd; }
+.is-standalone .content-dialog {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  border-radius: 0;
+}
+.is-standalone .dialog-close {
+  top: max(12px, env(safe-area-inset-top));
+  margin-top: max(12px, env(safe-area-inset-top));
+}
+.is-standalone #lessonContent,
+.is-standalone #resourceContent {
+  padding: calc(62px + env(safe-area-inset-top)) 20px calc(88px + env(safe-area-inset-bottom));
+}
+.is-standalone button,
+.is-standalone .button,
+.is-standalone input,
+.is-standalone select { min-height: 46px; }
+
+@media (hover: none) {
+  .lesson-card:hover, .resource-card:hover, .quick-start a:hover { transform: none; }
+}
