@@ -353,25 +353,21 @@ function showLesson(day) {
     <p class="dialog-kicker">Day ${lesson.day} · 60–75 minutes</p><h2>${lesson.title}</h2>
     <p class="dialog-goal"><strong>Can-do goal:</strong> ${lesson.goal}</p>
     <div class="lesson-tabs" role="tablist">
-      <button class="lesson-tab active" data-lesson-tab="student" type="button">Student</button>
-      <button class="lesson-tab" data-lesson-tab="teacher" type="button">Teacher</button>
-      <button class="lesson-tab" data-lesson-tab="materials" type="button">Materials</button>
-      <button class="lesson-tab" data-lesson-tab="progress" type="button">Progress</button>
+      <button class="lesson-tab active" data-lesson-tab="lesson" type="button">📘 Lesson</button>
+      <button class="lesson-tab" data-lesson-tab="activities" type="button">🎯 Activities</button>
     </div>
-    <div class="lesson-panel" data-lesson-panel="student">
+    <div class="lesson-panel" data-lesson-panel="lesson">
       <section class="dialog-section"><h3>Useful language</h3><p>${lesson.language}</p></section>
       <section class="dialog-section"><h3>Picture vocabulary</h3><div class="vocab-chips">${extra.words.map((word, index) => `<span><b>${["🔵","🟡","🟢","🟠","🟣","🔴"][index]}</b>${word}</span>`).join("")}</div></section>
       <section class="dialog-section"><h3>Listening</h3><div class="lesson-tools"><button class="button secondary" data-play-listening="${lesson.day}" type="button">▶ Play listening</button></div><p class="script">${lesson.listen}</p></section>
-      <section class="dialog-section"><h3>Speaking challenge</h3><p>${lesson.task}</p></section>
-      <section class="dialog-section"><h3>Worksheet</h3><p>${lesson.worksheet}</p></section>
+      ${teacherUnlocked ? lessonTeachingPack(lesson, extra) : `<section class="dialog-section"><h3>Teacher guidance</h3><p>Unlock the private Teacher area to view timing, differentiation, and assessment guidance.</p></section>`}
     </div>
-    <div class="lesson-panel" data-lesson-panel="teacher" hidden>${teacherUnlocked ? lessonTeachingPack(lesson, extra) : `<section class="dialog-section"><h3>Teacher access required</h3><p>Unlock the private Teacher area first, then reopen this lesson to view timing, differentiation, and assessment guidance.</p><a class="button primary" href="#students" onclick="document.querySelector('#lessonDialog').close()">Open teacher access</a></section>`}</div>
-    <div class="lesson-panel" data-lesson-panel="materials" hidden>
+    <div class="lesson-panel" data-lesson-panel="activities" hidden>
+      <section class="dialog-section"><h3>Speaking challenge</h3><p>${lesson.task}</p></section>
+      <section class="dialog-section"><h3>Worksheet activity</h3><p>${lesson.worksheet}</p></section>
       <section class="dialog-section media-section"><div class="video-card"><span class="play-icon">▶</span><div><p class="media-label">Video practice</p><h3>${lesson.title} video</h3><a href="${videoUrl}" target="_blank" rel="noreferrer">Find a lesson video ↗</a></div></div><div class="materials-card"><p class="media-label">Print & play</p><h3>Lesson materials</h3><ul>${extra.materials.map(item => `<li>${item}</li>`).join("")}</ul></div></section>
       <div class="lesson-tools"><a class="button secondary" href="downloads/flashcards.html" target="_blank">Open flashcards</a><button class="button secondary" onclick="window.print()" type="button">Print worksheet</button>${day === 1 ? `<a class="button primary" href="downloads/day1-pack.html" target="_blank">Open Day 1 pack</a>` : ""}</div>
       ${day === 1 ? dayOneExtended : ""}
-    </div>
-    <div class="lesson-panel" data-lesson-panel="progress" hidden>
       <section class="dialog-section"><h3>My success check</h3><ul class="success-list"><li>I used two target phrases.</li><li>I listened and answered my partner.</li><li>I spoke clearly.</li><li>I tried again when it was difficult.</li></ul></section>
       <section class="dialog-section bonus-card"><h3>Extra challenge</h3><p>${extra.bonus}</p></section>
       <button class="button primary dialog-complete" data-dialog-complete="${lesson.day}">${completed.has(day) ? "Completed ✓" : "Mark day complete"}</button>
