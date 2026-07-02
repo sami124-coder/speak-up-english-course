@@ -367,7 +367,6 @@ function showLesson(day) {
       <section class="dialog-section"><h3>Speaking challenge</h3><p>${lesson.task}</p></section>
       <section class="dialog-section"><h3>Worksheet activity</h3><p>${lesson.worksheet}</p></section>
       <section class="dialog-section media-section"><div class="video-card"><span class="play-icon">▶</span><div><p class="media-label">Video practice</p><h3>${lesson.title} video</h3><a href="${videoUrl}" target="_blank" rel="noreferrer">Find a lesson video ↗</a></div></div><div class="materials-card"><p class="media-label">Print & play</p><h3>Lesson materials</h3><ul>${extra.materials.map(item => `<li>${item}</li>`).join("")}</ul></div></section>
-      ${day === 1 ? dayOneExtended : ""}
       <section class="dialog-section"><h3>My success check</h3><ul class="success-list"><li>I used two target phrases.</li><li>I listened and answered my partner.</li><li>I spoke clearly.</li><li>I tried again when it was difficult.</li></ul></section>
       <section class="dialog-section bonus-card"><h3>Extra challenge</h3><p>${extra.bonus}</p></section>
       <button class="button primary dialog-complete" data-dialog-complete="${lesson.day}">${completed.has(day) ? "Completed ✓" : "Mark day complete"}</button>
