@@ -357,10 +357,12 @@ function showLesson(day) {
       <button class="lesson-tab" data-lesson-tab="activities" type="button">🎯 Activities</button>
     </div>
     <div class="lesson-panel" data-lesson-panel="lesson">
-      <section class="dialog-section"><h3>Useful language</h3><p>${lesson.language}</p></section>
-      <section class="dialog-section"><h3>Picture vocabulary</h3><div class="vocab-chips">${extra.words.map((word, index) => `<span><b>${["🔵","🟡","🟢","🟠","🟣","🔴"][index]}</b>${word}</span>`).join("")}</div></section>
-      <section class="dialog-section"><h3>Listening</h3><div class="lesson-tools"><button class="button secondary" data-play-listening="${lesson.day}" type="button">▶ Play listening</button></div><p class="script">${lesson.listen}</p></section>
-      ${teacherUnlocked ? lessonTeachingPack(lesson, extra) : `<section class="dialog-section"><h3>Teacher guidance</h3><p>Unlock the private Teacher area to view timing, differentiation, and assessment guidance.</p></section>`}
+      ${day === 1 ? "" : `
+        <section class="dialog-section"><h3>Useful language</h3><p>${lesson.language}</p></section>
+        <section class="dialog-section"><h3>Picture vocabulary</h3><div class="vocab-chips">${extra.words.map((word, index) => `<span><b>${["🔵","🟡","🟢","🟠","🟣","🔴"][index]}</b>${word}</span>`).join("")}</div></section>
+        <section class="dialog-section"><h3>Listening</h3><div class="lesson-tools"><button class="button secondary" data-play-listening="${lesson.day}" type="button">▶ Play listening</button></div><p class="script">${lesson.listen}</p></section>
+        ${teacherUnlocked ? lessonTeachingPack(lesson, extra) : `<section class="dialog-section"><h3>Teacher guidance</h3><p>Unlock the private Teacher area to view timing, differentiation, and assessment guidance.</p></section>`}
+      `}
       <section class="dialog-section"><p class="media-label">Lesson resources</p><h3>Open, print, and present</h3><div class="lesson-tools"><a class="button secondary" href="downloads/flashcards.html" target="_blank">Open flashcards</a><button class="button secondary" onclick="window.print()" type="button">Print worksheet</button>${day === 1 ? `<a class="button primary" href="downloads/day1-pack.html" target="_blank">Open Day 1 pack</a><a class="button secondary" href="downloads/Classroom_English_Day1_Ages_8-12.pptx" download>⬇ Download Day 1 PowerPoint</a>` : ""}</div></section>
     </div>
     <div class="lesson-panel" data-lesson-panel="activities" hidden>
