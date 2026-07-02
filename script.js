@@ -293,7 +293,7 @@ function renderLessons(filter = "all") {
     const extra = dailyExtras[lesson.day];
     card.innerHTML = `
       <div class="lesson-day"><span class="day-number">Day ${lesson.day}</span><button class="complete-toggle" data-complete="${lesson.day}" aria-label="Mark day ${lesson.day} complete">${completed.has(lesson.day) ? "✓" : ""}</button></div>
-      <div class="lesson-thumbnail unit-${lesson.unit}"><span>${extra.visual}</span><small>Picture prompt</small></div>
+      <div class="lesson-thumbnail unit-${lesson.unit} ${lesson.day === 1 ? "has-image" : ""}">${lesson.day === 1 ? `<img src="assets/day1-picture-prompt.png" alt="3D school, headphones, microphone, speech bubble, notebook, and pencil">` : `<span>${extra.visual}</span>`}<small>Picture prompt</small></div>
       <h3>${lesson.title}</h3><p>${lesson.goal}</p>
       <div class="lesson-meta"><span>🎤 Speaking</span><span>🎧 Video</span><span>📎 ${extra.materials.length + 3} materials</span></div>
       <button class="open-lesson" data-day="${lesson.day}">Open lesson →</button>`;
