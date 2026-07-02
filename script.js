@@ -357,7 +357,7 @@ function showLesson(day) {
       <button class="lesson-tab" data-lesson-tab="activities" type="button">🎯 Activities</button>
     </div>
     <div class="lesson-panel" data-lesson-panel="lesson">
-      ${day === 1 ? "" : `
+      ${day <= 2 ? "" : `
         <section class="dialog-section"><h3>Useful language</h3><p>${lesson.language}</p></section>
         <section class="dialog-section"><h3>Picture vocabulary</h3><div class="vocab-chips">${extra.words.map((word, index) => `<span><b>${["🔵","🟡","🟢","🟠","🟣","🔴"][index]}</b>${word}</span>`).join("")}</div></section>
         <section class="dialog-section"><h3>Listening</h3><div class="lesson-tools"><button class="button secondary" data-play-listening="${lesson.day}" type="button">▶ Play listening</button></div><p class="script">${lesson.listen}</p></section>
