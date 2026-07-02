@@ -103,6 +103,11 @@ if (!localStorage.getItem("speakUpNoDemoMigration")) {
 let signedInStudentId = sessionStorage.getItem("speakUpParentStudentId");
 const supabaseClient = window.supabase.createClient("https://vibayhusnmcpvtlxuayh.supabase.co", "sb_publishable_icj980mZsKVkWH4ZB7LyTA_DaK5x3Mx");
 const TEACHER_PIN = "2468";
+let analyticsVisitorId = localStorage.getItem("speakUpAnalyticsVisitor");
+if (!analyticsVisitorId) {
+  analyticsVisitorId = crypto.randomUUID?.() || `visitor-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  localStorage.setItem("speakUpAnalyticsVisitor", analyticsVisitorId);
+}
 let cloudUser = null;
 let teacherUnlocked = sessionStorage.getItem("speakUpTeacherUnlocked") === "1";
 document.querySelector("#teacherPrivate").append(document.querySelector("#resources"));
@@ -111,6 +116,31 @@ const lessonGrid = document.querySelector("#lessonGrid");
 const lessonDialog = document.querySelector("#lessonDialog");
 const resourceDialog = document.querySelector("#resourceDialog");
 let completed = new Set(JSON.parse(localStorage.getItem("speakUpProgress") || "[]"));
+
+async function trackAnalyticsEvent(eventType) {
+  try {
+    await supabaseClient.from("analytics_events").insert({event_type:eventType, visitor_id:analyticsVisitorId});
+  } catch {}
+}
+
+async function loadSiteAnalytics() {
+  const status = document.querySelector("#analyticsStatus");
+  status.textContent = "Loading anonymous analytics…";
+  const {data,error} = await supabaseClient.rpc("get_site_analytics", {p_pin:TEACHER_PIN});
+  if (error || !data) {
+    status.textContent = "Analytics setup required: run the latest supabase-setup.sql in Supabase.";
+    return;
+  }
+  document.querySelector("#analyticsTotalVisits").textContent = data.total_visits ?? 0;
+  document.querySelector("#analyticsUniqueDevices").textContent = data.unique_devices ?? 0;
+  document.querySelector("#analyticsInstallClicks").textContent = data.install_clicks ?? 0;
+  document.querySelector("#analyticsConfirmedInstalls").textContent = data.confirmed_installs ?? 0;
+  document.querySelector("#analyticsVisitsToday").textContent = data.visits_today ?? 0;
+  document.querySelector("#analyticsVisitsWeek").textContent = data.visits_7_days ?? 0;
+  status.textContent = "Anonymous counts only. No names, emails, or location are collected.";
+}
+
+trackAnalyticsEvent("page_view");
 
 async function saveStudents() {
   localStorage.setItem("speakUpStudents", JSON.stringify(trackedStudents));
@@ -517,7 +547,7 @@ document.querySelector("#teacherLoginForm").addEventListener("submit", async eve
   document.querySelector("#teacherLoginError").textContent = "";
   event.currentTarget.reset();
   renderTeacherAccess();
-  await loadCloudStudents();
+  await Promise.all([loadCloudStudents(), loadSiteAnalytics()]);
 });
 document.querySelector("#teacherSignOut").addEventListener("click", () => {
   teacherUnlocked = false;
@@ -525,6 +555,7 @@ document.querySelector("#teacherSignOut").addEventListener("click", () => {
   renderTeacherAccess();
   document.querySelector("#students").scrollIntoView({behavior:"smooth"});
 });
+document.querySelector("#refreshAnalytics").addEventListener("click", loadSiteAnalytics);
 
 document.querySelectorAll(".dialog-close").forEach(button => button.addEventListener("click", () => button.closest("dialog").close()));
 document.querySelectorAll("dialog").forEach(dialog => dialog.addEventListener("click", e => { if (e.target === dialog) dialog.close(); }));
@@ -570,6 +601,7 @@ renderLessons();
 updateProgress();
 renderStudentTracker();
 renderTeacherAccess();
+if (teacherUnlocked) loadSiteAnalytics();
 supabaseClient.auth.getSession().then(async ({data}) => {
   if (data.session?.user) {
     cloudUser = data.session.user;
@@ -620,6 +652,7 @@ window.addEventListener("beforeinstallprompt", event => {
   installBanner.hidden = false;
 });
 installButton.addEventListener("click", async () => {
+  trackAnalyticsEvent("install_click");
   if (installPrompt) {
     installPrompt.prompt();
     await installPrompt.userChoice;
@@ -629,6 +662,9 @@ installButton.addEventListener("click", async () => {
     alert("On iPhone or iPad: tap Share, then “Add to Home Screen”. On a computer: use the install icon in the browser address bar.");
   }
 });
-window.addEventListener("appinstalled", () => { installBanner.hidden = true; });
+window.addEventListener("appinstalled", () => {
+  trackAnalyticsEvent("app_installed");
+  installBanner.hidden = true;
+});
 if (matchMedia("(display-mode: standalone)").matches || window.navigator.standalone) installBanner.hidden = true;
 if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js"));

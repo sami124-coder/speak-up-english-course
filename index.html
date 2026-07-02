@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=49">
+  <link rel="stylesheet" href="styles.css?v=50">
 </head>
 <body>
   <aside class="app-download-banner" id="appDownloadBanner" aria-label="Install Speak Up application">
@@ -138,6 +138,21 @@
         </div>
         <div class="teacher-actions"><button class="ghost-button" id="teacherSignOut" type="button">Lock dashboard</button><button class="button secondary compact-button" id="addStudentButton" type="button">+ Add student</button></div>
       </div>
+      <section class="analytics-panel" aria-labelledby="analyticsTitle">
+        <div class="analytics-heading">
+          <div><p class="eyebrow">Anonymous website analytics</p><h3 id="analyticsTitle">Website and app reach</h3></div>
+          <button class="button secondary compact-button" id="refreshAnalytics" type="button">Refresh analytics</button>
+        </div>
+        <div class="analytics-summary">
+          <article><span>Total visits</span><strong id="analyticsTotalVisits">—</strong><small>page loads</small></article>
+          <article><span>Unique devices</span><strong id="analyticsUniqueDevices">—</strong><small>approximate</small></article>
+          <article><span>Install clicks</span><strong id="analyticsInstallClicks">—</strong><small>button taps</small></article>
+          <article><span>Confirmed installs</span><strong id="analyticsConfirmedInstalls">—</strong><small>supported browsers</small></article>
+          <article><span>Today</span><strong id="analyticsVisitsToday">—</strong><small>visits today</small></article>
+          <article><span>Last 7 days</span><strong id="analyticsVisitsWeek">—</strong><small>recent visits</small></article>
+        </div>
+        <p class="analytics-status" id="analyticsStatus">Loading anonymous analytics…</p>
+      </section>
       <section class="teacher-missions">
         <div class="section-title compact-title"><div><p class="eyebrow">Private lesson library</p><h2>Choose today’s speaking mission</h2></div>
           <div class="filters" role="group" aria-label="Filter lessons">
@@ -338,6 +353,6 @@
   </dialog>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js?v=49"></script>
+  <script src="script.js?v=50"></script>
 </body>
 </html>
