@@ -666,7 +666,7 @@ function updateAppTabs() {
       page.classList.toggle("app-page-active", active);
       page.hidden = !active;
     });
-    activePage.scrollTo({top: 0, behavior: "instant"});
+    activePage.scrollTop = 0;
   }
 }
 window.addEventListener("hashchange", updateAppTabs);
