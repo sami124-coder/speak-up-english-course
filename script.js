@@ -415,6 +415,18 @@ function showLesson(day) {
       <section class="dialog-section bonus-card"><h3>Extra challenge</h3><p>${extra.bonus}</p></section>
       <button class="button primary dialog-complete" data-dialog-complete="${lesson.day}">${completed.has(day) ? "Completed ✓" : "Mark day complete"}</button>
     </div>`;
+  if (day === 3) {
+    lessonContent.querySelector('[data-lesson-panel="lesson"]').insertAdjacentHTML("beforeend", `
+      <section class="dialog-section day3-resources">
+        <p class="media-label">Day 3 lesson files</p>
+        <h3>Open, print, and present</h3>
+        <div class="lesson-tools">
+          <a class="button secondary" href="downloads/Family_Friends_Day3_Flash_Cards.pdf" target="_blank">Open Day 3 flash cards</a>
+          <a class="button secondary" href="downloads/Family_Friends_Day3_Worksheet.pdf" target="_blank">Open Day 3 worksheet</a>
+          <a class="button primary" href="downloads/Family_Friends_Day3_Ages_8-12.pptx" download>Download Day 3 PowerPoint</a>
+        </div>
+      </section>`);
+  }
   lessonDialog.showModal();
 }
 
