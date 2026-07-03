@@ -491,6 +491,7 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
 .bingo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; max-width: 420px; }
 .bingo-grid span { display: grid; place-items: center; min-height: 70px; padding: 8px; border: 2px solid var(--ink); border-radius: 10px; background: white; font-weight: 800; }
 .dialog-complete { width: 100%; margin-top: 30px; }
+.lesson-day-3 [data-lesson-panel="lesson"] .dialog-section { display: none; }
 .resource-dialog table { width: 100%; border-collapse: collapse; }
 .resource-dialog th, .resource-dialog td { padding: 10px; border-bottom: 1px solid var(--line); text-align: left; }
 

@@ -388,7 +388,9 @@ function showLesson(day) {
   const lesson = lessons.find(l => l.day === day);
   const extra = dailyExtras[day];
   const videoUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(extra.video)}`;
-  document.querySelector("#lessonContent").innerHTML = `
+  const lessonContent = document.querySelector("#lessonContent");
+  lessonContent.className = `lesson-day-content lesson-day-${day}`;
+  lessonContent.innerHTML = `
     <div class="lesson-cover"><span>${extra.visual}</span><div><p>Picture prompt</p><strong>What can you see? What might happen today?</strong></div></div>
     <p class="dialog-kicker">Day ${lesson.day} · 60–75 minutes</p><h2>${lesson.title}</h2>
     <p class="dialog-goal"><strong>Can-do goal:</strong> ${lesson.goal}</p>
