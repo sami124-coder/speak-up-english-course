@@ -102,13 +102,14 @@ if (!localStorage.getItem("speakUpNoDemoMigration")) {
 }
 let signedInStudentId = sessionStorage.getItem("speakUpParentStudentId");
 const supabaseClient = window.supabase.createClient("https://vibayhusnmcpvtlxuayh.supabase.co", "sb_publishable_icj980mZsKVkWH4ZB7LyTA_DaK5x3Mx");
+const TEACHER_PIN = "2468";
 let analyticsVisitorId = localStorage.getItem("speakUpAnalyticsVisitor");
 if (!analyticsVisitorId) {
   analyticsVisitorId = crypto.randomUUID?.() || `visitor-${Date.now()}-${Math.random().toString(36).slice(2)}`;
   localStorage.setItem("speakUpAnalyticsVisitor", analyticsVisitorId);
 }
 let cloudUser = null;
-let teacherUnlocked = false;
+let teacherUnlocked = sessionStorage.getItem("speakUpTeacherUnlocked") === "1";
 document.querySelector("#teacherPrivate").append(document.querySelector("#resources"));
 
 const lessonGrid = document.querySelector("#lessonGrid");
@@ -161,9 +162,9 @@ async function loadCloudStudents() {
 function renderTeacherAccess() {
   document.querySelector("#teacherGate").hidden = teacherUnlocked;
   document.querySelector("#teacherPrivate").hidden = !teacherUnlocked;
-  document.querySelector("#teacherGateTitle").textContent = "Teacher account access";
-  document.querySelector("#teacherGateText").textContent = "Sign in with your teacher email and password.";
-  document.querySelector("#teacherPinHelp").textContent = "Secure access powered by Supabase";
+  document.querySelector("#teacherGateTitle").textContent = "Teacher PIN access";
+  document.querySelector("#teacherGateText").textContent = "Enter the teacher PIN to open the private dashboard.";
+  document.querySelector("#teacherPinHelp").textContent = "One teacher · one simple PIN";
 }
 
 function latestLesson(student) {
@@ -622,46 +623,20 @@ document.querySelector("#parentSignOut").addEventListener("click", () => {
 });
 document.querySelector("#teacherLoginForm").addEventListener("submit", async event => {
   event.preventDefault();
-  const email = document.querySelector("#teacherEmailInput").value.trim();
-  const password = document.querySelector("#teacherPasswordInput").value;
-  const {data,error} = await supabaseClient.auth.signInWithPassword({email,password});
-  if (error || !data.user) {
-    document.querySelector("#teacherLoginError").textContent = error?.message || "Sign-in failed.";
+  const pin = document.querySelector("#teacherPinInput").value;
+  if (pin !== TEACHER_PIN) {
+    document.querySelector("#teacherLoginError").textContent = "Incorrect PIN. Please try again.";
     return;
   }
-  cloudUser = data.user;
   teacherUnlocked = true;
+  sessionStorage.setItem("speakUpTeacherUnlocked", "1");
   document.querySelector("#teacherLoginError").textContent = "";
   event.currentTarget.reset();
   location.reload();
 });
-document.querySelector("#teacherCreateAccount").addEventListener("click", async () => {
-  const email = document.querySelector("#teacherEmailInput").value.trim();
-  const password = document.querySelector("#teacherPasswordInput").value;
-  const message = document.querySelector("#teacherLoginError");
-  if (!email || password.length < 8) {
-    message.textContent = "Enter a valid email and a password with at least 8 characters.";
-    return;
-  }
-  message.textContent = "Creating your secure teacher account…";
-  const {data,error} = await supabaseClient.auth.signUp({email,password});
-  if (error) {
-    message.textContent = error.message;
-    return;
-  }
-  if (data.session?.user) {
-    cloudUser = data.session.user;
-    teacherUnlocked = true;
-    message.textContent = "";
-    location.reload();
-    return;
-  }
-  message.textContent = "Account created. Check your email for the confirmation link, then return and sign in.";
-});
-document.querySelector("#teacherSignOut").addEventListener("click", async () => {
-  await supabaseClient.auth.signOut();
-  cloudUser = null;
+document.querySelector("#teacherSignOut").addEventListener("click", () => {
   teacherUnlocked = false;
+  sessionStorage.removeItem("speakUpTeacherUnlocked");
   renderTeacherAccess();
   document.querySelector("#students").scrollIntoView({behavior:"smooth"});
 });
@@ -714,9 +689,7 @@ renderTeacherAccess();
 supabaseClient.auth.getSession().then(async ({data}) => {
   if (data.session?.user) {
     cloudUser = data.session.user;
-    teacherUnlocked = true;
-    renderTeacherAccess();
-    await Promise.all([loadCloudStudents(), loadSiteAnalytics()]);
+    if (teacherUnlocked) await Promise.all([loadCloudStudents(), loadSiteAnalytics()]);
   }
 });
 
