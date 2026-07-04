@@ -493,6 +493,7 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
 .dialog-complete { width: 100%; margin-top: 30px; }
 .lesson-day-3 [data-lesson-panel="lesson"] .dialog-section:not(.day3-resources) { display: none; }
 .lesson-day-4 [data-lesson-panel="lesson"] .dialog-section:not(.day4-resources) { display: none; }
+.lesson-day-5 [data-lesson-panel="lesson"] .dialog-section { display: none; }
 .resource-dialog table { width: 100%; border-collapse: collapse; }
 .resource-dialog th, .resource-dialog td { padding: 10px; border-bottom: 1px solid var(--line); text-align: left; }
 
