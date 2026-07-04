@@ -633,8 +633,7 @@ document.querySelector("#teacherLoginForm").addEventListener("submit", async eve
   teacherUnlocked = true;
   document.querySelector("#teacherLoginError").textContent = "";
   event.currentTarget.reset();
-  renderTeacherAccess();
-  await Promise.all([loadCloudStudents(), loadSiteAnalytics()]);
+  location.reload();
 });
 document.querySelector("#teacherCreateAccount").addEventListener("click", async () => {
   const email = document.querySelector("#teacherEmailInput").value.trim();
@@ -654,8 +653,7 @@ document.querySelector("#teacherCreateAccount").addEventListener("click", async 
     cloudUser = data.session.user;
     teacherUnlocked = true;
     message.textContent = "";
-    renderTeacherAccess();
-    await Promise.all([loadCloudStudents(), loadSiteAnalytics()]);
+    location.reload();
     return;
   }
   message.textContent = "Account created. Check your email for the confirmation link, then return and sign in.";
