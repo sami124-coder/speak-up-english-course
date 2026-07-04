@@ -102,14 +102,13 @@ if (!localStorage.getItem("speakUpNoDemoMigration")) {
 }
 let signedInStudentId = sessionStorage.getItem("speakUpParentStudentId");
 const supabaseClient = window.supabase.createClient("https://vibayhusnmcpvtlxuayh.supabase.co", "sb_publishable_icj980mZsKVkWH4ZB7LyTA_DaK5x3Mx");
-const TEACHER_PIN = "2468";
 let analyticsVisitorId = localStorage.getItem("speakUpAnalyticsVisitor");
 if (!analyticsVisitorId) {
   analyticsVisitorId = crypto.randomUUID?.() || `visitor-${Date.now()}-${Math.random().toString(36).slice(2)}`;
   localStorage.setItem("speakUpAnalyticsVisitor", analyticsVisitorId);
 }
 let cloudUser = null;
-let teacherUnlocked = sessionStorage.getItem("speakUpTeacherUnlocked") === "1";
+let teacherUnlocked = false;
 document.querySelector("#teacherPrivate").append(document.querySelector("#resources"));
 
 const lessonGrid = document.querySelector("#lessonGrid");
@@ -126,7 +125,7 @@ async function trackAnalyticsEvent(eventType) {
 async function loadSiteAnalytics() {
   const status = document.querySelector("#analyticsStatus");
   status.textContent = "Loading anonymous analytics…";
-  const {data,error} = await supabaseClient.rpc("get_site_analytics", {p_pin:TEACHER_PIN});
+  const {data,error} = await supabaseClient.rpc("get_site_analytics");
   if (error || !data) {
     status.textContent = "Analytics setup required: run the latest supabase-setup.sql in Supabase.";
     return;
@@ -162,9 +161,9 @@ async function loadCloudStudents() {
 function renderTeacherAccess() {
   document.querySelector("#teacherGate").hidden = teacherUnlocked;
   document.querySelector("#teacherPrivate").hidden = !teacherUnlocked;
-  document.querySelector("#teacherGateTitle").textContent = "Teacher PIN access";
-  document.querySelector("#teacherGateText").textContent = "Enter the teacher PIN to open the private dashboard.";
-  document.querySelector("#teacherPinHelp").textContent = "One teacher · one simple PIN";
+  document.querySelector("#teacherGateTitle").textContent = "Teacher account access";
+  document.querySelector("#teacherGateText").textContent = "Sign in with your teacher email and password.";
+  document.querySelector("#teacherPinHelp").textContent = "Secure access powered by Supabase";
 }
 
 function latestLesson(student) {
@@ -176,6 +175,15 @@ function studentStatus(student) {
   if (student.speaking >= 65 && student.attendance >= 80) return ["On track", "status-track"];
   if (student.speaking >= 50) return ["Needs practice", "status-practice"];
   return ["Needs support", "status-support"];
+}
+
+function createFamilyCode(name) {
+  const prefix = name.replace(/[^a-z]/gi, "").slice(0, 4).toUpperCase() || "CHILD";
+  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  const bytes = new Uint8Array(8);
+  crypto.getRandomValues(bytes);
+  const token = [...bytes].map(value => alphabet[value % alphabet.length]).join("");
+  return `${prefix}-${token.slice(0, 4)}-${token.slice(4)}`;
 }
 
 function ensureLessonRecords(student) {
@@ -209,8 +217,10 @@ function parentUpdateText(student) {
 function renderStudentTracker() {
   const query = document.querySelector("#studentSearch").value.trim().toLowerCase();
   const level = document.querySelector("#studentLevelFilter").value;
+  const progressFilter = document.querySelector("#studentProgressFilter").value;
   const visible = trackedStudents.filter(student =>
     (level === "all" || student.level === level) &&
+    (progressFilter === "all" || studentStatus(student)[1] === progressFilter) &&
     `${student.name} ${student.goal}`.toLowerCase().includes(query)
   );
   document.querySelector("#studentTrackerRows").innerHTML = visible.map(student => {
@@ -337,7 +347,7 @@ function renderLessons(filter = "all") {
     }[lesson.day] || "";
     card.innerHTML = `
       <div class="lesson-day"><span class="day-number">Day ${lesson.day}</span><button class="complete-toggle" data-complete="${lesson.day}" aria-label="Mark day ${lesson.day} complete">${completed.has(lesson.day) ? "✓" : ""}</button></div>
-      <div class="lesson-thumbnail unit-${lesson.unit} ${pictureImage ? "has-image" : ""}">${pictureImage ? `<img src="${pictureImage}" alt="${pictureAlt}">` : `<span>${extra.visual}</span>`}<small>Picture prompt</small></div>
+      <div class="lesson-thumbnail unit-${lesson.unit} ${pictureImage ? "has-image" : ""}">${pictureImage ? `<img src="${pictureImage}" loading="lazy" decoding="async" alt="${pictureAlt}">` : `<span>${extra.visual}</span>`}<small>Picture prompt</small></div>
       <h3>${lesson.title}</h3><p>${lesson.goal}</p>
       <div class="lesson-meta"><span>🎤 Speaking</span><span>🎧 Video</span><span>📎 ${extra.materials.length + 3} materials</span></div>
       <button class="open-lesson" data-day="${lesson.day}">Open lesson →</button>`;
@@ -482,6 +492,17 @@ document.querySelectorAll("[data-resource]").forEach(button => button.addEventLi
 
 document.querySelector("#studentSearch").addEventListener("input", renderStudentTracker);
 document.querySelector("#studentLevelFilter").addEventListener("change", renderStudentTracker);
+document.querySelector("#studentProgressFilter").addEventListener("change", renderStudentTracker);
+document.querySelector("#exportStudentsCsv").addEventListener("click", () => {
+  const columns = ["Name","Age","Level","Completed","Attendance","Speaking","Listening","Stars","Family code","Goal"];
+  const rows = trackedStudents.map(student => [student.name,student.age,student.level,student.completed,student.attendance,student.speaking,student.listening,student.stars,student.familyCode,student.goal]);
+  const csv = [columns, ...rows].map(row => row.map(value => `"${String(value ?? "").replace(/"/g, '""')}"`).join(",")).join("\n");
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(new Blob([csv], {type:"text/csv;charset=utf-8"}));
+  link.download = `speak-up-students-${new Date().toISOString().slice(0,10)}.csv`;
+  link.click();
+  URL.revokeObjectURL(link.href);
+});
 document.querySelector("#addStudentButton").addEventListener("click", () => document.querySelector("#studentDialog").showModal());
 document.querySelector("#studentTrackerRows").addEventListener("click", event => {
   const profileButton = event.target.closest("[data-student-profile]");
@@ -497,8 +518,8 @@ document.querySelector("#studentTrackerRows").addEventListener("click", event =>
   const codeButton = event.target.closest("[data-copy-code]");
   if (codeButton) {
     const student = trackedStudents.find(item => item.id === Number(codeButton.dataset.copyCode));
-    if (!student.familyCode) {
-      student.familyCode = `${student.name.replace(/[^a-z]/gi,"").slice(0,4).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+    if (!student.familyCode || /^[A-Z]+-\d{4}$/.test(student.familyCode)) {
+      student.familyCode = createFamilyCode(student.name);
       saveStudents();
     }
     navigator.clipboard.writeText(`Student: ${student.name}\nFamily code: ${student.familyCode}`);
@@ -525,7 +546,7 @@ document.querySelector("#studentForm").addEventListener("submit", event => {
     goal:data.get("goal").trim(), note:data.get("note").trim(),
     home:"Practice today’s five useful phrases together for five minutes.",
     parentEmail:data.get("parentEmail").trim(),
-    familyCode:`${name.replace(/[^a-z]/gi,"").slice(0,4).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`
+    familyCode:createFamilyCode(name)
   });
   saveStudents(); renderStudentTracker(); document.querySelector("#studentDialog").close(); event.currentTarget.reset();
 });
@@ -581,6 +602,19 @@ document.querySelector("#parentLogin").addEventListener("submit", async event =>
   localStorage.setItem("speakUpStudents", JSON.stringify(trackedStudents));
   location.reload();
 });
+document.querySelector("#parentDemoButton").addEventListener("click", () => {
+  const demoStudent = {
+    id:"parent-preview", name:"Alex", age:9, level:"A1", completed:7, attendance:92,
+    speaking:74, listening:81, stars:12, goal:"Give longer answers using because.",
+    note:"Great work this week. Speaking confidence is growing with every lesson.",
+    home:"Ask and answer three preference questions together.",
+    familyCode:"DEMO-PREV-IEW1"
+  };
+  const existing = trackedStudents.findIndex(student => student.id === demoStudent.id);
+  if (existing >= 0) trackedStudents[existing] = demoStudent; else trackedStudents.push(demoStudent);
+  signedInStudentId = demoStudent.id;
+  renderParentDashboard();
+});
 document.querySelector("#parentSignOut").addEventListener("click", () => {
   signedInStudentId = null;
   sessionStorage.removeItem("speakUpParentStudentId");
@@ -588,21 +622,24 @@ document.querySelector("#parentSignOut").addEventListener("click", () => {
 });
 document.querySelector("#teacherLoginForm").addEventListener("submit", async event => {
   event.preventDefault();
-  const pin = document.querySelector("#teacherPinInput").value;
-  if (pin !== TEACHER_PIN) {
-    document.querySelector("#teacherLoginError").textContent = "Incorrect PIN. Please try again.";
+  const email = document.querySelector("#teacherEmailInput").value.trim();
+  const password = document.querySelector("#teacherPasswordInput").value;
+  const {data,error} = await supabaseClient.auth.signInWithPassword({email,password});
+  if (error || !data.user) {
+    document.querySelector("#teacherLoginError").textContent = error?.message || "Sign-in failed.";
     return;
   }
+  cloudUser = data.user;
   teacherUnlocked = true;
-  sessionStorage.setItem("speakUpTeacherUnlocked", "1");
   document.querySelector("#teacherLoginError").textContent = "";
   event.currentTarget.reset();
   renderTeacherAccess();
   await Promise.all([loadCloudStudents(), loadSiteAnalytics()]);
 });
-document.querySelector("#teacherSignOut").addEventListener("click", () => {
+document.querySelector("#teacherSignOut").addEventListener("click", async () => {
+  await supabaseClient.auth.signOut();
+  cloudUser = null;
   teacherUnlocked = false;
-  sessionStorage.removeItem("speakUpTeacherUnlocked");
   renderTeacherAccess();
   document.querySelector("#students").scrollIntoView({behavior:"smooth"});
 });
@@ -652,11 +689,12 @@ renderLessons();
 updateProgress();
 renderStudentTracker();
 renderTeacherAccess();
-if (teacherUnlocked) loadSiteAnalytics();
 supabaseClient.auth.getSession().then(async ({data}) => {
   if (data.session?.user) {
     cloudUser = data.session.user;
-    if (teacherUnlocked) await loadCloudStudents();
+    teacherUnlocked = true;
+    renderTeacherAccess();
+    await Promise.all([loadCloudStudents(), loadSiteAnalytics()]);
   }
 });
 

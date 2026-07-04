@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sami124-coder.github.io/speak-up-english-course/sitemap.xml

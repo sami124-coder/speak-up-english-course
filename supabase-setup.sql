@@ -62,7 +62,9 @@ create policy "Anonymous analytics inserts" on public.analytics_events
 for insert to anon, authenticated
 with check (event_type in ('page_view', 'install_click', 'app_installed'));
 
-create or replace function public.get_site_analytics(p_pin text)
+drop function if exists public.get_site_analytics(text);
+
+create or replace function public.get_site_analytics()
 returns jsonb
 language plpgsql
 stable
@@ -70,8 +72,8 @@ security definer
 set search_path = public
 as $$
 begin
-  if p_pin <> '2468' then
-    raise exception 'Invalid teacher PIN' using errcode = '42501';
+  if auth.uid() is null then
+    raise exception 'Teacher authentication required' using errcode = '42501';
   end if;
 
   return jsonb_build_object(
@@ -85,5 +87,5 @@ begin
 end;
 $$;
 
-revoke all on function public.get_site_analytics(text) from public;
-grant execute on function public.get_site_analytics(text) to anon, authenticated;
+revoke all on function public.get_site_analytics() from public;
+grant execute on function public.get_site_analytics() to authenticated;

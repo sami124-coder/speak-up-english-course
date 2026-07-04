@@ -10,15 +10,20 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/app-icon-192.png">
   <title>Speak Up! English Course for Kids | 15-Day Speaking & Listening Program</title>
   <meta name="description" content="A joyful 15-day English speaking and listening course for ages 8–12 with lessons, worksheets, games, teacher plans, and parent progress.">
   <meta property="og:title" content="Speak Up! English Course for Kids">
   <meta property="og:description" content="15 days to help children speak English with confidence.">
-  <meta property="og:image" content="assets/speak-up-hero.png">
+  <meta property="og:image" content="https://sami124-coder.github.io/speak-up-english-course/assets/speak-up-hero.png">
+  <link rel="canonical" href="https://sami124-coder.github.io/speak-up-english-course/">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Course","name":"Speak Up! 15-Day English Speaking & Listening Course","description":"A speaking-first English course for children aged 8–12.","provider":{"@type":"Organization","name":"Speak Up!"},"educationalLevel":"A1–A2","numberOfCredits":15,"inLanguage":"en"}
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=63">
+  <link rel="stylesheet" href="styles.css?v=64">
 </head>
 <body>
   <aside class="app-download-banner" id="appDownloadBanner" aria-label="Install Speak Up application">
@@ -63,7 +68,7 @@
         </div>
       </div>
       <div class="hero-visual" aria-label="Children practicing English through pictures, role-play, maps, and conversation">
-        <img src="assets/speak-up-hero.png" alt="Children learning English with picture cards, headphones, a town map, a café role-play, and a microphone">
+        <img src="assets/speak-up-hero.png" width="1779" height="884" decoding="async" alt="Children learning English with picture cards, headphones, a town map, a café role-play, and a microphone">
         <div class="hero-sticker sticker-one">15 joyful days</div>
         <div class="hero-sticker sticker-two">Speak · Listen · Play</div>
         <span class="hero-floater floater-one" aria-hidden="true">Hello! 👋</span>
@@ -123,13 +128,14 @@
         <div class="teacher-gate-icon">🔒</div>
         <p class="eyebrow">Private teacher area</p>
         <h2 id="teacherGateTitle">Teacher access only</h2>
-        <p id="teacherGateText">Enter the teacher PIN to open the private dashboard.</p>
+        <p id="teacherGateText">Sign in with your teacher account to open the private dashboard.</p>
         <form id="teacherLoginForm">
-          <label>Teacher PIN<input id="teacherPinInput" type="password" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{4}" maxlength="4" required placeholder="4-digit PIN"></label>
-          <button class="button primary" type="submit">Unlock</button>
+          <label>Email<input id="teacherEmailInput" type="email" autocomplete="username" required placeholder="teacher@example.com"></label>
+          <label>Password<input id="teacherPasswordInput" type="password" autocomplete="current-password" minlength="8" required placeholder="At least 8 characters"></label>
+          <button class="button primary" type="submit">Sign in</button>
           <p class="login-error" id="teacherLoginError" role="alert"></p>
         </form>
-        <small id="teacherPinHelp">One teacher · one simple PIN</small>
+        <small id="teacherPinHelp">Secure teacher account powered by Supabase</small>
       </div>
       <div id="teacherPrivate" hidden>
       <div class="section-title">
@@ -179,6 +185,13 @@
           <option value="A1+">A1+</option>
           <option value="A2">A2</option>
         </select>
+        <select id="studentProgressFilter" aria-label="Filter students by progress">
+          <option value="all">All progress</option>
+          <option value="status-support">Needs support</option>
+          <option value="status-practice">Needs practice</option>
+          <option value="status-track">On track</option>
+        </select>
+        <button class="button secondary compact-button" id="exportStudentsCsv" type="button">Export CSV</button>
       </div>
       <div class="student-table-wrap">
         <table class="student-table">
@@ -203,8 +216,9 @@
         <div class="login-icon">🔐</div>
         <div><p class="media-label">Private family access</p><h3>Sign in to view your child</h3><p>Enter the student name and family code provided by the teacher.</p></div>
         <label>Student name<input id="parentLoginName" required autocomplete="username" placeholder="Child’s name"></label>
-        <label>Family code<input id="parentLoginCode" required autocomplete="current-password" placeholder="e.g. MAYA-4821"></label>
+        <label>Family code<input id="parentLoginCode" required autocomplete="current-password" placeholder="e.g. MAYA-K7Q9-P2X4"></label>
         <button class="button primary" type="submit">View progress</button>
+        <button class="button secondary" id="parentDemoButton" type="button">Preview demo</button>
         <p class="login-error" id="parentLoginError" role="alert"></p>
       </form>
       <div class="parent-private" id="parentPrivate" hidden>
@@ -361,6 +375,6 @@
   </dialog>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js?v=63"></script>
+  <script src="script.js?v=64"></script>
 </body>
 </html>
