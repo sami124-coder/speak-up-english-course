@@ -636,6 +636,30 @@ document.querySelector("#teacherLoginForm").addEventListener("submit", async eve
   renderTeacherAccess();
   await Promise.all([loadCloudStudents(), loadSiteAnalytics()]);
 });
+document.querySelector("#teacherCreateAccount").addEventListener("click", async () => {
+  const email = document.querySelector("#teacherEmailInput").value.trim();
+  const password = document.querySelector("#teacherPasswordInput").value;
+  const message = document.querySelector("#teacherLoginError");
+  if (!email || password.length < 8) {
+    message.textContent = "Enter a valid email and a password with at least 8 characters.";
+    return;
+  }
+  message.textContent = "Creating your secure teacher account…";
+  const {data,error} = await supabaseClient.auth.signUp({email,password});
+  if (error) {
+    message.textContent = error.message;
+    return;
+  }
+  if (data.session?.user) {
+    cloudUser = data.session.user;
+    teacherUnlocked = true;
+    message.textContent = "";
+    renderTeacherAccess();
+    await Promise.all([loadCloudStudents(), loadSiteAnalytics()]);
+    return;
+  }
+  message.textContent = "Account created. Check your email for the confirmation link, then return and sign in.";
+});
 document.querySelector("#teacherSignOut").addEventListener("click", async () => {
   await supabaseClient.auth.signOut();
   cloudUser = null;

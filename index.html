@@ -23,7 +23,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=64">
+  <link rel="stylesheet" href="styles.css?v=65">
 </head>
 <body>
   <aside class="app-download-banner" id="appDownloadBanner" aria-label="Install Speak Up application">
@@ -133,6 +133,7 @@
           <label>Email<input id="teacherEmailInput" type="email" autocomplete="username" required placeholder="teacher@example.com"></label>
           <label>Password<input id="teacherPasswordInput" type="password" autocomplete="current-password" minlength="8" required placeholder="At least 8 characters"></label>
           <button class="button primary" type="submit">Sign in</button>
+          <button class="button secondary" id="teacherCreateAccount" type="button">Create account</button>
           <p class="login-error" id="teacherLoginError" role="alert"></p>
         </form>
         <small id="teacherPinHelp">Secure teacher account powered by Supabase</small>
@@ -375,6 +376,6 @@
   </dialog>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js?v=64"></script>
+  <script src="script.js?v=65"></script>
 </body>
 </html>
