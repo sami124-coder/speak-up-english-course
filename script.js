@@ -325,13 +325,15 @@ function renderLessons(filter = "all") {
       1:"assets/day1-picture-prompt.png",
       2:"assets/day2-picture-prompt.png",
       3:"assets/day3-picture-prompt.png",
-      4:"assets/day4-picture-prompt.png"
+      4:"assets/day4-picture-prompt.png",
+      5:"assets/day5-picture-prompt.png"
     }[lesson.day];
     const pictureAlt = {
       1:"3D school, headphones, microphone, speech bubble, notebook, and pencil",
       2:"Two children introducing themselves with a microphone, notebook, and speech bubbles",
       3:"A cheerful family with parents and children",
-      4:"Two children sharing likes and opinions about books and pizza"
+      4:"Two children sharing likes and opinions about books and pizza",
+      5:"A child’s daily routine with waking up, breakfast, school, homework, and bedtime"
     }[lesson.day] || "";
     card.innerHTML = `
       <div class="lesson-day"><span class="day-number">Day ${lesson.day}</span><button class="complete-toggle" data-complete="${lesson.day}" aria-label="Mark day ${lesson.day} complete">${completed.has(lesson.day) ? "✓" : ""}</button></div>
