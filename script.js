@@ -427,6 +427,18 @@ function showLesson(day) {
         </div>
       </section>`);
   }
+  if (day === 4) {
+    lessonContent.querySelector('[data-lesson-panel="lesson"]').insertAdjacentHTML("beforeend", `
+      <section class="dialog-section day4-resources">
+        <p class="media-label">Day 4 lesson files</p>
+        <h3>Open, print, and present</h3>
+        <div class="lesson-tools">
+          <a class="button secondary" href="downloads/Day4_Likes_and_Reasons_Flashcards.pdf" target="_blank">Open Day 4 flash cards</a>
+          <a class="button secondary" href="downloads/Day4_Likes_and_Reasons_Worksheet.pdf" target="_blank">Open Day 4 worksheet</a>
+          <a class="button primary" href="downloads/Day4_Likes_and_Reasons_Ages_8-12.pptx" download>Download Day 4 PowerPoint</a>
+        </div>
+      </section>`);
+  }
   lessonDialog.showModal();
 }
 
