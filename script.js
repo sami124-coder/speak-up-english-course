@@ -441,6 +441,18 @@ function showLesson(day) {
         </div>
       </section>`);
   }
+  if (day === 5) {
+    lessonContent.querySelector('[data-lesson-panel="lesson"]').insertAdjacentHTML("beforeend", `
+      <section class="dialog-section day5-resources">
+        <p class="media-label">Day 5 lesson files</p>
+        <h3>Open, print, and present</h3>
+        <div class="lesson-tools">
+          <a class="button secondary" href="downloads/Day5_Daily_Routines_Flash_Cards.pdf" target="_blank">Open Day 5 flash cards</a>
+          <a class="button secondary" href="downloads/Day5_Daily_Routines_Worksheet.pdf" target="_blank">Open Day 5 worksheet</a>
+          <a class="button primary" href="downloads/Day5_Daily_Routines_Ages_8-12.pptx" download>Download Day 5 PowerPoint</a>
+        </div>
+      </section>`);
+  }
   lessonDialog.showModal();
 }
 
