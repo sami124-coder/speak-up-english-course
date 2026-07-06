@@ -5,8 +5,8 @@ const lessons = [
   {day:4, unit:1, title:"Likes & Reasons", goal:"Share an opinion and explain it with “because.”", language:"I love/like/don’t like… · because… · Do you agree?", listen:"Noah: Do you like rainy days?\nEmi: Yes, because I can read and listen to the rain.\nNoah: I don’t. I like sunny days because I can ride my bike.\nEmi: We like different things!", task:"Choose a corner, explain your opinion, and find three things you share with a partner.", worksheet:"Complete four opinion-and-reason sentences."},
   {day:5, unit:1, title:"Daily Routines", goal:"Describe your day in order and tell the time.", language:"I usually… at… · First · Then · After that · Finally", listen:"Jay: I get up at seven. First, I wash my face. Then I eat breakfast at seven thirty. I go to school at eight. After school, I play football. Finally, I read before bed.", task:"Complete a partner timetable and compare routines using “We both…”", worksheet:"Draw a six-step routine timeline and label each time."},
   {day:6, unit:2, title:"Café Role-play", goal:"Order food and drink politely.", language:"I’d like… · Can I have…? · Anything else? · How much is it?", listen:"Server: Hello. What would you like?\nCustomer: I’d like a cheese sandwich and orange juice, please.\nServer: Anything else?\nCustomer: Can I have an apple?\nServer: Sure. That’s seven dollars.", task:"Run a mystery café. Each customer has a budget and a food preference.", worksheet:"Build a meal under $10 and prepare dialogue prompts."},
-  {day:7, unit:2, title:"Hobbies & Abilities", goal:"Talk about skills and learning goals.", language:"I can… · I can’t… yet. · I’m good at… · I want to learn…", listen:"Hana: What do you do after school?\nOmar: I play guitar. I can play three songs, but I can’t read music yet.\nHana: I’m good at swimming. I want to learn to dive.", task:"Complete a talent survey and create a class skills club.", worksheet:"Make a can / can’t yet / want to learn chart."},
-  {day:8, unit:2, title:"Places & Directions", goal:"Ask for and give simple directions.", language:"Go straight. · Turn left/right. · next to · opposite · between", listen:"Tourist: Excuse me, where is the library?\nChild: Go straight for one block. Turn right at the café. The library is next to the bank.\nTourist: Is it far?\nChild: No, it’s about five minutes.", task:"Use information-gap town maps and guide a partner to hidden destinations.", worksheet:"Draw the heard route and write four direction steps."},
+  {day:7, unit:2, title:"Hobbies & Abilities", goal:"Talk about skills and learning goals.", language:"", listen:"", task:"", worksheet:""},
+  {day:8, unit:2, title:"Places & Directions", goal:"Ask for and give simple directions.", language:"", listen:"", task:"", worksheet:""},
   {day:9, unit:2, title:"Shopping", goal:"Ask about price, color, and size, then buy an item.", language:"How much is this? · Do you have it in blue? · I’ll take it.", listen:"Assistant: Can I help you?\nCustomer: How much is this cap?\nAssistant: It’s eight dollars.\nCustomer: Do you have it in blue?\nAssistant: Yes. Here you are.\nCustomer: Great. I’ll take it.", task:"Use play money to buy three useful items without exceeding your budget.", worksheet:"Complete a shopping list with cost, total, and change."},
   {day:10, unit:2, title:"Feelings & Health", goal:"Explain a problem and give simple advice.", language:"I feel… · I have a… · You should… · You shouldn’t…", listen:"Nurse: What’s wrong?\nSam: I have a headache, and I feel tired.\nNurse: You should drink water and rest. You shouldn’t look at a screen for a while.\nSam: Thank you.", task:"Take turns as patient and helper using safe everyday health cards.", worksheet:"Match six common problems with sensible advice."},
   {day:11, unit:3, title:"Storytelling", goal:"Tell a story with a beginning, middle, and ending.", language:"One day… · Suddenly… · Then… · In the end…", listen:"One day, Maya found a tiny key under a tree. Suddenly, she heard a bell inside an old garden wall. The key opened a little door. Inside was a box of seeds and a note: “Plant kindness.” In the end, Maya shared the seeds with everyone.", task:"Use picture prompts to tell a one-minute story with five linking phrases.", worksheet:"Plan your story on a five-box story mountain."},
@@ -30,8 +30,8 @@ const dailyExtras = {
   4: {visual:"❤️", words:["love","like","dislike","favorite","because","agree"], materials:["Opinion corner signs","Food and hobby picture cards","Because sentence strips"], bonus:"Make a class bar chart of favorite activities and explain one result.", video:"likes and dislikes because English for kids"},
   5: {visual:"⏰", words:["wake up","breakfast","school","after","usually","finally"], materials:["Clock flashcards","Routine sequencing cards","My Day timeline"], bonus:"Put six routine cards in order against the clock.", video:"daily routines telling time English for kids"},
   6: {visual:"🥪", words:["menu","order","sandwich","juice","please","total"], materials:["Color café menu","Play-money sheet","Server and customer badges"], bonus:"Design a silly new café item and persuade a customer to try it.", video:"restaurant ordering food English conversation kids"},
-  7: {visual:"🎸", words:["hobby","can","can't yet","practice","skill","learn"], materials:["Talent survey","Hobby picture cards","Skills-club planner"], bonus:"Teach your partner one tiny skill using three English instructions.", video:"hobbies and abilities can can't English kids"},
-  8: {visual:"🗺️", words:["straight","left","right","next to","opposite","between"], materials:["Printable town map","Landmark cards","Direction arrow cutouts"], bonus:"Create a treasure route with four steps for another team.", video:"giving directions English for kids town map"},
+  7: {visual:"🎸", words:[], materials:[], bonus:"", video:""},
+  8: {visual:"🗺️", words:[], materials:[], bonus:"", video:""},
   9: {visual:"🛍️", words:["price","color","size","cheap","change","take"], materials:["Classroom shop cards","Price labels","Shopping budget sheet"], bonus:"Buy three gifts for three different people without overspending.", video:"shopping conversation English for kids how much"},
   10: {visual:"🩺", words:["headache","tired","rest","water","should","better"], materials:["Health problem cards","Advice matching sheet","Feelings thermometer"], bonus:"Create a healthy-day poster with three should sentences.", video:"health problems should shouldn't English kids"},
   11: {visual:"🔑", words:["character","setting","suddenly","problem","then","ending"], materials:["Story dice","Five-picture sequences","Story mountain planner"], bonus:"Add one surprise object to your partner’s story.", video:"English storytelling for kids beginning middle end"},
@@ -39,6 +39,24 @@ const dailyExtras = {
   13: {visual:"💬", words:["opinion","reason","example","agree","disagree","fair"], materials:["Mini-debate topic cards","Claim-reason-example planner","Polite response strips"], bonus:"Switch sides and defend the opposite opinion for thirty seconds.", video:"agree disagree opinions English for kids"},
   14: {visual:"🎤", words:["present","first","next","future","question","thank"], materials:["Presentation cue card","Peer feedback slips","Rehearsal timer"], bonus:"Record a practice presentation and notice one thing to improve.", video:"presentation skills for kids English speaking"},
   15: {visual:"🎉", words:["interview","role-play","present","listen","respond","proud"], materials:["Festival station signs","Final speaking rubric","Celebration certificates"], bonus:"Create a compliment wall: write one speaking strength for each teammate.", video:"English speaking activities for kids final presentation"}
+};
+
+const lessonDownloads = {
+  6: [
+    {label:"Open Day 6 flashcards", href:"downloads/Day6_Cafe_Roleplay_Flashcards.pdf", type:"secondary"},
+    {label:"Open Day 6 worksheet", href:"downloads/Day6_Cafe_Roleplay_Worksheet.pdf", type:"secondary"},
+    {label:"Download Day 6 PowerPoint", href:"downloads/Day6_Cafe_Roleplay_Ages_8-12.pptx", type:"primary", download:true}
+  ],
+  7: [
+    {label:"Open Day 7 flashcards", href:"downloads/Day7_Hobbies_and_Abilities_Flash_Cards.pdf", type:"secondary"},
+    {label:"Open Day 7 worksheet", href:"downloads/Day7_Hobbies_and_Abilities_Worksheet.pdf", type:"secondary"},
+    {label:"Download Day 7 PowerPoint", href:"downloads/Day7_Hobbies_and_Abilities_Ages_8-12.pptx", type:"primary", download:true}
+  ],
+  8: [
+    {label:"Open Day 8 flashcards", href:"downloads/Places_Directions_Day8_Flashcards_BIG_TEXT.pdf", type:"secondary"},
+    {label:"Open Day 8 worksheet", href:"downloads/Places_Directions_Day8_Worksheet_BIG_TEXT.pdf", type:"secondary"},
+    {label:"Download Day 8 PowerPoint", href:"downloads/Places_Directions_Day8_Ages_8-12_BIG_TEXT.pptx", type:"primary", download:true}
+  ]
 };
 
 resources.conversation = `<p class="dialog-kicker">Pair-work library</p><h2>Conversation cards</h2><div class="problem-card-grid">${["What makes you feel brave?","Describe your best friend.","What is your favorite day and why?","Tell three things you do before school.","Create a café order under $10.","What skill can you teach?","Give directions to a secret place.","Choose a gift and explain why.","Give two healthy tips.","Tell a 30-second story.","Suggest a fun class project.","Books or films—which is better?"].map((prompt,index)=>`<article><span>${index+1}</span><p>${prompt}</p><strong>Listen · Respond · Ask more</strong></article>`).join("")}</div>`;
@@ -337,14 +355,20 @@ function renderLessons(filter = "all") {
       2:"assets/day2-picture-prompt.png",
       3:"assets/day3-picture-prompt.png",
       4:"assets/day4-picture-prompt.png",
-      5:"assets/day5-picture-prompt.png"
+      5:"assets/day5-picture-prompt.png",
+      6:"assets/day6-picture-prompt.png",
+      7:"assets/day7-picture-prompt.png",
+      8:"assets/day8-picture-prompt.png"
     }[lesson.day];
     const pictureAlt = {
       1:"3D school, headphones, microphone, speech bubble, notebook, and pencil",
       2:"Two children introducing themselves with a microphone, notebook, and speech bubbles",
       3:"A cheerful family with parents and children",
       4:"Two children sharing likes and opinions about books and pizza",
-      5:"A child’s daily routine with waking up, breakfast, school, homework, and bedtime"
+      5:"A child’s daily routine with waking up, breakfast, school, homework, and bedtime",
+      6:"A child ordering a sandwich and juice from a cafe server",
+      7:"Children sharing hobbies including football, painting, guitar, dance, and reading",
+      8:"Two children using a map and pointing toward school and town directions"
     }[lesson.day] || "";
     card.innerHTML = `
       <div class="lesson-day"><span class="day-number">Day ${lesson.day}</span><button class="complete-toggle" data-complete="${lesson.day}" aria-label="Mark day ${lesson.day} complete">${completed.has(lesson.day) ? "✓" : ""}</button></div>
@@ -364,108 +388,36 @@ function updateProgress() {
   localStorage.setItem("speakUpProgress", JSON.stringify([...completed]));
 }
 
-function lessonTeachingPack(lesson, extra) {
-  const firstPhrase = lesson.language.split(" · ")[0];
-  return `
-    <section class="dialog-section">
-      <p class="media-label">Teacher-ready plan</p><h3>Learning design</h3>
-      <div class="lesson-quality-grid">
-        <article><span>🎯</span><strong>Outcome</strong><p>By the end, learners can ${lesson.goal.charAt(0).toLowerCase()}${lesson.goal.slice(1)}</p></article>
-        <article><span>🧰</span><strong>Prepare</strong><p>${extra.materials.join(", ")} and a timer.</p></article>
-        <article><span>🗣️</span><strong>Language target</strong><p>Model clearly: “${firstPhrase}”</p></article>
-      </div>
-    </section>
-    <section class="dialog-section">
-      <p class="media-label">60–75 minute sequence</p><h3>Teach it step by step</h3>
-      <div class="teaching-steps">
-        <article class="teaching-step"><span>5–8 min</span><div><strong>Connect & warm up</strong>Show the picture prompt. Learners notice three details, predict the topic, then share one idea with a partner.</div></article>
-        <article class="teaching-step"><span>10 min</span><div><strong>Model the language</strong>Teach the six picture words with gesture and voice. Model the key phrases, then use echo, whisper, and partner repetition.</div></article>
-        <article class="teaching-step"><span>12 min</span><div><strong>Listen twice</strong>First listen for the situation and speakers. Second listen for two details and one useful phrase. Pair-check before class feedback.</div></article>
-        <article class="teaching-step"><span>12 min</span><div><strong>Supported speaking</strong>Learners rehearse with visible sentence starters. Change partners once and encourage one follow-up question.</div></article>
-        <article class="teaching-step"><span>15 min</span><div><strong>Real communication mission</strong>${lesson.task}</div></article>
-        <article class="teaching-step"><span>8 min</span><div><strong>Reflect & exit</strong>Complete the worksheet, self-rate confidence from 1–3, and say one target phrase before leaving.</div></article>
-      </div>
-    </section>
-    <section class="dialog-section">
-      <p class="media-label">Support every learner</p><h3>Differentiate with confidence</h3>
-      <div class="support-grid">
-        <article><strong>🌱 Extra support</strong><p>Keep picture words and sentence frames visible. Allow pointing plus speaking, partner rehearsal, and a slower second listen.</p></article>
-        <article><strong>🚀 Ready for more</strong><p>Ask for a reason, extra detail, or follow-up question. Challenge learners to speak without reading the full sentence frame.</p></article>
-      </div>
-    </section>
-    <section class="dialog-section">
-      <p class="media-label">Quick assessment</p><h3>Success checklist</h3>
-      <ul class="success-list"><li>I used at least two target phrases.</li><li>I listened and responded to my partner.</li><li>I spoke clearly enough to be understood.</li><li>I tried again when communication was difficult.</li></ul>
-    </section>`;
-}
-
 function showLesson(day) {
   const lesson = lessons.find(l => l.day === day);
   const extra = dailyExtras[day];
-  const videoUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(extra.video)}`;
+  const downloads = lessonDownloads[day] || [];
+  const coverImage = {
+    6:"assets/day6-picture-prompt.png",
+    7:"assets/day7-picture-prompt.png",
+    8:"assets/day8-picture-prompt.png"
+  }[day];
+  const coverAlt = {
+    6:"A child ordering a sandwich and juice from a cafe server",
+    7:"Children sharing hobbies including football, painting, guitar, dance, and reading",
+    8:"Two children using a map and pointing toward school and town directions"
+  }[day] || "";
+  const videoUrl = extra.video ? `https://www.youtube.com/results?search_query=${encodeURIComponent(extra.video)}` : "";
+  const hasMaterials = extra.video || extra.materials.length || downloads.length;
   const lessonContent = document.querySelector("#lessonContent");
   lessonContent.className = `lesson-day-content lesson-day-${day}`;
   lessonContent.innerHTML = `
-    <div class="lesson-cover"><span>${extra.visual}</span><div><p>Picture prompt</p><strong>What can you see? What might happen today?</strong></div></div>
+    <div class="lesson-cover ${coverImage ? "has-cover-image" : ""}">${coverImage ? `<img src="${coverImage}" alt="${coverAlt}">` : `<span>${extra.visual}</span>`}<div><p>Picture prompt</p><strong>What can you see? What might happen today?</strong></div></div>
     <p class="dialog-kicker">Day ${lesson.day} · 60–75 minutes</p><h2>${lesson.title}</h2>
     <p class="dialog-goal"><strong>Can-do goal:</strong> ${lesson.goal}</p>
-    <div class="lesson-tabs" role="tablist">
-      <button class="lesson-tab active" data-lesson-tab="lesson" type="button">📘 Lesson</button>
-      <button class="lesson-tab" data-lesson-tab="activities" type="button">🎯 Activities</button>
-    </div>
-    <div class="lesson-panel" data-lesson-panel="lesson">
-      ${day <= 2 ? "" : `
-        <section class="dialog-section"><h3>Useful language</h3><p>${lesson.language}</p></section>
-        <section class="dialog-section"><h3>Picture vocabulary</h3><div class="vocab-chips">${extra.words.map((word, index) => `<span><b>${["🔵","🟡","🟢","🟠","🟣","🔴"][index]}</b>${word}</span>`).join("")}</div></section>
-        <section class="dialog-section"><h3>Listening</h3><div class="lesson-tools"><button class="button secondary" data-play-listening="${lesson.day}" type="button">▶ Play listening</button></div><p class="script">${lesson.listen}</p></section>
-        ${teacherUnlocked ? lessonTeachingPack(lesson, extra) : `<section class="dialog-section"><h3>Teacher guidance</h3><p>Unlock the private Teacher area to view timing, differentiation, and assessment guidance.</p></section>`}
-      `}
-      <section class="dialog-section"><p class="media-label">Lesson resources</p><h3>Open, print, and present</h3><div class="lesson-tools">${day === 1 ? `<a class="button secondary" href="downloads/classroom_english_day1_flashcards.pdf" target="_blank">Open Day 1 flashcards PDF</a>` : day === 2 ? `<a class="button secondary" href="downloads/Introductions_Day2_Flash_Cards.pdf" target="_blank">Open Day 2 flashcards PDF</a>` : `<a class="button secondary" href="downloads/flashcards.html" target="_blank">Open flashcards</a>`}${day === 1 ? `<a class="button secondary" href="downloads/classroom_english_day1_student_worksheet.pdf" target="_blank">Open Day 1 worksheet PDF</a>` : day === 2 ? `<a class="button secondary" href="downloads/Introductions_Day2_Worksheet.pdf" target="_blank">Open Day 2 worksheet PDF</a>` : `<button class="button secondary" onclick="window.print()" type="button">Print worksheet</button>`}${day === 1 ? `<a class="button primary" href="downloads/day1-pack.html" target="_blank">Open Day 1 pack</a><a class="button secondary" href="downloads/Classroom_English_Day1_Ages_8-12.pptx" download>⬇ Download Day 1 PowerPoint</a>` : ""}${day === 2 ? `<a class="button primary" href="downloads/Introductions_Day2_Ages_8-12.pptx" download>⬇ Download Day 2 PowerPoint</a>` : ""}</div></section>
-    </div>
-    <div class="lesson-panel" data-lesson-panel="activities" hidden>
-      <section class="dialog-section"><h3>Speaking challenge</h3><p>${lesson.task}</p></section>
-      <section class="dialog-section"><h3>Worksheet activity</h3><p>${lesson.worksheet}</p></section>
-      <section class="dialog-section media-section"><div class="video-card"><span class="play-icon">▶</span><div><p class="media-label">Video practice</p><h3>${lesson.title} video</h3><a href="${videoUrl}" target="_blank" rel="noreferrer">Find a lesson video ↗</a></div></div><div class="materials-card"><p class="media-label">Print & play</p><h3>Lesson materials</h3><ul>${extra.materials.map(item => `<li>${item}</li>`).join("")}</ul></div></section>
-      <section class="dialog-section"><h3>My success check</h3><ul class="success-list"><li>I used two target phrases.</li><li>I listened and answered my partner.</li><li>I spoke clearly.</li><li>I tried again when it was difficult.</li></ul></section>
-      <section class="dialog-section bonus-card"><h3>Extra challenge</h3><p>${extra.bonus}</p></section>
+    <div class="lesson-panel" data-lesson-panel="activities">
+      ${lesson.task ? `<section class="dialog-section"><h3>Speaking challenge</h3><p>${lesson.task}</p></section>` : ""}
+      ${lesson.worksheet ? `<section class="dialog-section"><h3>Worksheet activity</h3><p>${lesson.worksheet}</p></section>` : ""}
+      ${hasMaterials ? `<section class="dialog-section media-section">${extra.video ? `<div class="video-card"><span class="play-icon">▶</span><div><p class="media-label">Video practice</p><h3>${lesson.title} video</h3><a href="${videoUrl}" target="_blank" rel="noreferrer">Find a lesson video ↗</a></div></div>` : ""}${extra.materials.length || downloads.length ? `<div class="materials-card"><p class="media-label">Print & play</p><h3>Lesson materials</h3><ul>${extra.materials.map(item => `<li>${item}</li>`).join("")}</ul>${downloads.length ? `<div class="lesson-tools">${downloads.map(file => `<a class="button ${file.type}" href="${file.href}" ${file.download ? "download" : `target="_blank"`}>${file.label}</a>`).join("")}</div>` : ""}</div>` : ""}</section>` : ""}
+      ${[7, 8].includes(day) ? "" : `<section class="dialog-section"><h3>My success check</h3><ul class="success-list"><li>I used two target phrases.</li><li>I listened and answered my partner.</li><li>I spoke clearly.</li><li>I tried again when it was difficult.</li></ul></section>`}
+      ${extra.bonus ? `<section class="dialog-section bonus-card"><h3>Extra challenge</h3><p>${extra.bonus}</p></section>` : ""}
       <button class="button primary dialog-complete" data-dialog-complete="${lesson.day}">${completed.has(day) ? "Completed ✓" : "Mark day complete"}</button>
     </div>`;
-  if (day === 3) {
-    lessonContent.querySelector('[data-lesson-panel="lesson"]').insertAdjacentHTML("beforeend", `
-      <section class="dialog-section day3-resources">
-        <p class="media-label">Day 3 lesson files</p>
-        <h3>Open, print, and present</h3>
-        <div class="lesson-tools">
-          <a class="button secondary" href="downloads/Family_Friends_Day3_Flash_Cards.pdf" target="_blank">Open Day 3 flash cards</a>
-          <a class="button secondary" href="downloads/Family_Friends_Day3_Worksheet.pdf" target="_blank">Open Day 3 worksheet</a>
-          <a class="button primary" href="downloads/Family_Friends_Day3_Ages_8-12.pptx" download>Download Day 3 PowerPoint</a>
-        </div>
-      </section>`);
-  }
-  if (day === 4) {
-    lessonContent.querySelector('[data-lesson-panel="lesson"]').insertAdjacentHTML("beforeend", `
-      <section class="dialog-section day4-resources">
-        <p class="media-label">Day 4 lesson files</p>
-        <h3>Open, print, and present</h3>
-        <div class="lesson-tools">
-          <a class="button secondary" href="downloads/Day4_Likes_and_Reasons_Flashcards.pdf" target="_blank">Open Day 4 flash cards</a>
-          <a class="button secondary" href="downloads/Day4_Likes_and_Reasons_Worksheet.pdf" target="_blank">Open Day 4 worksheet</a>
-          <a class="button primary" href="downloads/Day4_Likes_and_Reasons_Ages_8-12.pptx" download>Download Day 4 PowerPoint</a>
-        </div>
-      </section>`);
-  }
-  if (day === 5) {
-    lessonContent.querySelector('[data-lesson-panel="lesson"]').insertAdjacentHTML("beforeend", `
-      <section class="dialog-section day5-resources">
-        <p class="media-label">Day 5 lesson files</p>
-        <h3>Open, print, and present</h3>
-        <div class="lesson-tools">
-          <a class="button secondary" href="downloads/Day5_Daily_Routines_Flash_Cards.pdf" target="_blank">Open Day 5 flash cards</a>
-          <a class="button secondary" href="downloads/Day5_Daily_Routines_Worksheet.pdf" target="_blank">Open Day 5 worksheet</a>
-          <a class="button primary" href="downloads/Day5_Daily_Routines_Ages_8-12.pptx" download>Download Day 5 PowerPoint</a>
-        </div>
-      </section>`);
-  }
   lessonDialog.showModal();
 }
 
@@ -646,24 +598,6 @@ document.querySelectorAll(".dialog-close").forEach(button => button.addEventList
 document.querySelectorAll("dialog").forEach(dialog => dialog.addEventListener("click", e => { if (e.target === dialog) dialog.close(); }));
 
 lessonDialog.addEventListener("click", event => {
-  const tab = event.target.closest("[data-lesson-tab]");
-  if (tab) {
-    lessonDialog.querySelectorAll("[data-lesson-tab]").forEach(button => button.classList.toggle("active", button === tab));
-    lessonDialog.querySelectorAll("[data-lesson-panel]").forEach(panel => { panel.hidden = panel.dataset.lessonPanel !== tab.dataset.lessonTab; });
-    return;
-  }
-  const audioButton = event.target.closest("[data-play-listening]");
-  if (audioButton) {
-    speechSynthesis.cancel();
-    const lesson = lessons.find(item => item.day === Number(audioButton.dataset.playListening));
-    const speech = new SpeechSynthesisUtterance(lesson.listen.replace(/\n/g, " "));
-    speech.rate = .82;
-    speech.lang = "en-US";
-    speechSynthesis.speak(speech);
-    audioButton.textContent = "🔊 Playing…";
-    speech.onend = () => { audioButton.textContent = "▶ Play listening"; };
-    return;
-  }
   const button = event.target.closest("[data-dialog-complete]");
   if (!button) return;
   const day = Number(button.dataset.dialogComplete);

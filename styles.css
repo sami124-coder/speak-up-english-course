@@ -446,6 +446,9 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
   box-shadow: 5px 5px 0 var(--ink);
 }
 .lesson-cover > span { display: grid; place-items: center; flex: 0 0 100px; height: 100px; border-radius: 50%; background: white; font-size: 3.8rem; }
+.lesson-cover.has-cover-image { align-items: flex-end; padding: 0; overflow: hidden; background: #dceaff; }
+.lesson-cover.has-cover-image img { width: min(58%, 420px); align-self: stretch; object-fit: cover; object-position: center; }
+.lesson-cover.has-cover-image div { padding: 22px 22px 22px 0; }
 .lesson-cover p { margin: 0 0 5px; color: var(--coral); font-size: .72rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
 .lesson-cover strong { font: 700 1.1rem "Fredoka"; }
 .content-dialog h2 { margin: 5px 0 25px; font-size: clamp(2.1rem, 5vw, 3.7rem); }
@@ -495,6 +498,7 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
 .lesson-day-3 [data-lesson-panel="lesson"] .dialog-section:not(.day3-resources) { display: none; }
 .lesson-day-4 [data-lesson-panel="lesson"] .dialog-section:not(.day4-resources) { display: none; }
 .lesson-day-5 [data-lesson-panel="lesson"] .dialog-section:not(.day5-resources) { display: none; }
+.lesson-day-6 [data-lesson-panel="lesson"] .dialog-section { display: none; }
 .resource-dialog table { width: 100%; border-collapse: collapse; }
 .resource-dialog th, .resource-dialog td { padding: 10px; border-bottom: 1px solid var(--line); text-align: left; }
 
