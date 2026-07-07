@@ -712,11 +712,11 @@ const standaloneApp = matchMedia("(display-mode: standalone)").matches || Boolea
 document.body.classList.toggle("is-standalone", standaloneApp);
 const appTabs = [...document.querySelectorAll("[data-app-tab]")];
 const appRoutes = {
-  home: "home",
-  course: "course",
-  students: "students",
-  resources: "students",
-  parents: "parents"
+  home: {page: "home", target: "home"},
+  course: {page: "students", target: ".teacher-missions"},
+  students: {page: "students", target: "students"},
+  resources: {page: "students", target: "resources"},
+  parents: {page: "parents", target: "parents"}
 };
 const appPageIds = ["home", "course", "students", "parents"];
 const appPages = appPageIds.map(id => document.querySelector(`main > section#${id}`)).filter(Boolean);
@@ -724,12 +724,13 @@ const topbar = document.querySelector(".topbar");
 const installOffset = () => installBanner && !installBanner.hidden && !standaloneApp ? installBanner.getBoundingClientRect().height : 0;
 const stickyOffset = () => standaloneApp ? 0 : Math.ceil((topbar?.getBoundingClientRect().height || 0) + installOffset() + 14);
 
-function normalizeAppSection(section = "home") {
-  return appRoutes[section] || "home";
+function appRouteFor(section = "home") {
+  return appRoutes[section] || appRoutes.home;
 }
 
 function setActiveAppTab(section) {
-  const activeSection = normalizeAppSection(section);
+  const route = appRouteFor(section);
+  const activeSection = appTabs.some(tab => tab.dataset.appTab === section) ? section : route.page;
   appTabs.forEach(tab => {
     const active = tab.dataset.appTab === activeSection;
     tab.classList.toggle("active", active);
@@ -738,15 +739,24 @@ function setActiveAppTab(section) {
   });
 }
 
-function showStandalonePage(section) {
-  const activeSection = normalizeAppSection(section);
-  const activePage = document.querySelector(`main > section#${CSS.escape(activeSection)}`) || document.querySelector("main > section#home");
+function scrollStandalonePage(page, targetSelector) {
+  const target = targetSelector?.startsWith(".")
+    ? page.querySelector(targetSelector)
+    : document.getElementById(targetSelector);
+  const visibleTarget = target && !target.hidden && target.offsetParent !== null ? target : page;
+  const top = visibleTarget === page ? 0 : Math.max(0, visibleTarget.offsetTop - page.offsetTop - 12);
+  page.scrollTo({top, behavior: "smooth"});
+}
+
+function showStandalonePage(section, resetScroll = true) {
+  const route = appRouteFor(section);
+  const activePage = document.querySelector(`main > section#${CSS.escape(route.page)}`) || document.querySelector("main > section#home");
   appPages.forEach(page => {
     const active = page === activePage;
     page.classList.toggle("app-page-active", active);
     page.hidden = !active;
   });
-  activePage.scrollTo({top: 0, behavior: "auto"});
+  if (resetScroll) scrollStandalonePage(activePage, route.target);
 }
 
 function scrollToAppSection(section, behavior = "smooth") {
@@ -757,14 +767,13 @@ function scrollToAppSection(section, behavior = "smooth") {
 }
 
 function navigateToAppSection(section, options = {}) {
-  const activeSection = normalizeAppSection(section);
-  setActiveAppTab(activeSection);
+  setActiveAppTab(section);
   if (standaloneApp) {
-    showStandalonePage(activeSection);
+    showStandalonePage(section);
   } else {
     scrollToAppSection(section, options.behavior || "smooth");
   }
-  const nextHash = `#${standaloneApp ? activeSection : section}`;
+  const nextHash = `#${section}`;
   if (location.hash !== nextHash) history.pushState(null, "", nextHash);
 }
 
