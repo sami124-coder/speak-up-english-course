@@ -157,7 +157,6 @@ if (!analyticsVisitorId) {
 }
 let cloudUser = null;
 let teacherUnlocked = sessionStorage.getItem("speakUpTeacherUnlocked") === "1";
-document.querySelector("#teacherPrivate").append(document.querySelector("#resources"));
 
 const lessonGrid = document.querySelector("#lessonGrid");
 const lessonDialog = document.querySelector("#lessonDialog");
@@ -697,19 +696,6 @@ document.querySelector("#parentLogin").addEventListener("submit", async event =>
   localStorage.setItem("speakUpStudents", JSON.stringify(trackedStudents));
   location.reload();
 });
-document.querySelector("#parentDemoButton").addEventListener("click", () => {
-  const demoStudent = {
-    id:"parent-preview", name:"Alex", age:9, level:"A1", completed:7, attendance:92,
-    speaking:74, listening:81, stars:12, goal:"Give longer answers using because.",
-    note:"Great work this week. Speaking confidence is growing with every lesson.",
-    home:"Ask and answer three preference questions together.",
-    familyCode:"DEMO-PREV-IEW1"
-  };
-  const existing = trackedStudents.findIndex(student => student.id === demoStudent.id);
-  if (existing >= 0) trackedStudents[existing] = demoStudent; else trackedStudents.push(demoStudent);
-  signedInStudentId = demoStudent.id;
-  renderParentDashboard();
-});
 document.querySelector("#parentSignOut").addEventListener("click", () => {
   signedInStudentId = null;
   sessionStorage.removeItem("speakUpParentStudentId");
@@ -816,7 +802,6 @@ const appRoutes = {
   home: {page: "home", target: "home"},
   course: {page: "students", target: ".teacher-missions"},
   students: {page: "students", target: "students"},
-  resources: {page: "students", target: "resources"},
   parents: {page: "parents", target: "parents"},
   start: {page: "start", target: "start"},
   outcomes: {page: "outcomes", target: "outcomes"},

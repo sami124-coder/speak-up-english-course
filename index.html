@@ -23,7 +23,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=90">
+  <link rel="stylesheet" href="styles.css?v=91">
 </head>
 <body>
   <aside class="app-download-banner" id="appDownloadBanner" aria-label="Install Speak Up application">
@@ -241,7 +241,6 @@
         <label>Student name<input id="parentLoginName" required autocomplete="username" placeholder="Childâ€™s name"></label>
         <label>Family code<input id="parentLoginCode" required autocomplete="current-password" placeholder="e.g. MAYA-K7Q9-P2X4"></label>
         <button class="button primary" type="submit">View progress</button>
-        <button class="button secondary" id="parentDemoButton" type="button">Preview demo</button>
         <p class="login-error" id="parentLoginError" role="alert"></p>
       </form>
       <div class="parent-private" id="parentPrivate" hidden>
@@ -280,63 +279,6 @@
         <div class="parent-record-heading"><div><p class="media-label">Complete learning record</p><h3>All lesson progress</h3><p>Read-only details shared by the teacher.</p></div><span id="parentStatusChip" class="status-chip">On track</span></div>
         <div class="parent-record-grid" id="parentLessonRecords"></div>
       </section>
-      </div>
-    </section>
-
-    <section class="section teacher-resource-section" id="resources">
-      <div class="section-title">
-        <div>
-          <p class="eyebrow">Private teacher materials</p>
-          <h2>Materials made easy</h2>
-        </div>
-      </div>
-      <div class="resource-grid">
-        <article class="resource-card coral">
-          <span class="resource-icon">ðŸŽ­</span>
-          <h3>Speaking cards</h3>
-          <p>CafÃ©, shop, health, directions, interviews, and debate prompts.</p>
-          <button type="button" data-resource="speaking">Open cards</button>
-        </article>
-        <article class="resource-card blue">
-          <span class="resource-icon">ðŸŽ§</span>
-          <h3>Listening sheets</h3>
-          <p>A repeatable first-listen, second-listen, and retell routine.</p>
-          <button type="button" data-resource="listening">Open sheet</button>
-        </article>
-        <article class="resource-card yellow">
-          <span class="resource-icon">ðŸ“–</span>
-          <h3>Story & presentation</h3>
-          <p>Story mountain and cue-card planners for confident delivery.</p>
-          <button type="button" data-resource="story">Open planners</button>
-        </article>
-        <article class="resource-card mint">
-          <span class="resource-icon">ðŸ…</span>
-          <h3>Speaking passport</h3>
-          <p>Fifteen can-do goals students can rate and celebrate.</p>
-          <button type="button" data-resource="passport">Open passport</button>
-        </article>
-        <article class="resource-card coral"><span class="resource-icon">ðŸƒ</span><h3>Vocabulary flashcards</h3><p>60 large word cards covering all 15 course topics.</p><a class="resource-download" href="downloads/flashcards.html" target="_blank">Open & print â†—</a></article>
-        <article class="resource-card blue"><span class="resource-icon">ðŸ’¬</span><h3>Conversation cards</h3><p>Questions for pair work, speaking circles, and speed chats.</p><button type="button" data-resource="conversation">Open prompts</button></article>
-        <article class="resource-card yellow"><span class="resource-icon">ðŸŽ­</span><h3>Role-play pack</h3><p>Printable role cards for six real-world speaking missions.</p><a class="resource-download" href="downloads/role-play-cards.html" target="_blank">Open & print â†—</a></article>
-        <article class="resource-card mint"><span class="resource-icon">ðŸ¡</span><h3>Family practice pack</h3><p>Fifteen five-minute home activities with parent instructions.</p><a class="resource-download" href="downloads/home-practice.html" target="_blank">Open & print â†—</a></article>
-        <article class="resource-card coral"><span class="resource-icon">ðŸ†</span><h3>Certificates</h3><p>Completion certificate and brave-speaker award.</p><a class="resource-download" href="downloads/certificates.html" target="_blank">Open & print â†—</a></article>
-      </div>
-      <div class="mega-library">
-        <div class="library-heading">
-          <div>
-            <p class="eyebrow">The big material box</p>
-            <h3>Everything you need for a lively class</h3>
-          </div>
-          <span>75+ activities</span>
-        </div>
-        <div class="library-grid">
-          <article><b>ðŸ–¼ï¸</b><strong>Picture prompts</strong><p>Daily visual warm-ups and describe-what-you-see questions.</p></article>
-          <article><b>ðŸƒ</b><strong>Role-play cards</strong><p>CafÃ©, shopping, directions, health, interviews, and teamwork.</p></article>
-          <article><b>âœ‚ï¸</b><strong>Print & cut</strong><p>Menus, maps, price tags, badges, story cards, and station signs.</p></article>
-          <article><b>ðŸŽ§</b><strong>Listening tools</strong><p>Scripts, first/second-listen sheets, detail hunts, and retells.</p></article>
-          <article><b>ðŸŽ²</b><strong>Speaking games</strong><p>Story dice, opinion corners, scavenger hunts, and speed chats.</p></article>
-          <article><b>ðŸ†</b><strong>Celebration kit</strong><p>Speaking passport, feedback slips, rubrics, and certificates.</p></article>
-        </div>
       </div>
     </section>
 
@@ -511,6 +453,6 @@
   </dialog>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js?v=90"></script>
+  <script src="script.js?v=91"></script>
 </body>
 </html>
