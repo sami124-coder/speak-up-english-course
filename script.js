@@ -693,27 +693,86 @@ const installBanner = document.querySelector("#appDownloadBanner");
 const standaloneApp = matchMedia("(display-mode: standalone)").matches || Boolean(window.navigator.standalone);
 document.body.classList.toggle("is-standalone", standaloneApp);
 const appTabs = [...document.querySelectorAll("[data-app-tab]")];
-function updateAppTabs() {
-  const section = (location.hash || "#home").slice(1);
+const appRoutes = {
+  home: "home",
+  course: "course",
+  students: "students",
+  resources: "students",
+  parents: "parents"
+};
+const appPageIds = ["home", "course", "students", "parents"];
+const appPages = appPageIds.map(id => document.querySelector(`main > section#${id}`)).filter(Boolean);
+const topbar = document.querySelector(".topbar");
+const installOffset = () => installBanner && !installBanner.hidden && !standaloneApp ? installBanner.getBoundingClientRect().height : 0;
+const stickyOffset = () => standaloneApp ? 0 : Math.ceil((topbar?.getBoundingClientRect().height || 0) + installOffset() + 14);
+
+function normalizeAppSection(section = "home") {
+  return appRoutes[section] || "home";
+}
+
+function setActiveAppTab(section) {
+  const activeSection = normalizeAppSection(section);
   appTabs.forEach(tab => {
-    const active = tab.dataset.appTab === section || (tab.dataset.appTab === "students" && section === "resources");
+    const active = tab.dataset.appTab === activeSection;
     tab.classList.toggle("active", active);
     if (active) tab.setAttribute("aria-current", "page");
     else tab.removeAttribute("aria-current");
   });
+}
+
+function showStandalonePage(section) {
+  const activeSection = normalizeAppSection(section);
+  const activePage = document.querySelector(`main > section#${CSS.escape(activeSection)}`) || document.querySelector("main > section#home");
+  appPages.forEach(page => {
+    const active = page === activePage;
+    page.classList.toggle("app-page-active", active);
+    page.hidden = !active;
+  });
+  activePage.scrollTo({top: 0, behavior: "auto"});
+}
+
+function scrollToAppSection(section, behavior = "smooth") {
+  const target = document.querySelector(`main > section#${CSS.escape(section)}`);
+  if (!target) return;
+  const top = Math.max(0, window.scrollY + target.getBoundingClientRect().top - stickyOffset());
+  window.scrollTo({top, behavior});
+}
+
+function navigateToAppSection(section, options = {}) {
+  const activeSection = normalizeAppSection(section);
+  setActiveAppTab(activeSection);
   if (standaloneApp) {
-    const appPages = [...document.querySelectorAll("main > section[id]")];
-    const requestedPage = document.querySelector(`main > section#${CSS.escape(section)}`);
-    const activePage = requestedPage || document.querySelector("main > section#home");
-    appPages.forEach(page => {
-      const active = page === activePage;
-      page.classList.toggle("app-page-active", active);
-      page.hidden = !active;
-    });
-    activePage.scrollTop = 0;
+    showStandalonePage(activeSection);
+  } else {
+    scrollToAppSection(section, options.behavior || "smooth");
   }
+  const nextHash = `#${standaloneApp ? activeSection : section}`;
+  if (location.hash !== nextHash) history.pushState(null, "", nextHash);
+}
+
+function updateAppTabs() {
+  const section = (location.hash || "#home").slice(1);
+  setActiveAppTab(section);
+  if (standaloneApp) showStandalonePage(section);
 }
 window.addEventListener("hashchange", updateAppTabs);
+document.querySelectorAll('a[href^="#"]').forEach(link => link.addEventListener("click", event => {
+  const hash = link.getAttribute("href");
+  if (!hash || hash === "#") return;
+  const targetId = hash.slice(1);
+  if (!document.getElementById(targetId)) return;
+  event.preventDefault();
+  navigateToAppSection(targetId);
+}));
+if (!standaloneApp && "IntersectionObserver" in window) {
+  const sectionObserver = new IntersectionObserver(entries => {
+    const visible = entries
+      .filter(entry => entry.isIntersecting)
+      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+    if (visible) setActiveAppTab(visible.target.id);
+  }, {rootMargin: `-${stickyOffset()}px 0px -55% 0px`, threshold:[.2, .45, .7]});
+  appPages.forEach(page => sectionObserver.observe(page));
+}
 updateAppTabs();
 window.addEventListener("beforeinstallprompt", event => {
   event.preventDefault();
