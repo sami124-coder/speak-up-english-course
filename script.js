@@ -70,6 +70,16 @@ const lessonDownloads = {
   11: [
     {label:"Open Day 11 flashcards", href:"downloads/Day11_Storytelling_Flashcards.pdf", type:"secondary"},
     {label:"Download Day 11 PowerPoint", href:"downloads/Day11_Storytelling_Ages_8-12_REAL_FIXED_IMAGES.pptx", type:"primary", download:true}
+  ],
+  12: [
+    {label:"Open Day 12 flashcards", href:"downloads/Team_Challenge_Day12_Flashcards.pdf", type:"secondary"},
+    {label:"Open Day 12 worksheet", href:"downloads/Team_Challenge_Day12_Worksheet.pdf", type:"secondary"},
+    {label:"Download Day 12 PowerPoint", href:"downloads/Team_Challenge_Day12_Ages_8-12.pptx", type:"primary", download:true}
+  ],
+  13: [
+    {label:"Open Day 13 flashcards", href:"downloads/Mini_Debate_Day13_Flashcards_Ages_8-12.pdf", type:"secondary"},
+    {label:"Open Day 13 worksheet", href:"downloads/Mini_Debate_Day13_Worksheet_Ages_8-12.pdf", type:"secondary"},
+    {label:"Download Day 13 PowerPoint", href:"downloads/Mini_Debate_Day13_Ages_8-12.pptx", type:"primary", download:true}
   ]
 };
 
@@ -375,7 +385,9 @@ function renderLessons(filter = "all") {
       8:"assets/day8-picture-prompt.png",
       9:"assets/day9-picture-prompt.png",
       10:"assets/day10-picture-prompt.png",
-      11:"assets/day11-picture-prompt.png"
+      11:"assets/day11-picture-prompt.png",
+      12:"assets/day12-picture-prompt.png",
+      13:"assets/day13-picture-prompt.png"
     }[lesson.day];
     const pictureAlt = {
       1:"3D school, headphones, microphone, speech bubble, notebook, and pencil",
@@ -388,7 +400,9 @@ function renderLessons(filter = "all") {
       8:"Two children using a map and pointing toward school and town directions",
       9:"Shopping bags, groceries, a shirt, and a price tag",
       10:"Health and feelings icons with a stethoscope, smile, thermometer, water, and tissues",
-      11:"An open storybook with a golden key, a hero, a dragon, and a castle"
+      11:"An open storybook with a golden key, a hero, a dragon, and a castle",
+      12:"A red bridge over blue water under a crescent moon",
+      13:"A purple speech bubble for debate and discussion"
     }[lesson.day] || "";
     card.innerHTML = `
       <div class="lesson-day"><span class="day-number">Day ${lesson.day}</span><button class="complete-toggle" data-complete="${lesson.day}" aria-label="Mark day ${lesson.day} complete">${completed.has(lesson.day) ? "✓" : ""}</button></div>
@@ -418,7 +432,9 @@ function showLesson(day) {
     8:"assets/day8-picture-prompt.png",
     9:"assets/day9-picture-prompt.png",
     10:"assets/day10-picture-prompt.png",
-    11:"assets/day11-picture-prompt.png"
+    11:"assets/day11-picture-prompt.png",
+    12:"assets/day12-picture-prompt.png",
+    13:"assets/day13-picture-prompt.png"
   }[day];
   const coverAlt = {
     6:"A child ordering a sandwich and juice from a cafe server",
@@ -426,7 +442,9 @@ function showLesson(day) {
     8:"Two children using a map and pointing toward school and town directions",
     9:"Shopping bags, groceries, a shirt, and a price tag",
     10:"Health and feelings icons with a stethoscope, smile, thermometer, water, and tissues",
-    11:"An open storybook with a golden key, a hero, a dragon, and a castle"
+    11:"An open storybook with a golden key, a hero, a dragon, and a castle",
+    12:"A red bridge over blue water under a crescent moon",
+    13:"A purple speech bubble for debate and discussion"
   }[day] || "";
   const videoUrl = extra.video ? `https://www.youtube.com/results?search_query=${encodeURIComponent(extra.video)}` : "";
   const hasMaterials = extra.video || extra.materials.length || downloads.length;
