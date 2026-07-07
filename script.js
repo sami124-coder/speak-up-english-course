@@ -143,7 +143,12 @@ if (!localStorage.getItem("speakUpNoDemoMigration")) {
   localStorage.setItem("speakUpStudents", JSON.stringify(trackedStudents));
 }
 let signedInStudentId = sessionStorage.getItem("speakUpParentStudentId");
-const supabaseClient = window.supabase.createClient("https://vibayhusnmcpvtlxuayh.supabase.co", "sb_publishable_icj980mZsKVkWH4ZB7LyTA_DaK5x3Mx");
+const offlineSupabaseResult = {data:null, error:{message:"Supabase is unavailable while offline."}};
+const supabaseClient = window.supabase?.createClient("https://vibayhusnmcpvtlxuayh.supabase.co", "sb_publishable_icj980mZsKVkWH4ZB7LyTA_DaK5x3Mx") || {
+  from: () => ({insert: async () => offlineSupabaseResult, upsert: async () => offlineSupabaseResult, select: () => ({order: async () => ({data:[], error:offlineSupabaseResult.error})}), delete: () => ({eq: async () => offlineSupabaseResult})}),
+  rpc: async () => offlineSupabaseResult,
+  auth: {getSession: async () => ({data:{session:null}})}
+};
 const TEACHER_PIN = "2468";
 let analyticsVisitorId = localStorage.getItem("speakUpAnalyticsVisitor");
 if (!analyticsVisitorId) {
@@ -159,6 +164,33 @@ const lessonDialog = document.querySelector("#lessonDialog");
 const resourceDialog = document.querySelector("#resourceDialog");
 let completed = new Set(JSON.parse(localStorage.getItem("speakUpProgress") || "[]"));
 
+function escapeHTML(value = "") {
+  return String(value).replace(/[&<>"']/g, character => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  }[character]));
+}
+
+function escapeAttribute(value = "") {
+  return escapeHTML(value).replace(/`/g, "&#96;");
+}
+
+function setStatusText(selector, text) {
+  const element = document.querySelector(selector);
+  if (element) element.textContent = text;
+}
+
+function setButtonBusy(button, busy, label = "Loading...") {
+  if (!button) return;
+  if (!button.dataset.idleText) button.dataset.idleText = button.textContent;
+  button.disabled = busy;
+  button.classList.toggle("is-loading", busy);
+  button.textContent = busy ? label : button.dataset.idleText;
+}
+
 async function trackAnalyticsEvent(eventType) {
   try {
     await supabaseClient.from("analytics_events").insert({event_type:eventType, visitor_id:analyticsVisitorId});
@@ -167,8 +199,15 @@ async function trackAnalyticsEvent(eventType) {
 
 async function loadSiteAnalytics() {
   const status = document.querySelector("#analyticsStatus");
+  const refreshButton = document.querySelector("#refreshAnalytics");
+  if (!navigator.onLine) {
+    status.textContent = "Analytics are unavailable while this device is offline.";
+    return;
+  }
+  setButtonBusy(refreshButton, true, "Refreshing...");
   status.textContent = "Loading anonymous analytics…";
   const {data,error} = await supabaseClient.rpc("get_site_analytics");
+  setButtonBusy(refreshButton, false);
   if (error || !data) {
     status.textContent = "Analytics setup required: run the latest supabase-setup.sql in Supabase.";
     return;
@@ -187,9 +226,38 @@ trackAnalyticsEvent("page_view");
 async function saveStudents() {
   localStorage.setItem("speakUpStudents", JSON.stringify(trackedStudents));
   if (!cloudUser) return;
+  if (!navigator.onLine) {
+    setStatusText("#teacherSyncStatus", "Saved on this device. Cloud sync will resume when internet returns.");
+    return;
+  }
+  setStatusText("#teacherSyncStatus", "Saving learner records...");
   const rows = trackedStudents.map(student => ({id:Number(student.id), teacher_id:cloudUser.id, name:student.name, family_code:student.familyCode, payload:student, updated_at:new Date().toISOString()}));
   const {error} = await supabaseClient.from("students").upsert(rows);
-  if (error) console.error("Cloud sync failed:", error.message);
+  if (error) {
+    console.error("Cloud sync failed:", error.message);
+    setStatusText("#teacherSyncStatus", "Cloud sync failed. Local changes are still saved on this device.");
+  } else {
+    setStatusText("#teacherSyncStatus", "Learner records saved privately.");
+  }
+}
+
+async function deleteStudent(studentId) {
+  const student = trackedStudents.find(item => String(item.id) === String(studentId));
+  if (!student) return;
+  if (!confirm(`Delete ${student.name}'s student record from this teacher dashboard?`)) return;
+  trackedStudents = trackedStudents.filter(item => String(item.id) !== String(studentId));
+  if (String(signedInStudentId) === String(studentId)) {
+    signedInStudentId = null;
+    sessionStorage.removeItem("speakUpParentStudentId");
+  }
+  localStorage.setItem("speakUpStudents", JSON.stringify(trackedStudents));
+  if (cloudUser && navigator.onLine && !String(studentId).startsWith("parent-preview")) {
+    const {error} = await supabaseClient.from("students").delete().eq("id", Number(studentId));
+    setStatusText("#teacherSyncStatus", error ? "Local record deleted. Cloud delete could not be confirmed." : "Student record deleted.");
+  } else {
+    setStatusText("#teacherSyncStatus", "Student record deleted from this device.");
+  }
+  renderStudentTracker();
 }
 
 async function loadCloudStudents() {
@@ -268,13 +336,20 @@ function renderStudentTracker() {
   );
   document.querySelector("#studentTrackerRows").innerHTML = visible.map(student => {
     const status = studentStatus(student);
+    const safeName = escapeHTML(student.name);
+    const safeInitial = escapeHTML((student.name || "?")[0].toUpperCase());
+    const safeLevel = escapeHTML(student.level);
+    const safeGoal = escapeHTML(student.goal);
+    const safeFamilyCode = escapeHTML(student.familyCode || "Create code");
+    const safeAge = Number(student.age) || "";
+    const progressWidth = Math.max(0, Math.min(100, Number(student.completed || 0) / 15 * 100));
     return `
     <tr>
-      <td><div class="student-name-cell"><span class="mini-avatar">${student.name[0].toUpperCase()}</span><div><button class="student-name-button" data-student-profile="${student.id}">${student.name}</button><br><small>Age ${student.age} · <span class="level-pill">${student.level}</span></small><br><span class="status-chip ${status[1]}">${status[0]}</span></div></div></td>
-      <td><strong>${student.completed}/15</strong><div class="table-progress"><span style="width:${student.completed / 15 * 100}%"></span></div></td>
-      <td>${student.attendance}%</td><td>${student.speaking}%</td><td>${student.listening}%</td>
-      <td>⭐ ${student.stars}</td><td><button class="student-action family-code" data-copy-code="${student.id}">${student.familyCode || "Create code"}</button></td><td>${student.goal}</td>
-      <td><button class="student-action" data-student-profile="${student.id}">Profile</button> <button class="student-action" data-copy-update="${student.id}">Copy update</button></td>
+      <td><div class="student-name-cell"><span class="mini-avatar">${safeInitial}</span><div><button class="student-name-button" data-student-profile="${student.id}">${safeName}</button><br><small>Age ${safeAge} - <span class="level-pill">${safeLevel}</span></small><br><span class="status-chip ${status[1]}">${status[0]}</span></div></div></td>
+      <td><strong>${Number(student.completed) || 0}/15</strong><div class="table-progress"><span style="width:${progressWidth}%"></span></div></td>
+      <td>${Number(student.attendance) || 0}%</td><td>${Number(student.speaking) || 0}%</td><td>${Number(student.listening) || 0}%</td>
+      <td>Star ${Number(student.stars) || 0}</td><td><button class="student-action family-code" data-copy-code="${student.id}">${safeFamilyCode}</button></td><td>${safeGoal}</td>
+      <td><button class="student-action" data-student-profile="${student.id}">Profile</button> <button class="student-action" data-copy-update="${student.id}">Copy update</button> <button class="student-action danger-action" data-delete-student="${student.id}">Delete</button></td>
     </tr>`}).join("");
   const total = trackedStudents.length || 1;
   document.querySelector("#studentTotal").textContent = trackedStudents.length;
@@ -294,9 +369,9 @@ function renderParentDashboard() {
   if (!student) return;
   const progress = Math.round(student.completed / 15 * 100);
   const lesson = latestLesson(student);
-  document.querySelector("#parentAvatar").textContent = student.name[0].toUpperCase();
+  document.querySelector("#parentAvatar").textContent = (student.name || "?")[0].toUpperCase();
   document.querySelector("#parentName").textContent = student.name;
-  document.querySelector("#parentLevel").textContent = `Age ${student.age} · Level ${student.level}`;
+  document.querySelector("#parentLevel").textContent = `Age ${student.age} - Level ${student.level}`;
   document.querySelector("#parentProgressPercent").textContent = `${progress}%`;
   document.querySelector("#parentProgressRing").style.background = `conic-gradient(var(--coral) ${progress}%, #edf0ee ${progress}%)`;
   document.querySelector("#parentProgressText").textContent = `${student.completed} of 15 days complete`;
@@ -308,7 +383,7 @@ function renderParentDashboard() {
   document.querySelector("#parentTeacherNote").textContent = student.note;
   document.querySelector("#parentGoal").textContent = student.goal;
   document.querySelector("#parentHomePractice").textContent = student.home;
-  document.querySelector("#latestLessonTitle").textContent = `Day ${lesson.day} · ${lesson.title}`;
+  document.querySelector("#latestLessonTitle").textContent = `Day ${lesson.day} - ${lesson.title}`;
   document.querySelector("#latestLessonCanDo").textContent = `I can ${lesson.goal.charAt(0).toLowerCase()}${lesson.goal.slice(1)}`;
   const status = studentStatus(student);
   const statusChip = document.querySelector("#parentStatusChip");
@@ -317,50 +392,56 @@ function renderParentDashboard() {
   document.querySelector("#parentLessonRecords").innerHTML = ensureLessonRecords(student).map(record => {
     const lessonInfo = lessons[record.day - 1];
     const unmarked = record.attendance === "Not marked";
+    const safeNote = escapeHTML(record.note || (unmarked ? "This lesson has not been assessed yet." : "No lesson note added."));
     return `<article class="parent-record-day ${unmarked ? "is-unmarked" : ""}">
-      <h4>Day ${record.day} · ${lessonInfo.title}</h4>
+      <h4>Day ${record.day} - ${escapeHTML(lessonInfo.title)}</h4>
       <dl>
-        <dt>Attendance</dt><dd>${record.attendance}</dd>
-        <dt>Speaking</dt><dd>${record.speaking || "—"}/4</dd>
-        <dt>Listening</dt><dd>${record.listening || "—"}/4</dd>
-        <dt>Participation</dt><dd>${record.participation || "—"}/4</dd>
-        <dt>Stars</dt><dd>⭐ ${record.stars || 0}</dd>
+        <dt>Attendance</dt><dd>${escapeHTML(record.attendance)}</dd>
+        <dt>Speaking</dt><dd>${record.speaking || "-"}/4</dd>
+        <dt>Listening</dt><dd>${record.listening || "-"}/4</dd>
+        <dt>Participation</dt><dd>${record.participation || "-"}/4</dd>
+        <dt>Stars</dt><dd>${Number(record.stars) || 0}</dd>
       </dl>
-      <p class="parent-record-note">${record.note || (unmarked ? "This lesson has not been assessed yet." : "No lesson note added.")}</p>
+      <p class="parent-record-note">${safeNote}</p>
     </article>`;
   }).join("");
 }
 
 function showStudentProfile(studentId) {
   const student = trackedStudents.find(item => item.id === Number(studentId));
+  if (!student) return;
   const records = ensureLessonRecords(student);
   const status = studentStatus(student);
+  const safeName = escapeHTML(student.name);
+  const safeNote = escapeHTML(student.note);
+  const safeGoal = escapeHTML(student.goal);
+  const safeHome = escapeHTML(student.home);
   document.querySelector("#studentProfileContent").innerHTML = `
-    <div class="profile-head"><div><p class="dialog-kicker">Student profile</p><h2>${student.name}</h2><span class="status-chip ${status[1]}">${status[0]}</span></div><button class="button secondary" data-profile-copy="${student.id}">Copy parent update</button></div>
+    <div class="profile-head"><div><p class="dialog-kicker">Student profile</p><h2>${safeName}</h2><span class="status-chip ${status[1]}">${status[0]}</span></div><div class="profile-actions"><button class="button secondary" data-profile-copy="${student.id}">Copy parent update</button><button class="button secondary danger-action" data-profile-delete="${student.id}">Delete student data</button></div></div>
     <div class="profile-summary">
       <article><span>Course progress</span><strong>${student.completed}/15</strong></article>
       <article><span>Attendance</span><strong>${student.attendance}%</strong></article>
       <article><span>Speaking</span><strong>${student.speaking}%</strong></article>
       <article><span>Listening</span><strong>${student.listening}%</strong></article>
-      <article><span>Stars</span><strong>⭐ ${student.stars}</strong></article>
+      <article><span>Stars</span><strong>${student.stars}</strong></article>
     </div>
     <div class="profile-notes">
-      <label>Teacher note<textarea data-profile-field="note" data-student-id="${student.id}">${student.note}</textarea></label>
-      <label>Next goal<textarea data-profile-field="goal" data-student-id="${student.id}">${student.goal}</textarea></label>
-      <label>Parent activity<textarea data-profile-field="home" data-student-id="${student.id}">${student.home}</textarea></label>
+      <label>Teacher note<textarea data-profile-field="note" data-student-id="${student.id}">${safeNote}</textarea></label>
+      <label>Next goal<textarea data-profile-field="goal" data-student-id="${student.id}">${safeGoal}</textarea></label>
+      <label>Parent activity<textarea data-profile-field="home" data-student-id="${student.id}">${safeHome}</textarea></label>
     </div>
     <h3>Lesson-by-lesson tracking</h3>
     <div class="lesson-records">${records.map(record => {
       const lesson = lessons[record.day - 1];
-      const scoreOptions = [0,1,2,3,4].map(value => `<option value="${value}" ${Number(record.speaking)===value ? "selected":""}>${value || "—"}</option>`).join("");
+      const scoreOptions = [0,1,2,3,4].map(value => `<option value="${value}" ${Number(record.speaking)===value ? "selected":""}>${value || "-"}</option>`).join("");
       return `<article class="lesson-record" data-record-day="${record.day}">
-        <div><h4>Day ${record.day} · ${lesson.title}</h4><small>${lesson.goal}</small></div>
+        <div><h4>Day ${record.day} - ${escapeHTML(lesson.title)}</h4><small>${escapeHTML(lesson.goal)}</small></div>
         <label>Attendance<select data-record-field="attendance"><option ${record.attendance==="Not marked"?"selected":""}>Not marked</option><option ${record.attendance==="Present"?"selected":""}>Present</option><option ${record.attendance==="Late"?"selected":""}>Late</option><option ${record.attendance==="Absent"?"selected":""}>Absent</option></select></label>
         <label>Speaking<select data-record-field="speaking">${scoreOptions}</select></label>
-        <label>Listening<select data-record-field="listening">${[0,1,2,3,4].map(value => `<option value="${value}" ${Number(record.listening)===value ? "selected":""}>${value || "—"}</option>`).join("")}</select></label>
-        <label>Participation<select data-record-field="participation">${[0,1,2,3,4].map(value => `<option value="${value}" ${Number(record.participation)===value ? "selected":""}>${value || "—"}</option>`).join("")}</select></label>
-        <label>Stars<input data-record-field="stars" type="number" min="0" max="10" value="${record.stars || 0}"></label>
-        <label>Short note<input data-record-field="note" value="${record.note || ""}" placeholder="Optional"></label>
+        <label>Listening<select data-record-field="listening">${[0,1,2,3,4].map(value => `<option value="${value}" ${Number(record.listening)===value ? "selected":""}>${value || "-"}</option>`).join("")}</select></label>
+        <label>Participation<select data-record-field="participation">${[0,1,2,3,4].map(value => `<option value="${value}" ${Number(record.participation)===value ? "selected":""}>${value || "-"}</option>`).join("")}</select></label>
+        <label>Stars<input data-record-field="stars" type="number" min="0" max="10" value="${Number(record.stars) || 0}"></label>
+        <label>Short note<input data-record-field="note" value="${escapeAttribute(record.note || "")}" placeholder="Optional"></label>
       </article>`;
     }).join("")}</div>`;
   const profileDialog = document.querySelector("#studentProfileDialog");
@@ -524,6 +605,11 @@ document.querySelector("#studentTrackerRows").addEventListener("click", event =>
     setTimeout(() => { codeButton.textContent = student.familyCode; }, 1200);
     return;
   }
+  const deleteButton = event.target.closest("[data-delete-student]");
+  if (deleteButton) {
+    deleteStudent(deleteButton.dataset.deleteStudent);
+    return;
+  }
   const progressButton = event.target.closest("[data-student-progress]");
   const starButton = event.target.closest("[data-student-star]");
   if (!progressButton && !starButton) return;
@@ -572,6 +658,12 @@ document.querySelector("#studentProfileDialog").addEventListener("change", event
   }
 });
 document.querySelector("#studentProfileDialog").addEventListener("click", event => {
+  const deleteButton = event.target.closest("[data-profile-delete]");
+  if (deleteButton) {
+    document.querySelector("#studentProfileDialog").close();
+    deleteStudent(deleteButton.dataset.profileDelete);
+    return;
+  }
   const copyButton = event.target.closest("[data-profile-copy]");
   if (!copyButton) return;
   const student = trackedStudents.find(item => item.id === Number(copyButton.dataset.profileCopy));
@@ -580,9 +672,15 @@ document.querySelector("#studentProfileDialog").addEventListener("click", event 
 });
 document.querySelector("#parentLogin").addEventListener("submit", async event => {
   event.preventDefault();
+  const submitButton = event.currentTarget.querySelector('button[type="submit"]');
+  if (!navigator.onLine) {
+    document.querySelector("#parentLoginError").textContent = "This device is offline. Parent progress needs internet unless the record is already saved here.";
+  }
+  setButtonBusy(submitButton, true, "Checking...");
   const name = document.querySelector("#parentLoginName").value.trim().toLowerCase();
   const code = document.querySelector("#parentLoginCode").value.trim().toUpperCase();
   const {data,error} = await supabaseClient.rpc("get_child_progress", {p_student_name:name, p_family_code:code});
+  setButtonBusy(submitButton, false);
   let student = data;
   if (!student) student = trackedStudents.find(item => item.name.trim().toLowerCase() === name && item.familyCode?.toUpperCase() === code);
   if (!student) {
@@ -619,9 +717,12 @@ document.querySelector("#parentSignOut").addEventListener("click", () => {
 });
 document.querySelector("#teacherLoginForm").addEventListener("submit", async event => {
   event.preventDefault();
+  const submitButton = event.currentTarget.querySelector('button[type="submit"]');
+  setButtonBusy(submitButton, true, "Unlocking...");
   const pin = document.querySelector("#teacherPinInput").value;
   if (pin !== TEACHER_PIN) {
     document.querySelector("#teacherLoginError").textContent = "Incorrect PIN. Please try again.";
+    setButtonBusy(submitButton, false);
     return;
   }
   teacherUnlocked = true;
@@ -716,9 +817,18 @@ const appRoutes = {
   course: {page: "students", target: ".teacher-missions"},
   students: {page: "students", target: "students"},
   resources: {page: "students", target: "resources"},
-  parents: {page: "parents", target: "parents"}
+  parents: {page: "parents", target: "parents"},
+  start: {page: "start", target: "start"},
+  outcomes: {page: "outcomes", target: "outcomes"},
+  app: {page: "app", target: "app"},
+  faq: {page: "faq", target: "faq"},
+  testimonials: {page: "testimonials", target: "testimonials"},
+  enrollment: {page: "enrollment", target: "enrollment"},
+  privacy: {page: "privacy", target: "privacy"},
+  terms: {page: "terms", target: "terms"},
+  contact: {page: "contact", target: "contact"}
 };
-const appPageIds = ["home", "course", "students", "parents"];
+const appPageIds = ["home", "start", "course", "students", "parents", "outcomes", "app", "faq", "testimonials", "enrollment", "privacy", "terms", "contact"];
 const appPages = appPageIds.map(id => document.querySelector(`main > section#${id}`)).filter(Boolean);
 const topbar = document.querySelector(".topbar");
 const installOffset = () => installBanner && !installBanner.hidden && !standaloneApp ? installBanner.getBoundingClientRect().height : 0;
@@ -791,6 +901,9 @@ document.querySelectorAll('a[href^="#"]').forEach(link => link.addEventListener(
   event.preventDefault();
   navigateToAppSection(targetId);
 }));
+document.querySelectorAll("[data-onboard-target]").forEach(button => button.addEventListener("click", () => {
+  navigateToAppSection(button.dataset.onboardTarget);
+}));
 if (!standaloneApp && "IntersectionObserver" in window) {
   const sectionObserver = new IntersectionObserver(entries => {
     const visible = entries
@@ -801,6 +914,20 @@ if (!standaloneApp && "IntersectionObserver" in window) {
   appPages.forEach(page => sectionObserver.observe(page));
 }
 updateAppTabs();
+
+function updateOnlineStatus() {
+  const status = document.querySelector("#offlineStatus");
+  if (!status) return;
+  const online = navigator.onLine;
+  status.textContent = online
+    ? "Online. Cloud features are available."
+    : "Offline mode. Opened lessons stay available, but sign-in, analytics, and cloud sync need internet.";
+  status.classList.toggle("is-offline", !online);
+}
+window.addEventListener("online", updateOnlineStatus);
+window.addEventListener("offline", updateOnlineStatus);
+updateOnlineStatus();
+
 window.addEventListener("beforeinstallprompt", event => {
   event.preventDefault();
   installPrompt = event;

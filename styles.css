@@ -129,6 +129,54 @@ h1 em { display: block; color: var(--coral); font-style: normal; }
 .quick-start div { display: grid; gap: 3px; }
 .quick-start small { color: var(--muted); }
 .quick-start b { margin-left: auto; color: var(--coral); }
+.onboarding-section { background: #f5f8f6; }
+.onboarding-grid, .outcome-grid, .policy-grid, .testimonial-grid, .app-preview-grid, .install-help {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+.onboarding-card {
+  display: grid; gap: 14px; min-height: 170px; padding: 24px; text-align: left;
+  border: 1px solid var(--line); border-radius: 20px; background: white; box-shadow: 0 12px 30px rgba(16,42,67,.08);
+}
+.onboarding-card span { color: var(--blue); font-size: .8rem; font-weight: 900; text-transform: uppercase; }
+.onboarding-card strong { font: 700 1.35rem "Fredoka"; line-height: 1.2; }
+.offline-status, .sync-status {
+  margin: 18px 0 0; padding: 13px 15px; border: 1px solid var(--line); border-radius: 12px;
+  color: #315d4a; background: #eaf7ef; font-weight: 700;
+}
+.offline-status.is-offline { color: #694e00; background: #fff4c2; }
+.data-notice-card {
+  display: grid; grid-template-columns: 1.5fr .9fr; gap: 20px; align-items: center;
+  margin: 0 0 34px; padding: clamp(20px, 4vw, 30px); border: 1px solid var(--line); border-radius: 20px; background: #fffdf8;
+}
+.data-notice-card h3 { margin: 3px 0 8px; font-size: 1.6rem; }
+.data-notice-card p { color: var(--muted); line-height: 1.65; }
+.sync-status { margin: 0; color: var(--ink); background: #eef4fb; }
+.button.is-loading, button.is-loading { opacity: .72; cursor: progress; }
+.danger-action { color: #9f1f1f !important; border-color: rgba(159,31,31,.3) !important; }
+.profile-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; }
+.outcomes-section, .faq-section, .privacy-section, .contact-section { background: white; }
+.app-preview-section, .terms-section { background: var(--cream); }
+.testimonials-section { background: #173d3a; color: white; }
+.testimonial-grid blockquote {
+  min-height: 150px; margin: 0; padding: 24px; border: 1px solid rgba(255,255,255,.2); border-radius: 18px;
+  background: rgba(255,255,255,.08); line-height: 1.65;
+}
+.outcome-grid article, .policy-grid article, .install-help article, .enrollment-card, .terms-card {
+  padding: 24px; border: 1px solid var(--line); border-radius: 18px; background: white; box-shadow: 0 8px 24px rgba(16,42,67,.06);
+}
+.outcome-grid strong, .install-help strong { display: block; margin-bottom: 9px; font: 700 1.25rem "Fredoka"; }
+.outcome-grid p, .policy-grid p, .install-help p, .enrollment-card p, .terms-card p, .contact-note { color: var(--muted); line-height: 1.7; }
+.app-preview-grid figure { margin: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 18px; background: white; }
+.app-preview-grid img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.app-preview-grid figcaption { padding: 12px 14px; color: var(--muted); font-weight: 800; }
+.install-help { grid-template-columns: 1fr 1fr; margin-top: 16px; }
+.faq-list { display: grid; gap: 10px; }
+.faq-list details { padding: 18px 20px; border: 1px solid var(--line); border-radius: 14px; background: #fbfcfb; }
+.faq-list summary { cursor: pointer; font-weight: 900; }
+.faq-list p { color: var(--muted); line-height: 1.65; }
+.policy-grid { grid-template-columns: repeat(2, 1fr); }
+.policy-grid h3 { margin: 0 0 8px; font-size: 1.35rem; }
+.enrollment-card { display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center; }
 .sample-lesson { display: flex; align-items: center; justify-content: space-between; gap: 35px; padding: 50px clamp(24px, 7vw, 110px); color: white; background: var(--blue); }
 .sample-lesson h2 { margin: 0; font-size: clamp(2.3rem, 4vw, 4rem); }
 .sample-lesson p:last-child { max-width: 700px; color: rgba(255,255,255,.78); line-height: 1.7; }
@@ -512,6 +560,8 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
   .progress-strip { grid-template-columns: 1fr; }
   .tracker-summary { grid-template-columns: repeat(2, 1fr); }
   .analytics-summary { grid-template-columns: repeat(3, 1fr); }
+  .onboarding-grid, .outcome-grid, .app-preview-grid, .testimonial-grid { grid-template-columns: 1fr; }
+  .policy-grid, .data-notice-card, .install-help, .enrollment-card { grid-template-columns: 1fr; }
   .quick-start { grid-template-columns: 1fr; }
   .public-roadmap { grid-template-columns: 1fr; }
   .parent-dashboard { grid-template-columns: 1fr; }
@@ -550,6 +600,8 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
   .tracker-summary { grid-template-columns: 1fr 1fr; }
   .analytics-heading { align-items: stretch; flex-direction: column; }
   .analytics-summary { grid-template-columns: 1fr 1fr; }
+  .onboarding-grid, .outcome-grid, .app-preview-grid, .testimonial-grid, .policy-grid, .install-help { grid-template-columns: 1fr; }
+  .data-notice-card, .enrollment-card { grid-template-columns: 1fr; }
   .student-toolbar, .parent-heading { align-items: stretch; flex-direction: column; }
   .teacher-gate form, .teacher-actions { align-items: stretch; flex-direction: column; }
   .teacher-gate form { grid-template-columns: 1fr; }
