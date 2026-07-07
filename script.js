@@ -56,6 +56,20 @@ const lessonDownloads = {
     {label:"Open Day 8 flashcards", href:"downloads/Places_Directions_Day8_Flashcards_BIG_TEXT.pdf", type:"secondary"},
     {label:"Open Day 8 worksheet", href:"downloads/Places_Directions_Day8_Worksheet_BIG_TEXT.pdf", type:"secondary"},
     {label:"Download Day 8 PowerPoint", href:"downloads/Places_Directions_Day8_Ages_8-12_BIG_TEXT.pptx", type:"primary", download:true}
+  ],
+  9: [
+    {label:"Open Day 9 flashcards", href:"downloads/Shopping_Day9_Flashcards.pdf", type:"secondary"},
+    {label:"Open Day 9 worksheet", href:"downloads/Shopping_Day9_Worksheet.pdf", type:"secondary"},
+    {label:"Download Day 9 PowerPoint", href:"downloads/Shopping_Day9_Ages_8-12_OPTIMIZED.pptx", type:"primary", download:true}
+  ],
+  10: [
+    {label:"Open Day 10 flashcards", href:"downloads/Day10_Feelings_and_Health_Flashcards.pdf", type:"secondary"},
+    {label:"Open Day 10 worksheet", href:"downloads/Day10_Feelings_and_Health_Worksheet.pdf", type:"secondary"},
+    {label:"Download Day 10 PowerPoint", href:"downloads/Day10_Feelings_and_Health_Ages_8-12.pptx", type:"primary", download:true}
+  ],
+  11: [
+    {label:"Open Day 11 flashcards", href:"downloads/Day11_Storytelling_Flashcards.pdf", type:"secondary"},
+    {label:"Download Day 11 PowerPoint", href:"downloads/Day11_Storytelling_Ages_8-12_REAL_FIXED_IMAGES.pptx", type:"primary", download:true}
   ]
 };
 
@@ -358,7 +372,10 @@ function renderLessons(filter = "all") {
       5:"assets/day5-picture-prompt.png",
       6:"assets/day6-picture-prompt.png",
       7:"assets/day7-picture-prompt.png",
-      8:"assets/day8-picture-prompt.png"
+      8:"assets/day8-picture-prompt.png",
+      9:"assets/day9-picture-prompt.png",
+      10:"assets/day10-picture-prompt.png",
+      11:"assets/day11-picture-prompt.png"
     }[lesson.day];
     const pictureAlt = {
       1:"3D school, headphones, microphone, speech bubble, notebook, and pencil",
@@ -368,7 +385,10 @@ function renderLessons(filter = "all") {
       5:"A child’s daily routine with waking up, breakfast, school, homework, and bedtime",
       6:"A child ordering a sandwich and juice from a cafe server",
       7:"Children sharing hobbies including football, painting, guitar, dance, and reading",
-      8:"Two children using a map and pointing toward school and town directions"
+      8:"Two children using a map and pointing toward school and town directions",
+      9:"Shopping bags, groceries, a shirt, and a price tag",
+      10:"Health and feelings icons with a stethoscope, smile, thermometer, water, and tissues",
+      11:"An open storybook with a golden key, a hero, a dragon, and a castle"
     }[lesson.day] || "";
     card.innerHTML = `
       <div class="lesson-day"><span class="day-number">Day ${lesson.day}</span><button class="complete-toggle" data-complete="${lesson.day}" aria-label="Mark day ${lesson.day} complete">${completed.has(lesson.day) ? "✓" : ""}</button></div>
@@ -395,12 +415,18 @@ function showLesson(day) {
   const coverImage = {
     6:"assets/day6-picture-prompt.png",
     7:"assets/day7-picture-prompt.png",
-    8:"assets/day8-picture-prompt.png"
+    8:"assets/day8-picture-prompt.png",
+    9:"assets/day9-picture-prompt.png",
+    10:"assets/day10-picture-prompt.png",
+    11:"assets/day11-picture-prompt.png"
   }[day];
   const coverAlt = {
     6:"A child ordering a sandwich and juice from a cafe server",
     7:"Children sharing hobbies including football, painting, guitar, dance, and reading",
-    8:"Two children using a map and pointing toward school and town directions"
+    8:"Two children using a map and pointing toward school and town directions",
+    9:"Shopping bags, groceries, a shirt, and a price tag",
+    10:"Health and feelings icons with a stethoscope, smile, thermometer, water, and tissues",
+    11:"An open storybook with a golden key, a hero, a dragon, and a castle"
   }[day] || "";
   const videoUrl = extra.video ? `https://www.youtube.com/results?search_query=${encodeURIComponent(extra.video)}` : "";
   const hasMaterials = extra.video || extra.materials.length || downloads.length;
