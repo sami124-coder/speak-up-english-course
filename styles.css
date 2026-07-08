@@ -129,13 +129,35 @@ h1 em { display: block; color: var(--coral); font-style: normal; }
 .quick-start div { display: grid; gap: 3px; }
 .quick-start small { color: var(--muted); }
 .quick-start b { margin-left: auto; color: var(--coral); }
-.onboarding-section { background: #f5f8f6; }
+.onboarding-section {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #173d3a;
+}
+.onboarding-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, rgba(245,248,246,.94), rgba(245,248,246,.82) 48%, rgba(245,248,246,.72));
+}
+.onboarding-bg-video {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
 .onboarding-grid, .outcome-grid, .policy-grid, .testimonial-grid, .app-preview-grid, .install-help {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
 }
 .onboarding-card {
   display: grid; gap: 14px; min-height: 170px; padding: 24px; text-align: left;
-  border: 1px solid var(--line); border-radius: 20px; background: white; box-shadow: 0 12px 30px rgba(16,42,67,.08);
+  border: 1px solid rgba(255,255,255,.62); border-radius: 20px; background: rgba(255,255,255,.88); box-shadow: 0 18px 45px rgba(16,42,67,.16);
+  backdrop-filter: blur(12px);
 }
 .onboarding-card span { color: var(--blue); font-size: .8rem; font-weight: 900; text-transform: uppercase; }
 .onboarding-card strong { font: 700 1.35rem "Fredoka"; line-height: 1.2; }

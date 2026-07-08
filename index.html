@@ -23,7 +23,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=92">
+  <link rel="stylesheet" href="styles.css?v=94">
 </head>
 <body>
   <aside class="app-download-banner" id="appDownloadBanner" aria-label="Install Speak Up application">
@@ -94,6 +94,9 @@
     </section>
 
     <section class="section onboarding-section" id="start">
+      <video class="onboarding-bg-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1">
+        <source src="assets/onboarding-bg.mp4" type="video/mp4">
+      </video>
       <div class="section-title">
         <div>
           <p class="eyebrow">Choose your path</p>
@@ -453,6 +456,6 @@
   </dialog>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js?v=93"></script>
+  <script src="script.js?v=94"></script>
 </body>
 </html>
