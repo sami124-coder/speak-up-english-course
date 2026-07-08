@@ -705,8 +705,8 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
   height: calc(100dvh - 64px - 76px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
   overflow: hidden;
 }
-.is-standalone main > section[id] { display: none; }
-.is-standalone main > section[id].app-page-active {
+.is-standalone main > section { display: none; }
+.is-standalone main > section.app-page-active {
   display: block;
   box-sizing: border-box;
   height: 100%;
