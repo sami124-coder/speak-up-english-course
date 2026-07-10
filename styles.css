@@ -436,13 +436,59 @@ h1 em { display: block; color: var(--coral); font-style: normal; }
 .child-picker { display: grid; gap: 8px; color: rgba(255,255,255,.7); font-size: .78rem; font-weight: 800; }
 .child-picker select { min-width: 210px; }
 .parent-dashboard { display: grid; grid-template-columns: .8fr 1fr 1.2fr; gap: 15px; }
-.parent-login { display: grid; grid-template-columns: auto 1.2fr 1fr 1fr auto auto; align-items: end; gap: 18px; padding: 26px; color: var(--ink); border-radius: 24px; background: white; }
-.parent-login h3 { margin: 3px 0; font-size: 1.45rem; }
-.parent-login p { margin: 3px 0; color: var(--muted); }
-.parent-login label { display: grid; gap: 7px; font-weight: 700; }
-.parent-login input { min-width: 0; padding: 13px; border: 1px solid var(--line); border-radius: 10px; font: inherit; }
-.login-icon { font-size: 2.2rem; }
-.login-error { grid-column: 3 / -1; color: #bd3c2c !important; font-weight: 700; }
+.parent-login {
+  display: grid;
+  grid-template-columns: auto minmax(240px, .95fr) minmax(420px, 1.45fr);
+  align-items: center;
+  gap: 24px;
+  padding: clamp(22px, 3vw, 34px);
+  color: var(--ink);
+  border: 1px solid rgba(255,255,255,.38);
+  border-radius: 28px;
+  background: linear-gradient(135deg, #fff, #f7fbf8);
+  box-shadow: 0 22px 55px rgba(0,0,0,.18);
+}
+.parent-login-copy { display: grid; gap: 8px; }
+.parent-login h3 { margin: 0; font-size: clamp(1.5rem, 2.5vw, 2.05rem); }
+.parent-login p { margin: 0; color: var(--muted); line-height: 1.45; }
+.parent-login-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  align-items: end;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid rgba(23, 61, 58, .11);
+  border-radius: 20px;
+  background: white;
+}
+.parent-login label { display: grid; gap: 8px; font-weight: 800; }
+.parent-login input {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 54px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fbfdfc;
+  font: inherit;
+  font-weight: 700;
+}
+.parent-login input:focus { outline: 3px solid rgba(234, 171, 47, .28); border-color: var(--coral); }
+.parent-login .button { min-height: 54px; white-space: nowrap; }
+.login-icon {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border: 2px solid var(--ink);
+  border-radius: 22px;
+  color: var(--ink);
+  background: var(--yellow);
+  font: 800 2rem "Fredoka";
+  box-shadow: 5px 5px 0 var(--ink);
+}
+.login-error { grid-column: 3; margin: -5px 16px 0 !important; color: #bd3c2c !important; font-weight: 700; }
 .parent-private[hidden], .parent-login[hidden] { display: none; }
 .parent-dashboard > article { min-height: 420px; padding: 26px; color: var(--ink); border-radius: 24px; background: white; }
 .parent-profile-card { text-align: center; }
@@ -675,8 +721,9 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
   .public-roadmap { grid-template-columns: 1fr; }
   .parent-dashboard { grid-template-columns: 1fr; }
   .parent-record-grid { grid-template-columns: 1fr 1fr; }
-  .parent-login { grid-template-columns: 1fr; align-items: stretch; }
-  .login-error { grid-column: auto; }
+  .parent-login { grid-template-columns: auto 1fr; align-items: center; }
+  .parent-login-fields { grid-column: 1 / -1; grid-template-columns: 1fr 1fr auto; }
+  .login-error { grid-column: 1 / -1; }
   .weekly-strip { grid-template-columns: 1fr; }
 }
 @media (max-width: 700px) {
@@ -695,6 +742,10 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
   .hero-floater { transform: scale(.85); }
   .hero-visual img { min-height: 360px; }
   .course-facts { gap: 18px; }
+  .parent-login { grid-template-columns: 1fr; gap: 18px; }
+  .login-icon { width: 62px; height: 62px; border-radius: 18px; font-size: 1.6rem; }
+  .parent-login-fields { grid-template-columns: 1fr; padding: 12px; }
+  .parent-login .button { width: 100%; }
   .section-title { align-items: start; flex-direction: column; }
   .lesson-grid, .resource-grid, .rhythm-grid { grid-template-columns: 1fr; }
   .lesson-quality-grid, .support-grid { grid-template-columns: 1fr; }

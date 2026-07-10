@@ -23,7 +23,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=97">
+  <link rel="stylesheet" href="styles.css?v=98">
 </head>
 <body>
   <aside class="app-download-banner" id="appDownloadBanner" aria-label="Install Speak Up application">
@@ -251,11 +251,13 @@
         <button class="ghost-button light-ghost" id="parentSignOut" type="button" hidden>Sign out</button>
       </div>
       <form class="parent-login" id="parentLogin">
-        <div class="login-icon">Key</div>
-        <div><p class="media-label">Private family access</p><h3>Sign in to view your child</h3><p>Enter the student name and family code provided by the teacher.</p></div>
-        <label>Student name<input id="parentLoginName" required autocomplete="username" placeholder="Child's name"></label>
-        <label>Family code<input id="parentLoginCode" required autocomplete="current-password" placeholder="e.g. MAYA-K7Q9-P2X4"></label>
-        <button class="button primary" type="submit">View progress</button>
+        <div class="login-icon" aria-hidden="true">K</div>
+        <div class="parent-login-copy"><p class="media-label">Private family access</p><h3>Sign in to view your child</h3><p>Use the learner name and family code shared by the teacher.</p></div>
+        <div class="parent-login-fields">
+          <label>Student name<input id="parentLoginName" required autocomplete="username" placeholder="Child's name"></label>
+          <label>Family code<input id="parentLoginCode" required autocomplete="current-password" placeholder="e.g. MAYA-K7Q9-P2X4"></label>
+          <button class="button primary" type="submit">View progress</button>
+        </div>
         <p class="login-error" id="parentLoginError" role="alert"></p>
       </form>
       <div class="parent-private" id="parentPrivate" hidden>
@@ -468,6 +470,6 @@
   </dialog>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js?v=97"></script>
+  <script src="script.js?v=98"></script>
 </body>
 </html>
