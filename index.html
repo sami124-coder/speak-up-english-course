@@ -23,7 +23,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=96">
+  <link rel="stylesheet" href="styles.css?v=97">
 </head>
 <body>
   <aside class="app-download-banner" id="appDownloadBanner" aria-label="Install Speak Up application">
@@ -88,9 +88,21 @@
     </section>
 
     <section class="quick-start" aria-label="Quick start">
-      <a href="#course"><span>S</span><div><strong>For Students</strong><small>Explore the 15-day roadmap</small></div><b>Go</b></a>
-      <a href="#students"><span>T</span><div><strong>For Teachers</strong><small>Lessons, materials, and progress</small></div><b>Go</b></a>
-      <a href="#parents"><span>P</span><div><strong>For Parents</strong><small>Progress and home practice</small></div><b>Go</b></a>
+      <a href="#course" class="quick-start-card student-card">
+        <span aria-hidden="true">S</span>
+        <div><small>Student path</small><strong>Explore lessons</strong><em>Open the 15-day speaking roadmap.</em></div>
+        <b aria-hidden="true">-></b>
+      </a>
+      <a href="#students" class="quick-start-card teacher-card">
+        <span aria-hidden="true">T</span>
+        <div><small>Teacher path</small><strong>Open materials</strong><em>Lessons, files, and learner progress.</em></div>
+        <b aria-hidden="true">-></b>
+      </a>
+      <a href="#parents" class="quick-start-card parent-card">
+        <span aria-hidden="true">P</span>
+        <div><small>Parent path</small><strong>View progress</strong><em>Follow home practice and updates.</em></div>
+        <b aria-hidden="true">-></b>
+      </a>
     </section>
 
     <section class="section onboarding-section" id="start">
@@ -456,6 +468,6 @@
   </dialog>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js?v=96"></script>
+  <script src="script.js?v=97"></script>
 </body>
 </html>
