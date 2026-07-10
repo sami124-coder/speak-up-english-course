@@ -42,6 +42,31 @@ const dailyExtras = {
 };
 
 const lessonDownloads = {
+  1: [
+    {label:"Open Day 1 flashcards", href:"downloads/classroom_english_day1_flashcards.pdf", type:"secondary"},
+    {label:"Open Day 1 worksheet", href:"downloads/classroom_english_day1_student_worksheet.pdf", type:"secondary"},
+    {label:"Download Day 1 PowerPoint", href:"downloads/Classroom_English_Day1_Ages_8-12.pptx", type:"primary", download:true}
+  ],
+  2: [
+    {label:"Open Day 2 flashcards", href:"downloads/Introductions_Day2_Flash_Cards.pdf", type:"secondary"},
+    {label:"Open Day 2 worksheet", href:"downloads/Introductions_Day2_Worksheet.pdf", type:"secondary"},
+    {label:"Download Day 2 PowerPoint", href:"downloads/Introductions_Day2_Ages_8-12.pptx", type:"primary", download:true}
+  ],
+  3: [
+    {label:"Open Day 3 flashcards", href:"downloads/Family_Friends_Day3_Flash_Cards.pdf", type:"secondary"},
+    {label:"Open Day 3 worksheet", href:"downloads/Family_Friends_Day3_Worksheet.pdf", type:"secondary"},
+    {label:"Download Day 3 PowerPoint", href:"downloads/Family_Friends_Day3_Ages_8-12.pptx", type:"primary", download:true}
+  ],
+  4: [
+    {label:"Open Day 4 flashcards", href:"downloads/Day4_Likes_and_Reasons_Flashcards.pdf", type:"secondary"},
+    {label:"Open Day 4 worksheet", href:"downloads/Day4_Likes_and_Reasons_Worksheet.pdf", type:"secondary"},
+    {label:"Download Day 4 PowerPoint", href:"downloads/Day4_Likes_and_Reasons_Ages_8-12.pptx", type:"primary", download:true}
+  ],
+  5: [
+    {label:"Open Day 5 flashcards", href:"downloads/Day5_Daily_Routines_Flash_Cards.pdf", type:"secondary"},
+    {label:"Open Day 5 worksheet", href:"downloads/Day5_Daily_Routines_Worksheet.pdf", type:"secondary"},
+    {label:"Download Day 5 PowerPoint", href:"downloads/Day5_Daily_Routines_Ages_8-12.pptx", type:"primary", download:true}
+  ],
   6: [
     {label:"Open Day 6 flashcards", href:"downloads/Day6_Cafe_Roleplay_Flashcards.pdf", type:"secondary"},
     {label:"Open Day 6 worksheet", href:"downloads/Day6_Cafe_Roleplay_Worksheet.pdf", type:"secondary"},
@@ -528,16 +553,25 @@ function showLesson(day) {
   }[day] || "";
   const videoUrl = extra.video ? `https://www.youtube.com/results?search_query=${encodeURIComponent(extra.video)}` : "";
   const hasMaterials = extra.video || extra.materials.length || downloads.length;
+  const downloadButtons = downloads.map(file => `<a class="button ${file.type}" href="${file.href}" ${file.download ? "download" : `target="_blank"`} rel="noreferrer">${file.label}</a>`).join("");
   const lessonContent = document.querySelector("#lessonContent");
   lessonContent.className = `lesson-day-content lesson-day-${day}`;
   lessonContent.innerHTML = `
     <div class="lesson-cover ${coverImage ? "has-cover-image" : ""}">${coverImage ? `<img src="${coverImage}" alt="${coverAlt}">` : `<span>${extra.visual}</span>`}<div><p>Picture prompt</p><strong>What can you see? What might happen today?</strong></div></div>
     <p class="dialog-kicker">Day ${lesson.day} · 60–75 minutes</p><h2>${lesson.title}</h2>
     <p class="dialog-goal"><strong>Can-do goal:</strong> ${lesson.goal}</p>
+    <section class="dialog-section material-downloads">
+      <div>
+        <p class="media-label">Teacher files</p>
+        <h3>PowerPoint, worksheet, and flashcards</h3>
+        <p>${downloads.length ? "Open or download the ready-made lesson files for this day." : "No PowerPoint, worksheet, or flashcard file has been uploaded for this day yet."}</p>
+      </div>
+      ${downloads.length ? `<div class="lesson-tools prominent-tools">${downloadButtons}</div>` : ""}
+    </section>
     <div class="lesson-panel" data-lesson-panel="activities">
       ${lesson.task ? `<section class="dialog-section"><h3>Speaking challenge</h3><p>${lesson.task}</p></section>` : ""}
       ${lesson.worksheet ? `<section class="dialog-section"><h3>Worksheet activity</h3><p>${lesson.worksheet}</p></section>` : ""}
-      ${hasMaterials ? `<section class="dialog-section media-section">${extra.video ? `<div class="video-card"><span class="play-icon">▶</span><div><p class="media-label">Video practice</p><h3>${lesson.title} video</h3><a href="${videoUrl}" target="_blank" rel="noreferrer">Find a lesson video ↗</a></div></div>` : ""}${extra.materials.length || downloads.length ? `<div class="materials-card"><p class="media-label">Print & play</p><h3>Lesson materials</h3><ul>${extra.materials.map(item => `<li>${item}</li>`).join("")}</ul>${downloads.length ? `<div class="lesson-tools">${downloads.map(file => `<a class="button ${file.type}" href="${file.href}" ${file.download ? "download" : `target="_blank"`}>${file.label}</a>`).join("")}</div>` : ""}</div>` : ""}</section>` : ""}
+      ${hasMaterials ? `<section class="dialog-section media-section">${extra.video ? `<div class="video-card"><span class="play-icon">▶</span><div><p class="media-label">Video practice</p><h3>${lesson.title} video</h3><a href="${videoUrl}" target="_blank" rel="noreferrer">Find a lesson video ↗</a></div></div>` : ""}${extra.materials.length ? `<div class="materials-card"><p class="media-label">Print & play</p><h3>Lesson materials</h3><ul>${extra.materials.map(item => `<li>${item}</li>`).join("")}</ul></div>` : ""}</section>` : ""}
       ${[7, 8].includes(day) ? "" : `<section class="dialog-section"><h3>My success check</h3><ul class="success-list"><li>I used two target phrases.</li><li>I listened and answered my partner.</li><li>I spoke clearly.</li><li>I tried again when it was difficult.</li></ul></section>`}
       ${extra.bonus ? `<section class="dialog-section bonus-card"><h3>Extra challenge</h3><p>${extra.bonus}</p></section>` : ""}
       <button class="button primary dialog-complete" data-dialog-complete="${lesson.day}">${completed.has(day) ? "Completed ✓" : "Mark day complete"}</button>

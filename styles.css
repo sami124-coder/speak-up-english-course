@@ -219,6 +219,21 @@ h1 em { display: block; color: var(--coral); font-style: normal; }
 .lesson-tab.active { color: white; background: var(--blue); }
 .lesson-panel[hidden] { display: none; }
 .lesson-tools { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0; }
+.material-downloads {
+  display: grid;
+  grid-template-columns: minmax(220px, .9fr) 1.2fr;
+  gap: 18px;
+  align-items: center;
+  padding: 22px;
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  background: #fff8d8;
+  box-shadow: 5px 5px 0 var(--ink);
+}
+.material-downloads h3 { margin: 0 0 8px; }
+.material-downloads p:last-child { margin-bottom: 0; }
+.prominent-tools { margin: 0; justify-content: flex-end; }
+.prominent-tools .button { min-width: 190px; }
 .privacy-note { margin-top: 18px; padding: 14px; border-radius: 12px; color: #694e00; background: #fff4c2; font-size: .9rem; line-height: 1.5; }
 
 .section { padding: clamp(65px, 9vw, 125px) clamp(24px, 7vw, 110px); }
@@ -634,6 +649,9 @@ footer { display: flex; align-items: center; justify-content: space-between; gap
   .lesson-record { grid-template-columns: 1fr 1fr; }
   .media-section, .vocab-chips { grid-template-columns: 1fr; }
   .poster-grid, .problem-card-grid, .worksheet-columns { grid-template-columns: 1fr; }
+  .material-downloads { grid-template-columns: 1fr; }
+  .prominent-tools { justify-content: stretch; }
+  .prominent-tools .button { width: 100%; min-width: 0; }
   .lesson-cover { align-items: flex-start; flex-direction: column; }
   .rhythm-grid article { min-height: 160px; }
   .rhythm-grid strong { margin-top: 30px; }
