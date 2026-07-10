@@ -23,7 +23,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=98">
+  <link rel="stylesheet" href="styles.css?v=99">
 </head>
 <body>
   <aside class="app-download-banner" id="appDownloadBanner" aria-label="Install Speak Up application">
@@ -40,9 +40,12 @@
       <span>Speak Up!<small>English for ages 8-12</small></span>
     </a>
     <nav aria-label="Primary navigation">
-      <a href="#course">Lessons</a>
+      <a href="#home">Home</a>
+      <a href="#course">Course</a>
       <a href="#students">Teacher</a>
       <a href="#parents">Parent</a>
+      <a href="#app">App</a>
+      <a href="#faq">FAQ</a>
       <a href="#privacy">Privacy</a>
     </nav>
     <div class="app-controls"><button class="ghost-button" id="resetProgress" type="button">Reset progress</button></div>
@@ -105,6 +108,20 @@
       </a>
     </section>
 
+    <section class="site-hub" id="hub" aria-label="Course hub">
+      <div class="site-hub-copy">
+        <p class="eyebrow">Course hub</p>
+        <h2>Find the right part of Speak Up fast.</h2>
+        <p>Use the roadmap for the full 15-day sequence, the teacher area for private materials and learner records, and the parent area for home progress.</p>
+      </div>
+      <div class="site-hub-links" aria-label="Important sections">
+        <a href="#course"><span>01</span><strong>Roadmap</strong><small>All 15 lesson topics</small></a>
+        <a href="#students"><span>02</span><strong>Teacher area</strong><small>Lessons, files, records</small></a>
+        <a href="#outcomes"><span>03</span><strong>Outcomes</strong><small>What children can do</small></a>
+        <a href="#faq"><span>04</span><strong>FAQ</strong><small>Privacy and access answers</small></a>
+      </div>
+    </section>
+
     <section class="section onboarding-section" id="start">
       <video class="onboarding-bg-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1">
         <source src="assets/onboarding-bg.mp4" type="video/mp4">
@@ -131,9 +148,9 @@
         </div>
       </div>
       <div class="public-roadmap">
-        <article><span>Days 1-5</span><h3>Build the foundation</h3><ol><li>Classroom English</li><li>Introductions</li><li>Family & Friends</li><li>Likes & Reasons</li><li>Daily Routines</li></ol></article>
-        <article><span>Days 6-10</span><h3>Speak in real situations</h3><ol><li>Cafe Role-play</li><li>Hobbies & Abilities</li><li>Places & Directions</li><li>Shopping</li><li>Feelings & Health</li></ol></article>
-        <article><span>Days 11-15</span><h3>Share ideas confidently</h3><ol><li>Storytelling</li><li>Team Challenge</li><li>Mini Debates</li><li>Presentation Rehearsal</li><li>Speaking Festival</li></ol></article>
+        <article><span>Unit 1 / Days 1-5</span><h3>Build the foundation</h3><p>Classroom language, introductions, people, opinions, and daily routines.</p><ol><li>Classroom English</li><li>Introductions</li><li>Family & Friends</li><li>Likes & Reasons</li><li>Daily Routines</li></ol></article>
+        <article><span>Unit 2 / Days 6-10</span><h3>Speak in real situations</h3><p>Role-play practical English for food, hobbies, directions, shopping, and health.</p><ol><li>Cafe Role-play</li><li>Hobbies & Abilities</li><li>Places & Directions</li><li>Shopping</li><li>Feelings & Health</li></ol></article>
+        <article><span>Unit 3 / Days 11-15</span><h3>Share ideas confidently</h3><p>Move from sentence practice into stories, teamwork, debate, and presentation.</p><ol><li>Storytelling</li><li>Team Challenge</li><li>Mini Debates</li><li>Presentation Rehearsal</li><li>Speaking Festival</li></ol></article>
       </div>
       <p class="roadmap-lock">Private lesson plans, listening scripts, worksheets, and speaking missions are available inside the Teacher area.</p>
     </section>
@@ -434,8 +451,14 @@
 
   <footer>
     <a class="brand" href="#home"><span class="brand-bubble">UP</span><span>Speak Up!</span></a>
+    <nav aria-label="Footer navigation">
+      <a href="#course">Course</a>
+      <a href="#students">Teacher</a>
+      <a href="#parents">Parent</a>
+      <a href="#privacy">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
     <p>Made for brave voices, curious minds, and joyful classrooms.</p>
-    <p><a href="privacy.html">Privacy Policy</a> - <a href="terms.html">Terms of Use</a> - <a href="#contact">Contact</a></p>
   </footer>
 
   <dialog id="lessonDialog" class="content-dialog">
@@ -470,6 +493,6 @@
   </dialog>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js?v=98"></script>
+  <script src="script.js?v=99"></script>
 </body>
 </html>

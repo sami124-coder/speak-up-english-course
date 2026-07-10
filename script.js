@@ -807,7 +807,7 @@ if (matchMedia("(pointer:fine)").matches && !matchMedia("(prefers-reduced-motion
   });
 }
 
-const revealTargets = document.querySelectorAll(".section-title, .lesson-card, .resource-card, .quick-start a, .public-roadmap article");
+const revealTargets = document.querySelectorAll(".section-title, .lesson-card, .resource-card, .quick-start a, .site-hub-copy, .site-hub-links a, .public-roadmap article");
 revealTargets.forEach((element, index) => {
   element.classList.add("motion-reveal");
   element.style.transitionDelay = `${Math.min(index % 5, 4) * 70}ms`;
@@ -834,6 +834,7 @@ document.body.classList.toggle("is-standalone", standaloneApp);
 const appTabs = [...document.querySelectorAll("[data-app-tab]")];
 const appRoutes = {
   home: {page: "home", target: "home"},
+  hub: {page: "hub", target: "hub"},
   course: {page: "course", target: "course"},
   students: {page: "students", target: "students"},
   parents: {page: "parents", target: "parents"},
@@ -847,7 +848,7 @@ const appRoutes = {
   terms: {page: "terms", target: "terms"},
   contact: {page: "contact", target: "contact"}
 };
-const appPageIds = ["home", "start", "course", "students", "parents", "outcomes", "app", "faq", "testimonials", "enrollment", "privacy", "terms", "contact"];
+const appPageIds = ["home", "hub", "start", "course", "students", "parents", "outcomes", "app", "faq", "testimonials", "enrollment", "privacy", "terms", "contact"];
 const appPages = appPageIds.map(id => document.querySelector(`main > section#${id}`)).filter(Boolean);
 const topbar = document.querySelector(".topbar");
 const installOffset = () => installBanner && !installBanner.hidden && !standaloneApp ? installBanner.getBoundingClientRect().height : 0;
