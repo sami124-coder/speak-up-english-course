@@ -23,7 +23,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=99">
+  <link rel="stylesheet" href="styles.css?v=100">
 </head>
 <body>
   <aside class="app-download-banner" id="appDownloadBanner" aria-label="Install Speak Up application">
@@ -190,7 +190,7 @@
           <p class="eyebrow">Teacher dashboard</p>
           <h2>See every learner clearly</h2>
         </div>
-        <div class="teacher-actions"><button class="ghost-button" id="teacherSignOut" type="button">Lock dashboard</button><button class="button secondary compact-button" id="addStudentButton" type="button">+ Add student</button></div>
+        <div class="teacher-actions"><button class="ghost-button" id="teacherSignOut" type="button">Lock dashboard</button><button class="button secondary compact-button" id="syncParentAccess" type="button">Sync parent access</button><button class="button secondary compact-button" id="addStudentButton" type="button">+ Add student</button></div>
       </div>
       <section class="analytics-panel" aria-labelledby="analyticsTitle">
         <div class="analytics-heading">
@@ -213,7 +213,7 @@
           <h3 id="teacherDataNotice">Private learner records only</h3>
           <p>Student names, ages, levels, family codes, goals, teacher notes, progress, attendance, stars, and optional parent email are stored only for the teacher dashboard and parent progress access. Public pages never show student names.</p>
         </div>
-        <p id="teacherSyncStatus" class="sync-status">Local records are saved on this device. Cloud sync is used only when the teacher dashboard is connected.</p>
+        <p id="teacherSyncStatus" class="sync-status">Local records are saved on this device. Press Sync parent access so parents can use their family codes on another phone.</p>
       </section>
       <section class="teacher-missions">
         <div class="section-title compact-title"><div><p class="eyebrow">Private lesson library</p><h2>Choose today's speaking mission</h2></div>
@@ -493,6 +493,6 @@
   </dialog>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js?v=99"></script>
+  <script src="script.js?v=100"></script>
 </body>
 </html>

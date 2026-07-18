@@ -215,6 +215,61 @@ function setButtonBusy(button, busy, label = "Loading...") {
   button.textContent = busy ? label : button.dataset.idleText;
 }
 
+function normalizeDisplayName(value = "") {
+  return String(value).trim().replace(/\s+/g, " ");
+}
+
+function normalizeNameForLookup(value = "") {
+  return normalizeDisplayName(value).toLowerCase();
+}
+
+function normalizeFamilyCode(value = "") {
+  return String(value)
+    .trim()
+    .replace(/[\u2010-\u2015\u2212]/g, "-")
+    .replace(/\s+/g, "")
+    .toUpperCase();
+}
+
+function normalizeStudentForSave(student) {
+  const name = normalizeDisplayName(student.name);
+  return {
+    ...student,
+    name,
+    familyCode: normalizeFamilyCode(student.familyCode || createFamilyCode(name))
+  };
+}
+
+async function ensureCloudUser() {
+  if (cloudUser) return cloudUser;
+  if (!navigator.onLine) return null;
+  try {
+    const sessionResult = await supabaseClient.auth.getSession?.();
+    cloudUser = sessionResult?.data?.session?.user || null;
+    if (cloudUser) return cloudUser;
+    if (typeof supabaseClient.auth.signInAnonymously === "function") {
+      const {data,error} = await supabaseClient.auth.signInAnonymously();
+      if (!error) cloudUser = data?.user || data?.session?.user || null;
+    }
+  } catch (error) {
+    console.warn("Cloud sign-in unavailable:", error?.message || error);
+  }
+  return cloudUser;
+}
+
+async function publishParentAccessRows(records = trackedStudents) {
+  const parentRecords = records.map(normalizeStudentForSave);
+  const {data,error} = await supabaseClient.rpc("publish_parent_students", {
+    p_teacher_pin: TEACHER_PIN,
+    p_records: parentRecords
+  });
+  if (error) {
+    console.error("Parent access publish failed:", error.message);
+    return {ok:false, count:0, error};
+  }
+  return {ok:true, count:Number(data) || parentRecords.length, error:null};
+}
+
 async function trackAnalyticsEvent(eventType) {
   try {
     await supabaseClient.from("analytics_events").insert({event_type:eventType, visitor_id:analyticsVisitorId});
@@ -248,20 +303,28 @@ async function loadSiteAnalytics() {
 trackAnalyticsEvent("page_view");
 
 async function saveStudents() {
+  trackedStudents = trackedStudents.map(normalizeStudentForSave);
   localStorage.setItem("speakUpStudents", JSON.stringify(trackedStudents));
-  if (!cloudUser) return;
   if (!navigator.onLine) {
     setStatusText("#teacherSyncStatus", "Saved on this device. Cloud sync will resume when internet returns.");
     return;
   }
   setStatusText("#teacherSyncStatus", "Saving learner records...");
-  const rows = trackedStudents.map(student => ({id:Number(student.id), teacher_id:cloudUser.id, name:student.name, family_code:student.familyCode, payload:student, updated_at:new Date().toISOString()}));
-  const {error} = await supabaseClient.from("students").upsert(rows);
-  if (error) {
+  const user = await ensureCloudUser();
+  if (user) {
+    const rows = trackedStudents.map(student => ({id:Number(student.id), teacher_id:user.id, name:student.name, family_code:student.familyCode, payload:student, updated_at:new Date().toISOString()}));
+    const {error} = await supabaseClient.from("students").upsert(rows);
+    if (!error) {
+      setStatusText("#teacherSyncStatus", `Parent access synced for ${trackedStudents.length} learner${trackedStudents.length === 1 ? "" : "s"}.`);
+      return;
+    }
     console.error("Cloud sync failed:", error.message);
-    setStatusText("#teacherSyncStatus", "Cloud sync failed. Local changes are still saved on this device.");
+  }
+  const published = await publishParentAccessRows(trackedStudents);
+  if (published.ok) {
+    setStatusText("#teacherSyncStatus", `Parent access synced for ${published.count} learner${published.count === 1 ? "" : "s"}.`);
   } else {
-    setStatusText("#teacherSyncStatus", "Learner records saved privately.");
+    setStatusText("#teacherSyncStatus", "Saved on this device, but parent access is not connected. Run the updated supabase-setup.sql, then press Sync parent access.");
   }
 }
 
@@ -615,6 +678,12 @@ document.querySelector("#exportStudentsCsv").addEventListener("click", () => {
   URL.revokeObjectURL(link.href);
 });
 document.querySelector("#addStudentButton").addEventListener("click", () => document.querySelector("#studentDialog").showModal());
+document.querySelector("#syncParentAccess").addEventListener("click", async event => {
+  const button = event.currentTarget;
+  setButtonBusy(button, true, "Syncing...");
+  await saveStudents();
+  setButtonBusy(button, false);
+});
 document.querySelector("#studentTrackerRows").addEventListener("click", event => {
   const profileButton = event.target.closest("[data-student-profile]");
   if (profileButton) { showStudentProfile(profileButton.dataset.studentProfile); return; }
@@ -710,16 +779,16 @@ document.querySelector("#parentLogin").addEventListener("submit", async event =>
     document.querySelector("#parentLoginError").textContent = "This device is offline. Parent progress needs internet unless the record is already saved here.";
   }
   setButtonBusy(submitButton, true, "Checking...");
-  const name = document.querySelector("#parentLoginName").value.trim().toLowerCase();
-  const code = document.querySelector("#parentLoginCode").value.trim().toUpperCase();
+  const name = normalizeNameForLookup(document.querySelector("#parentLoginName").value);
+  const code = normalizeFamilyCode(document.querySelector("#parentLoginCode").value);
   const {data,error} = await supabaseClient.rpc("get_child_progress", {p_student_name:name, p_family_code:code});
   setButtonBusy(submitButton, false);
   let student = data;
-  if (!student) student = trackedStudents.find(item => item.name.trim().toLowerCase() === name && item.familyCode?.toUpperCase() === code);
+  if (!student) student = trackedStudents.find(item => normalizeNameForLookup(item.name) === name && normalizeFamilyCode(item.familyCode) === code);
   if (!student) {
     document.querySelector("#parentLoginError").textContent = error
-      ? "Progress service is unavailable. Please try again or use this device after the teacher adds the learner."
-      : "The name or family code is incorrect. Please ask the teacher for access details.";
+      ? "Parent access is not connected yet. Ask the teacher to open the dashboard, press Sync parent access, and try again."
+      : "We could not find this learner in parent access. Check the exact student name and family code, or ask the teacher to press Sync parent access.";
     return;
   }
   const existing = trackedStudents.findIndex(item => String(item.id) === String(student.id));
@@ -749,6 +818,7 @@ document.querySelector("#teacherLoginForm").addEventListener("submit", async eve
   sessionStorage.setItem("speakUpTeacherUnlocked", "1");
   document.querySelector("#teacherLoginError").textContent = "";
   event.currentTarget.reset();
+  await saveStudents();
   location.reload();
 });
 document.querySelector("#teacherSignOut").addEventListener("click", () => {
